@@ -1698,6 +1698,7 @@ html.touch-device .joy-zone { display:flex !important; pointer-events:auto !impo
 #ui-top #back-btn{display:none;}
 .lb-score{display:inline-flex;align-items:center;justify-content:flex-end;gap:3px;}
 .lb-gold-icon{width:15px;height:15px;object-fit:contain;display:block;}
+#upgrade-overlay,#upg-backdrop,#upg-notify-btn{display:none !important;}
 </style>
 <script>
 function drawSkinEyesOverlay(c, R, sk, fl) {
@@ -7968,11 +7969,7 @@ document.addEventListener('keydown', function(e){
 });
 
 function showUpgradeOverlay(age) {
-  const shuffled = PERKS.slice().sort(()=>Math.random()-0.5).slice(0,3);
-  _pendingUpgrades.push({age, shuffled});
-  _refreshUpgBtn();
-  // Auto-open immediately so the player never misses a skill choice
-  setTimeout(_openUpgradePanel, 420);
+  return;
 }
 // XP DOM güncellemesi — her kaynak darbede DOM yazmak layout tetikler.
 // Çözüm: dirty flag → her 4 frame'de bir toplu yaz (_flushXP).
@@ -7983,7 +7980,6 @@ function updateXP() {
   if (age > _prevAge) {
     _prevAge = age;
     floatingTexts.push({ x: player.x, y: player.y - 60, text: '⬆️ AGE ' + age + '!', alpha: 1, life: 55, color: '#ffd700' });
-    setTimeout(() => showUpgradeOverlay(age), 400);
     _xpDirty = true; _flushXP(); // level-up'ta DOM'u hemen güncelle
     return;
   }
