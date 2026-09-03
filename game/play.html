@@ -1701,6 +1701,62 @@ html.touch-device .joy-zone { display:flex !important; pointer-events:auto !impo
 .lb-score{display:inline-flex;align-items:center;justify-content:flex-end;gap:3px;}
 .lb-gold-icon{width:15px;height:15px;object-fit:contain;display:block;}
 #upgrade-overlay,#upg-backdrop,#upg-notify-btn{display:none !important;}
+/* Death result: compact forest HUD, with real player and weapon assets. */
+#death-overlay{
+  background:rgba(3,8,12,.82);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  padding:16px;
+  animation:deathOverlayIn .28s ease-out both;
+}
+.death-wood-panel{
+  width:min(520px,calc(100vw - 28px));
+  max-height:min(650px,calc(100dvh - 28px));
+  padding:0;
+  overflow:hidden;
+  background:linear-gradient(155deg,#13241f 0%,#0b1518 72%,#101d24 100%);
+  border:1px solid rgba(127,226,111,.28);
+  border-radius:18px;
+  box-shadow:0 26px 80px rgba(0,0,0,.72),0 0 0 1px rgba(255,215,96,.08),inset 0 1px 0 rgba(255,255,255,.1);
+  animation:deathPanelIn .42s cubic-bezier(.16,1,.3,1) both;
+}
+.death-modal-tab{
+  top:14px;left:auto;right:16px;transform:none;
+  padding:4px 8px;background:rgba(255,215,96,.1);
+  border:1px solid rgba(255,215,96,.3);border-radius:6px;
+  color:#f7d66c;font:800 9px/1 'Nunito',sans-serif;letter-spacing:1.5px;
+  box-shadow:none;-webkit-text-stroke:0;
+}
+#death-scroll{padding:28px 22px 18px;gap:14px;overflow-y:auto;}
+.death-header{display:flex;align-items:center;gap:14px;padding:4px 0 14px;border-bottom:1px solid rgba(255,255,255,.1);}
+.death-avatar-frame{width:72px;height:72px;flex:0 0 72px;display:grid;place-items:center;border-radius:14px;background:radial-gradient(circle at 35% 25%,rgba(123,220,102,.3),rgba(10,25,24,.9) 70%);border:1px solid rgba(142,230,112,.38);box-shadow:0 0 0 5px rgba(121,209,56,.06),0 10px 22px rgba(0,0,0,.35);animation:deathAvatarIn .5s .12s cubic-bezier(.16,1,.3,1) both;}
+#death-player-avatar{width:62px;height:62px;object-fit:contain;image-rendering:auto;filter:drop-shadow(0 5px 7px rgba(0,0,0,.6));}
+.death-header-copy{min-width:0;display:flex;flex-direction:column;gap:4px;}
+.death-kicker{color:#7fca78;font:800 10px/1 'Nunito',sans-serif;letter-spacing:2px;}
+#death-title{margin:0;color:#f5f0da;font:900 clamp(30px,7vw,44px)/.95 'Lilita One',cursive;letter-spacing:.5px;text-shadow:0 3px 0 #06100e,0 0 22px rgba(241,199,76,.16);-webkit-text-stroke:0;animation:deathTitleIn .5s .18s cubic-bezier(.16,1,.3,1) both;}
+#death-killer{display:block !important;margin:2px 0 0;padding:0;background:none;border:0;box-shadow:none;color:rgba(255,255,255,.56);font:700 11px/1.3 'Nunito',sans-serif;}
+#death-xp-summary{width:100%;display:flex;align-items:center;gap:12px;padding:14px 15px;background:linear-gradient(110deg,rgba(121,209,56,.16),rgba(16,36,32,.64));border:1px solid rgba(121,209,56,.3);border-radius:12px;box-shadow:inset 0 1px 0 rgba(255,255,255,.08);animation:deathSummaryIn .5s .24s cubic-bezier(.16,1,.3,1) both;}
+.death-xp-icon{width:38px;height:38px;object-fit:contain;filter:drop-shadow(0 4px 8px rgba(0,0,0,.5));}
+.death-xp-copy{display:flex;flex-direction:column;gap:4px;}
+#death-xp-caption{order:0;margin:0;color:#91c98d;font:800 10px/1 'Nunito',sans-serif;letter-spacing:1.5px;}
+#death-xp-earned{order:1;color:#f6d46a;font:900 clamp(28px,7vw,40px)/.9 'Lilita One',cursive;text-shadow:0 2px 0 #17251b;}
+#death-rank-bar{display:block !important;width:100% !important;padding:12px !important;background:rgba(4,12,14,.52) !important;border:1px solid rgba(255,215,96,.2) !important;border-radius:12px !important;box-shadow:none !important;animation:deathSummaryIn .5s .3s cubic-bezier(.16,1,.3,1) both;}
+#death-footer{padding:0 22px 22px;gap:10px;margin:0;}
+.btn-death-play{width:100%;padding:13px 18px;background:linear-gradient(180deg,#8dde59,#4da947);border:1px solid rgba(194,255,157,.5);border-radius:10px;color:#07170c;font:900 15px/1 'Nunito',sans-serif;letter-spacing:1.4px;text-shadow:none;-webkit-text-stroke:0;box-shadow:0 5px 0 #245e2a,0 10px 22px rgba(50,160,65,.18),inset 0 1px 0 rgba(255,255,255,.5);transition:transform .12s,box-shadow .12s;}
+.btn-death-play:active{transform:translateY(4px);box-shadow:0 1px 0 #245e2a,0 4px 12px rgba(50,160,65,.12),inset 0 1px 0 rgba(255,255,255,.5);}
+#death-action-row{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;width:100%;}
+.btn-death-act{min-height:34px;padding:8px 4px;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.14);border-radius:8px;color:rgba(255,255,255,.72);font:800 10px/1 'Nunito',sans-serif;letter-spacing:.7px;box-shadow:none;transition:background .12s,border-color .12s,transform .12s;}
+.btn-death-act:hover{background:rgba(121,209,56,.12);border-color:rgba(121,209,56,.38);}
+.btn-death-act:active{transform:translateY(2px);box-shadow:none;}
+.btn-death-act.menu-btn{background:rgba(247,192,45,.1);border-color:rgba(247,192,45,.28);color:#f7d66c;box-shadow:none;}
+@keyframes deathOverlayIn{from{opacity:0}to{opacity:1}}
+@keyframes deathAvatarIn{from{opacity:0;transform:translateX(-10px) scale(.82)}to{opacity:1;transform:none}}
+@media (max-width:480px){
+  #death-scroll{padding:26px 16px 14px;gap:11px;}
+  #death-footer{padding:0 16px 16px;}
+  .death-avatar-frame{width:60px;height:60px;flex-basis:60px;}
+  #death-player-avatar{width:52px;height:52px;}
+  #death-title{font-size:32px;}
+}
 </style>
 <script>
 function drawSkinEyesOverlay(c, R, sk, fl) {
@@ -2171,14 +2227,24 @@ function drawSkinEyesOverlay(c, R, sk, fl) {
 <!-- DEATH OVERLAY (PREMIUM 3D WOOD IO THEME) -->
 <div id="death-overlay">
   <div class="death-wood-panel">
-    <div class="death-modal-tab">💀 ELENDİN!</div>
+    <div class="death-modal-tab">RUN ENDED</div>
     
     <!-- Scrollable section — title, stats, progress bars -->
     <div id="death-scroll">
-      <div id="death-title">DEFEATED</div>
+      <div class="death-header">
+        <div class="death-avatar-frame"><img id="death-player-avatar" src="players/default.png" alt="Oyuncu"></div>
+        <div class="death-header-copy">
+          <div class="death-kicker">ORMAN GÜNLÜĞÜ</div>
+          <div id="death-title">MAC BİTTİ</div>
+          <div id="death-killer"></div>
+        </div>
+      </div>
       <div id="death-xp-summary" aria-label="Kazanılan deneyim">
-        <div id="death-xp-earned">+0 XP</div>
-        <div id="death-xp-caption">Bu maçta kazandığın deneyim</div>
+        <img class="death-xp-icon" src="weapons/sword-tier-0.png" alt="Deneyim">
+        <div class="death-xp-copy">
+          <div id="death-xp-caption">KAZANILAN DENEYİM</div>
+          <div id="death-xp-earned">+0 XP</div>
+        </div>
       </div>
       
       <div id="death-rank-bar" style="display:none;width:100%;background:#382110;border:2px solid #1F1108;border-radius:10px;padding:8px 12px;box-shadow:inset 0 2px 4px rgba(0,0,0,0.5);">
@@ -2193,12 +2259,11 @@ function drawSkinEyesOverlay(c, R, sk, fl) {
 
     <!-- Sticky footer — respawn + action buttons -->
     <div id="death-footer">
-      <button id="respawn-btn" class="btn-death-play" onclick="respawn()">PLAY AGAIN 🔄</button>
+      <button id="respawn-btn" class="btn-death-play" onclick="respawn()">TEKRAR OYNA</button>
       <div id="death-action-row">
-        <button id="death-spectate-btn" class="btn-death-act" onclick="_enterSpectator()">👁️ İzle</button>
-        <button id="death-invite-btn" class="btn-death-act" onclick="_shareScoreWithParty()">🔗 Davet</button>
-        <button id="share-score-btn" class="btn-death-act" onclick="_shareScore()">📤 Paylaş</button>
-        <button class="btn-death-act menu-btn" onclick="window.location.href=_BASE">🏠 Menü</button>
+        <button id="death-invite-btn" class="btn-death-act" onclick="_shareScoreWithParty()">DAVET ET</button>
+        <button id="share-score-btn" class="btn-death-act" onclick="_shareScore()">PAYLAŞ</button>
+        <button class="btn-death-act menu-btn" onclick="window.location.href=_BASE">MENÜ</button>
       </div>
     </div>
   </div>
@@ -8197,6 +8262,11 @@ function die() {
 
   // Killer info banner
   const killerEl = document.getElementById('death-killer');
+  const avatarEl = document.getElementById('death-player-avatar');
+  if (avatarEl) {
+    avatarEl.src = `players/${_playerSkin || 'default'}.png`;
+    avatarEl.onerror = () => { avatarEl.src = 'players/default.png'; };
+  }
   if (_lastDamager && killerEl) {
     killerEl.style.display = '';
     killerEl.innerHTML = `☠️ <b>${_lastDamager.typeName || 'Düşman'}</b> tarafından öldürüldün!`;
