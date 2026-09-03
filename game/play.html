@@ -14353,11 +14353,11 @@ function initMultiplayer() {
     _reconnectDelay = 2000;
     if (_reconnectTimer) { clearTimeout(_reconnectTimer); _reconnectTimer = null; }
     _hideRcOverlay();
-    if (_pingEl) { _pingEl.style.display = ''; _pingEl.style.color = ''; _pingEl.textContent = '🌐 10ms'; }
+    if (_pingEl) { _pingEl.style.display = ''; _pingEl.style.color = ''; _pingEl.textContent = '🌐 -- ms'; }
     if (_fpsEl) { _fpsEl.style.display = ''; _fpsEl.textContent = '⚡ 60 FPS'; }
     if (_pingTimer) clearInterval(_pingTimer);
-    _pingTimer = setInterval(() => { if (_connected && _socket) _socket.emit('ping_req', Date.now()); }, 1500);
-    _socket.emit('ping_req', Date.now());
+    _pingTimer = setInterval(() => { if (_connected && _socket) _socket.emit('ping_req', { t: performance.now() }); }, 1500);
+    _socket.emit('ping_req', { t: performance.now() });
     const _initAxeTier = (playerAcc && playerAcc.baltalar && playerAcc.baltalar.startsWith('ba_tier_')) ? Math.max(_wepTier(_axeXP), parseInt(playerAcc.baltalar.replace('ba_tier_', '')) || 0) : _wepTier(_axeXP);
     const _initSwordTier = (playerAcc && playerAcc.kiliclar && playerAcc.kiliclar.startsWith('ki_tier_')) ? Math.max(_wepTier(_swordXP), parseInt(playerAcc.kiliclar.replace('ki_tier_', '')) || 0) : _wepTier(_swordXP);
     const _authTok = localStorage.getItem('fb_auth_token') || '';
@@ -14874,7 +14874,7 @@ function initMultiplayer() {
   // Ping response
   _socket.on('pong_res', (d) => {
     const t = d?.t ?? d;
-    _ping = typeof t === 'number' ? Date.now() - t : _ping;
+    _ping = typeof t === 'number' ? Math.max(0, Math.round(performance.now() - t)) : _ping;
     if (_pingEl) {
       const col = _ping < 40 ? '#aaffaa' : _ping < 80 ? '#ffee88' : '#ff8888';
       _pingEl.style.color = col;
@@ -15622,17 +15622,7 @@ function _mpUpdate() {
       else _socket.volatile.emit('state', _statePayload);
     }
   }
-  // Ping every ~1.5s for responsive ms display
-  _pingTimer++;
-  if (_pingTimer >= 90) { _pingTimer = 0; _socket.emit('ping_req', { t: Date.now() }); }
 }
-
-// Background tab keepalive — prevents server from disconnecting or deleting buildings when user switches tabs!
-setInterval(() => {
-  if (_connected && _socket && player && !player.dead) {
-    _socket.emit('ping_req', { t: Date.now() });
-  }
-}, 2500);
 
 document.addEventListener('visibilitychange', () => {
   if (!document.hidden && _connected && _socket && player && !player.dead) {

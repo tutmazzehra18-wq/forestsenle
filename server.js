@@ -1,5 +1,6 @@
 const http = require('http');
 const fs = require('fs');
+const fsp = fs.promises;
 const path = require('path');
 const crypto = require('crypto');
 const { Server } = require('socket.io');
@@ -167,8 +168,14 @@ loadAccountData();
 for (const clan of Object.values(accountData.clans || {})) clans.set(clan.id, clan);
 
 let _saveTimeout = null;
+let _saveInFlight = null;
+let _saveQueued = false;
 function saveAccountData(immediate = false) {
-  const doSave = () => {
+  const doSave = async () => {
+    if (_saveInFlight) {
+      _saveQueued = true;
+      return _saveInFlight;
+    }
     try {
       accountData.users = { ...(accountData.users || {}) };
       accountData.clans = Object.fromEntries(clans);
@@ -177,27 +184,32 @@ function saveAccountData(immediate = false) {
       const bakFile = dataFile + '.bak';
 
       // Atomic write to tmp file
-      fs.writeFileSync(tmpFile, dataStr, 'utf8');
+      _saveInFlight = (async () => {
+        await fsp.writeFile(tmpFile, dataStr, 'utf8');
 
-      // Backup current file if exists
-      if (fs.existsSync(dataFile)) {
-        try { fs.copyFileSync(dataFile, bakFile); } catch(e) {}
-      }
+        // Backup current file if exists
+        try { await fsp.copyFile(dataFile, bakFile); } catch (error) {
+          if (error.code !== 'ENOENT') throw error;
+        }
 
-      // Rename tmp to dataFile
-      fs.renameSync(tmpFile, dataFile);
+        // Rename tmp to dataFile
+        await fsp.rename(tmpFile, dataFile);
+      })();
+      await _saveInFlight;
     } catch (error) {
-      try {
-        fs.writeFileSync(dataFile, JSON.stringify(accountData, null, 2), 'utf8');
-      } catch (err2) {
-        console.warn('Could not save account data:', err2.message);
+      console.warn('Could not save account data:', error.message);
+    } finally {
+      _saveInFlight = null;
+      if (_saveQueued) {
+        _saveQueued = false;
+        void doSave();
       }
     }
   };
 
   if (immediate) {
     if (_saveTimeout) { clearTimeout(_saveTimeout); _saveTimeout = null; }
-    doSave();
+    return doSave();
   } else {
     if (!_saveTimeout) {
       _saveTimeout = setTimeout(() => {
@@ -208,11 +220,10 @@ function saveAccountData(immediate = false) {
   }
 }
 
-// Auto-save every 20 seconds and on process exit
+// Auto-save every 20 seconds and flush on process exit
 setInterval(() => saveAccountData(true), 20000);
-process.on('SIGINT', () => { saveAccountData(true); process.exit(0); });
-process.on('SIGTERM', () => { saveAccountData(true); process.exit(0); });
-process.on('exit', () => { saveAccountData(true); });
+process.on('SIGINT', async () => { await saveAccountData(true); process.exit(0); });
+process.on('SIGTERM', async () => { await saveAccountData(true); process.exit(0); });
 
 function publicUser(user) {
   const rInfo = rankInfo(user.xp || 0);
@@ -773,6 +784,8 @@ function serveStatic(request, response, requestPath) {
 
 const io = new Server(server, {
   path: '/api/socket.io',
+  pingInterval: 10000,
+  pingTimeout: 5000,
   cors: {
     origin: (origin, callback) => callback(null, !origin || allowedOrigins.has(origin)),
     credentials: true,
