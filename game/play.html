@@ -441,7 +441,7 @@ body>iframe[style]{
 }
 html.touch-device .joy-zone { display:flex !important; pointer-events:auto !important; }
 @media (max-width:1200px), (pointer:coarse) {
-  .joy-zone { width:min(42vw,220px) !important; height:min(34vh,220px) !important; min-width:132px; min-height:132px; }
+  .joy-zone { width:50vw !important; height:min(34vh,220px) !important; min-width:132px; min-height:132px; }
   #joy-left { left:max(env(safe-area-inset-left,0px),8px) !important; right:auto !important; bottom:max(env(safe-area-inset-bottom,0px),72px) !important; top:auto !important; }
   #joy-right { left:auto !important; right:max(env(safe-area-inset-right,0px),8px) !important; bottom:max(env(safe-area-inset-bottom,0px),72px) !important; top:auto !important; }
 }
@@ -556,7 +556,7 @@ html.touch-device .joy-zone { display:flex !important; pointer-events:auto !impo
 @media (max-height:480px) and (orientation:landscape){
   /* ── Joysticks: half-screen wide but stop above inventory (≈60px) ── */
   /* NO !important on joy-base — JS floating position must work in landscape too */
-  .joy-zone{width:38%;height:auto;border-radius:0;top:36px;bottom:62px;}
+  .joy-zone{width:50%;height:auto;border-radius:0;top:36px;bottom:62px;}
   #joy-left{
     left:0;
     bottom:62px;
@@ -5726,7 +5726,7 @@ function tryPlaceBuilding() {
   }
 
   const costs = { 3:[20,5,150], 4:[40,20,100], 5:[10,20,50], 6:[30,10,80], 7:[60,40,200], 8:[30,0,300], 9:[80,60,400], 10:[25,0,300] };
-  const radii = { 3:34, 4:44, 5:22, 6:26, 7:32, 8:20, 9:52, 10:28 };
+  const radii = { 3:34, 4:44, 5:22, 6:32, 7:32, 8:20, 9:52, 10:28 };
   const [cW, cS, mHp] = costs[player.weapon] || [0,0,0];
 
   // Use snapped position computed during last ghost preview frame
@@ -6121,7 +6121,7 @@ function setupJoy(zoneId, stickId, isMove) {
     lastDist = dist;
     if (isMove) {
       // Must match desktop movement feel exactly: keyboard uses the same 6.4 speed baseline.
-      const moveScale = 6.4;
+      const moveScale = 5.2;
       _joystickMoveX = (ox / maxDist) * moveScale;
       _joystickMoveY = (oy / maxDist) * moveScale;
       player.vx = _joystickMoveX;
@@ -9165,16 +9165,16 @@ function drawBuilding(b, ghost) {
     }
     ctx.restore();
 
-  } else if (b.type === 6) { // ══ TRAP / TUZAK (Ayı Tuzağı) — Büyük ve Belirgin Boyut (140x140) ══
+  } else if (b.type === 6) { // ══ TRAP / TUZAK (Ayı Tuzağı) — Büyük ve Belirgin Boyut (156x156) ══
     const trapImg = _getBuildSprite('beartrap');
     if (trapImg && trapImg.complete && trapImg.naturalWidth > 0) {
-      ctx.drawImage(trapImg, -70, -70, 140, 140);
+      ctx.drawImage(trapImg, -78, -78, 156, 156);
     } else {
-      ctx.drawImage(_getBldSC('tr_'+_bTier, 140, 140, 70, 70, (c) => {
+      ctx.drawImage(_getBldSC('tr_'+_bTier, 156, 156, 78, 78, (c) => {
         c.fillStyle='#8a6020'; c.strokeStyle='#3a1e06'; c.lineWidth=5;
         c.beginPath(); c.arc(0,0,50,0,Math.PI*2); c.fill(); c.stroke();
         c.fillStyle='#1a0808'; c.beginPath(); c.arc(0,0,36,0,Math.PI*2); c.fill();
-      }), -70, -70);
+      }), -78, -78);
     }
 
   } else if (b.type === 7) { // ══ TURRET / TARET — Premium Asset (116x116, Gölgesiz) ══
@@ -12681,7 +12681,7 @@ function update(timestamp = 0) {
           if (_otb.type !== 6 || _otb.hp <= 0) continue;
           var _otdx = _otb.x - e.x, _otdy = _otb.y - e.y;
           var _otd2 = _otdx * _otdx + _otdy * _otdy;
-          var _otMinD = e.radius + 42; // trap trigger radius
+          var _otMinD = e.radius + 52; // enlarged trap trigger radius
           if (_otd2 > _otMinD * _otMinD) continue;
           // First contact — capture mob at its current position
           var _otKey = _otb._netId || _otb.id;
@@ -13095,7 +13095,7 @@ function update(timestamp = 0) {
       if (isOwn) continue;
       if (b.ownerClanId && player.clanId && b.ownerClanId === player.clanId) continue;
       const tdx = player.x - b.x, tdy = player.y - b.y;
-      const trapTriggerR = (b.radius || 42) + player.radius * 0.75;
+      const trapTriggerR = (b.radius || 52) + player.radius * 0.75;
       if (tdx * tdx + tdy * tdy <= trapTriggerR * trapTriggerR) {
         _trapCaughtBy = b._netId || b.id || b._bLid;
         _trapCaughtX = player.x;
@@ -14088,7 +14088,7 @@ function _doDash() {
 
 // WASD hız vektörünü her frame'de uygula
 function applyWASD() {
-  const spd = 6.4;
+  const spd = 5.2;
   if (_joystickActive) {
     player.vx = _joystickMoveX;
     player.vy = _joystickMoveY;
@@ -14139,7 +14139,7 @@ function _screenToWorld(clientX, clientY) {
 
 function _findOwnBldAt(clientX, clientY) {
   const p = _screenToWorld(clientX, clientY);
-  const HR = {3:38, 4:58, 5:50, 6:50, 7:45, 8:30, 9:64, 10:28};
+  const HR = {3:38, 4:58, 5:50, 6:58, 7:45, 8:30, 9:64, 10:28};
   let best = null, bestD = 9999;
   const nearby = (typeof _sgQuery === 'function') ? _sgQuery(p.x, p.y, 180) : buildings;
   const candidateList = (nearby && nearby.length > 0) ? nearby : buildings;
