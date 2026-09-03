@@ -1673,8 +1673,8 @@ html.touch-device .joy-zone { display:flex !important; pointer-events:auto !impo
 }
 /* Final HUD positions: resources and minimap share the left rail. */
 #minimap{
-  top:160px;
-  left:10px;
+  top:calc(env(safe-area-inset-top,0px) + 76px);
+  left:env(safe-area-inset-left,0px);
   right:auto;
   bottom:auto;
 }
@@ -1697,10 +1697,15 @@ html.touch-device .joy-zone { display:flex !important; pointer-events:auto !impo
 }
 #ui-top > div:last-child{gap:5px;flex-direction:column;align-items:stretch;}
 #ui-top #back-btn{display:none;}
-#left-stats-stack{top:106px;left:10px;}
+#left-stats-stack{top:env(safe-area-inset-top,0px);left:env(safe-area-inset-left,0px);right:auto;display:flex !important;flex-direction:row !important;align-items:flex-start !important;gap:8px !important;}
+#hud-performance{display:flex;flex-direction:column;gap:4px;flex:0 0 auto;}
+#fps-display,#ping-display{position:relative;top:auto;left:auto;height:30px;}
+.lb-title-icon{width:15px;height:15px;object-fit:contain;display:block;}
+.lb-rank{display:none !important;}
 .lb-score{display:inline-flex;align-items:center;justify-content:flex-end;gap:3px;}
 .lb-gold-icon{width:15px;height:15px;object-fit:contain;display:block;}
 #upgrade-overlay,#upg-backdrop,#upg-notify-btn{display:none !important;}
+@media (max-width:600px) and (hover:none){#minimap{top:calc(env(safe-area-inset-top,0px) + 62px);left:env(safe-area-inset-left,0px);width:80px;height:80px;padding:3px;}#left-stats-stack{top:env(safe-area-inset-top,0px);left:env(safe-area-inset-left,0px);gap:5px !important;}#resource-hud{max-width:calc(100vw - 105px);}#hud-performance{gap:3px;}#fps-display,#ping-display{display:inline-flex !important;font-size:9px;height:25px;padding:2px 5px;}}
 /* Death result: compact forest HUD, with real player and weapon assets. */
 #death-overlay{
   background:rgba(3,8,12,.82);
@@ -1810,8 +1815,10 @@ function drawSkinEyesOverlay(c, R, sk, fl) {
     </div>
   </div>
 
-  <div id="fps-display" onclick="document.getElementById('perf-panel').style.display=document.getElementById('perf-panel').style.display==='none'?'block':'none'" title="FPS (Detaylar için tıkla)">⚡ 60 FPS</div>
-  <div id="ping-display" title="Gecikme (Ping / MS)">🌐 12ms</div>
+  <div id="hud-performance" aria-label="Performans durumu">
+    <div id="fps-display" onclick="document.getElementById('perf-panel').style.display=document.getElementById('perf-panel').style.display==='none'?'block':'none'" title="FPS (Detaylar için tıkla)">⚡ 60 FPS</div>
+    <div id="ping-display" title="Gecikme (Ping / MS)">🌐 12ms</div>
+  </div>
   <div id="perf-panel" style="display:none;position:fixed;top:54px;left:10px;z-index:901;background:rgba(0,0,0,0.88);border:1.5px solid rgba(255,255,255,0.18);border-radius:10px;padding:10px 13px;font-size:11px;font-family:monospace;color:#ddd;pointer-events:none;width:260px;line-height:1.65;box-shadow:0 4px 18px rgba(0,0,0,0.7);"></div>
 </div>
 
@@ -2145,7 +2152,7 @@ function drawSkinEyesOverlay(c, R, sk, fl) {
 
 <!-- IN-GAME LEADERBOARD -->
 <div id="lb-panel">
-  <div id="lb-title">SIRALAMA</div>
+  <div id="lb-title"><img class="lb-title-icon" src="asset/gold.png" alt="">SIRALAMA</div>
   <div id="lb-rows"></div>
 </div>
 
