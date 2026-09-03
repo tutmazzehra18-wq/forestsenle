@@ -14954,10 +14954,9 @@ function initMultiplayer() {
       const goldNum = typeof e.gold === 'number' ? e.gold : (Number(e.score) || 0);
       const pts = formatScore(goldNum);
       const safeName = String(e.name || 'Oyuncu').replace(/[<>]/g, '').slice(0, 13);
-      const medal = idx === 0 ? '🥇 ' : idx === 1 ? '🥈 ' : idx === 2 ? '🥉 ' : `${idx + 1}. `;
       return `<div class="lb-row${isMe ? ' me' : ''}">
-        <span class="lb-name">${medal}${safeName}</span>
-        <span class="lb-score" style="color:#ffd700;font-weight:900;">🪙 ${pts}</span>
+        <span class="lb-name">${safeName}</span>
+        <span class="lb-score" style="color:#ffd700;font-weight:900;"><img class="lb-gold-icon" src="asset/gold.png" alt="Altın">${pts}</span>
       </div>`;
     }).join('');
   }
