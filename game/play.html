@@ -8174,10 +8174,10 @@ function die() {
 
   // Killer info banner
   const killerEl = document.getElementById('death-killer');
-  if (_lastDamager) {
+  if (_lastDamager && killerEl) {
     killerEl.style.display = '';
     killerEl.innerHTML = `☠️ <b>${_lastDamager.typeName || 'Düşman'}</b> tarafından öldürüldün!`;
-  } else {
+  } else if (killerEl) {
     killerEl.style.display = 'none';
   }
 
@@ -10056,6 +10056,7 @@ _MOB_ASSETS.spider_ag_tuzak.src = _MOB_ASSET_BASE + 'spider_ag_tuzak.png';
 const _mobWebProjectiles = [];
 const _mobWebTraps = [];
 const _mobScratchEffects = [];
+const _mobWebCooldowns = new Map();
 
 function spawnMobAttackEffect(type, x, y, angle, targetX, targetY) {
   if (type === 'spider' || type === 'orumcek' || type === 'örümcek' || type === 'spider_web') {
@@ -13799,7 +13800,7 @@ function update(timestamp = 0) {
   if (_playerMoveTrail.length > 1 && playerAcc && playerAcc.izler && playerAcc.izler !== 'iz_none') {
     drawPlayerMovementTrail(playerAcc.izler, _playerMoveTrail);
   }
-  drawPlayer();
+  if (!_isDying) drawPlayer();
   drawSpawnShield();
   _drawLocalChatBubble();
 
@@ -14843,6 +14844,7 @@ function initMultiplayer() {
     }
     // Server-authoritative hp/xp/kills — always accept
     if (typeof s.hp === 'number') player.hp = s.hp;
+    if (player.hp <= 0 && !_isDying) die();
     if (typeof s.sc === 'number') player.score = Math.max(player.score || 0, s.sc);
     // Position is client-predicted. The server stores the latest input only;
     // applying its delayed echo here makes high-latency players rubber-band.
@@ -15286,6 +15288,12 @@ function initMultiplayer() {
 
   // ── Mob attacks player (server-authoritative damage & animation) ───────
   _socket.on('mob_attack', ({ id, targetId, dmg, hp, typeName, shape, isWeb, x, y, angle, targetX, targetY }) => {
+    if (isWeb && id) {
+      const _now = Date.now();
+      const _lastWeb = _mobWebCooldowns.get(id) || 0;
+      if (_now - _lastWeb < 5000) return;
+      _mobWebCooldowns.set(id, _now);
+    }
     let attackingMob = null;
     if (id) {
       attackingMob = enemies.find(en => en._netId === id);
