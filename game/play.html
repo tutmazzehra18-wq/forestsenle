@@ -1671,6 +1671,33 @@ html.touch-device .joy-zone { display:flex !important; pointer-events:auto !impo
   #snap-settings-panel,.death-wood-panel,#death-title,#death-xp-summary,#death-rank-bar{animation:none !important;}
   .snap-row,.snap-toggle-track,.snap-toggle-thumb{transition:none;}
 }
+/* Final HUD positions: resources and minimap share the left rail. */
+#minimap{
+  top:72px;
+  left:10px;
+  right:auto;
+  bottom:auto;
+}
+#mm-col-labels,#mm-row-labels{display:none !important;}
+#lb-panel{
+  top:184px;
+  left:10px;
+  right:auto;
+  min-width:150px;
+  max-width:210px;
+  display:block !important;
+}
+#ui-top{
+  top:72px;
+  left:122px;
+  right:auto;
+  width:auto;
+  justify-content:flex-start;
+}
+#ui-top > div:last-child{gap:5px;}
+#ui-top #back-btn{display:none;}
+.lb-score{display:inline-flex;align-items:center;justify-content:flex-end;gap:3px;}
+.lb-gold-icon{width:15px;height:15px;object-fit:contain;display:block;}
 </style>
 <script>
 function drawSkinEyesOverlay(c, R, sk, fl) {
@@ -2059,7 +2086,7 @@ function drawSkinEyesOverlay(c, R, sk, fl) {
 
 <!-- IN-GAME LEADERBOARD -->
 <div id="lb-panel">
-  <div id="lb-title">🏆 SIRALAMA</div>
+  <div id="lb-title">SIRALAMA</div>
   <div id="lb-rows"></div>
 </div>
 
@@ -2082,10 +2109,8 @@ function drawSkinEyesOverlay(c, R, sk, fl) {
   <div id="qcw-items" style="position:absolute;left:-100px;top:-100px;width:200px;height:200px"></div>
 </div>
 
-<!-- MINIMAP — bottom-left with grid labels -->
+<!-- MINIMAP — below the resource counter -->
 <div id="minimap">
-  <div id="mm-col-labels"><span>A</span><span>B</span><span>C</span><span>D</span></div>
-  <div id="mm-row-labels"><span>1</span><span>2</span><span>3</span><span>4</span></div>
   <canvas id="minimapCanvas" width="128" height="128"></canvas>
 </div>
 
@@ -6279,7 +6304,7 @@ function updateLeaderboard() {
     const pts = formatScore(e.score);
     return `<div class="lb-row${e.isMe ? ' me' : ''}">
       <span class="lb-name">${e.name}</span>
-      <span class="lb-score">${pts}</span>
+      <span class="lb-score"><img class="lb-gold-icon" src="asset/gold.png" alt="Altın">${pts}</span>
     </div>`;
   }).join('') || '<div style="color:#aaa;text-align:center;padding:8px;font-size:11px">Bağlanılıyor...</div>';
   // PERF: skip DOM rebuild when nothing changed — avoids style recalc + layout every 2s
@@ -13877,26 +13902,10 @@ function update(timestamp = 0) {
   }
 
   // Screen-space post-process layers
-  drawNightOverlay();
   drawRain();
   // FPS counter is now an HTML element (top-left) — no canvas drawing needed here
   _drawDashCooldown();
   drawLowHpVignette();
-  // Player level badge (screen-space) — PERF: OC-cached, only redrawn when level changes
-  if (_playerLevel !== _lvlBadgeLevel || !_lvlBadgeOC) {
-    _lvlBadgeLevel = _playerLevel;
-    _lvlBadgeOC = createRenderCanvas(80, 28);
-    const _lbc = _lvlBadgeOC.getContext('2d');
-    _lbc.fillStyle = 'rgba(0,0,0,0.6)'; _lbc.strokeStyle = '#ffdd00'; _lbc.lineWidth = 2;
-    _lbc.beginPath(); _lbc.roundRect(0, 0, 80, 28, 8); _lbc.fill(); _lbc.stroke();
-    _lbc.fillStyle = '#ffdd00'; _lbc.font = 'bold 13px Arial'; _lbc.textAlign = 'left'; _lbc.textBaseline = 'middle';
-    _lbc.fillText(`⭐ SEV ${_playerLevel}`, 8, 14);
-  }
-  ctx.save();
-  ctx.setTransform(1,0,0,1,0,0);
-  ctx.drawImage(_lvlBadgeOC, 12, canvas.height - 110);
-  ctx.restore();
-
   // XP DOM flush — her 4 frame'de bir (her kaynak darbede layout tetiklenmez)
   if (globalTime % 4 === 0) _flushXP();
   // Minimap — composite smoothly every frame
@@ -14697,7 +14706,6 @@ function initMultiplayer() {
         shake: 0,
         hitFlash: 0
       });
-      showToast(`📦 GİZEMLİ HAZİNE SANDIĞI DÜŞTÜ! (${ad.tier === 2 ? '💎 Elmas' : '🪙 Altın'})`, 5500, '#ffd700');
       playSound(660, 0.2, 'triangle', 0.35);
       setTimeout(() => playSound(880, 0.2, 'sine', 0.3), 150);
     }
