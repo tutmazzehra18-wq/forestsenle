@@ -170,52 +170,160 @@
             -webkit-text-stroke: 0;
         }
 
-        /* --- PANELLER --- */
+        /* --- TAMING.IO UI TASARIM SİSTEMİ (PANELLER & BAŞLIKLAR) --- */
         .panel-wood {
-            background: linear-gradient(180deg, var(--wood-light) 0%, var(--wood-main) 100%);
-            border: 4px solid var(--border-heavy);
-            border-radius: 16px;
-            box-shadow: inset 0 2px 0 rgba(255,255,255,0.25), inset 0 -4px 0 rgba(0,0,0,0.25), 0 10px 25px rgba(0,0,0,0.65);
+            background: linear-gradient(180deg, #9e6032 0%, #874f26 100%);
+            border: 5px solid #3c1e08;
+            border-radius: 20px;
+            box-shadow: inset 0 2px 0 rgba(255,255,255,0.25), inset 0 -4px 0 rgba(0,0,0,0.35), 0 16px 36px rgba(0,0,0,0.7);
+            padding: 12px 14px 14px;
+            position: relative;
         }
         
         .panel-inset {
-            background-color: var(--wood-inset);
-            border: 3px solid var(--border-heavy);
-            border-radius: 12px;
-            box-shadow: inset 0 4px 8px rgba(0,0,0,0.5), 0 2px 0 rgba(255,255,255,0.12);
+            background-color: #52280d;
+            border: 3.5px solid #3c1e08;
+            border-radius: 14px;
+            box-shadow: inset 0 4px 10px rgba(0,0,0,0.5), 0 2px 0 rgba(255,255,255,0.1);
         }
 
-        .modal-tab {
-            position: absolute;
-            top: -20px; left: -4px;
-            background-color: var(--text-beige);
-            border: 4px solid var(--border-heavy);
-            border-radius: 10px;
-            padding: 2px 18px;
-            color: var(--border-heavy);
-            font-size: 1.15rem;
+        /* Taming.io Standart Entegre Başlık Çubuğu */
+        .modal-header-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            width: 100%;
+            margin-bottom: 6px;
+            position: relative;
+            z-index: 20;
+        }
+
+        /* Taming.io Krem-Altın Başlık Rozeti */
+        .modal-badge-title {
+            background: linear-gradient(180deg, #fae6b2 0%, #ebd088 100%);
+            border: 3.5px solid #3c1e08;
+            border-radius: 12px;
+            padding: 4px 14px;
             font-family: 'Lilita One', cursive;
-            box-shadow: 0 4px 0 var(--border-heavy);
-            z-index: 10;
+            font-size: 1.15rem;
+            letter-spacing: 0.6px;
+            color: #3c1e08;
+            box-shadow: 0 3px 0 #3c1e08;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        /* Taming.io Krem 3D Kare Kapatma Butonu (✕) */
+        .modal-close-btn {
+            width: 36px;
+            height: 36px;
+            min-width: 36px;
+            min-height: 36px;
+            background: linear-gradient(180deg, #fff7dc 0%, #f6e3b5 100%);
+            border: 3.5px solid #3c1e08;
+            border-radius: 10px;
+            font-family: 'Lilita One', cursive;
+            font-size: 1.35rem;
+            font-weight: 900;
+            color: #3c1e08;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 3px 0 #3c1e08;
+            cursor: pointer;
+            transition: all 0.08s ease;
+            user-select: none;
+            padding: 0;
+            line-height: 1;
+        }
+        .modal-close-btn:hover {
+            background: #e04a3a;
+            color: #ffffff;
+        }
+        .modal-close-btn:active {
+            transform: translateY(3px);
+            box-shadow: 0 0 0 #3c1e08;
+        }
+
+        /* Taming.io Ahşap Sekme Butonları */
+        .taming-tab {
+            background: linear-gradient(180deg, #7d441d 0%, #633211 100%);
+            border: 3px solid #3c1e08;
+            border-radius: 10px;
+            padding: 4px 12px;
+            color: #ecd6c0;
+            font-family: 'Lilita One', cursive;
+            font-size: 0.85rem;
+            box-shadow: 0 2.5px 0 #3c1e08;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.1s ease;
+            white-space: nowrap;
+        }
+        .taming-tab:hover:not(.active) {
+            background: #8e4f24;
+            color: #fff;
+        }
+        .taming-tab.active {
+            background: linear-gradient(180deg, #fce072 0%, #e5a720 100%);
+            color: #3c1e08;
+            box-shadow: 0 2.5px 0 #3c1e08;
+            -webkit-text-stroke: 0.5px rgba(255,255,255,0.4);
+        }
+        .taming-tab:active {
+            transform: translateY(2px);
+            box-shadow: 0 0 0 #3c1e08;
+        }
+
+        /* Yıldız Desenli Önizleme Arka Planı (Screenshot 1) */
+        .preview-star-pattern {
+            background-color: #613313;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 24 24'%3E%3Cpath fill='%237d451e' d='M12 2l2.4 7.2h7.6l-6.1 4.5 2.3 7.3-6.2-4.6-6.2 4.6 2.3-7.3-6.1-4.5h7.6z'/%3E%3C/svg%3E");
+            background-size: 32px 32px;
+        }
+
+        /* Asma Kilit Rozeti (Screenshot 1) */
+        .lock-badge {
+            position: absolute;
+            bottom: 4px;
+            right: 4px;
+            width: 22px;
+            height: 22px;
+            background: #e09f28;
+            border: 2px solid #3c1e08;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #3c1e08;
+            font-size: 11px;
+            box-shadow: 0 2px 0 #3c1e08;
+            z-index: 5;
         }
 
         .modal-content {
             width: min(94vw, 440px);
-            max-height: min(90vh, 840px);
+            max-height: min(92vh, 840px);
             overflow-y: auto;
             margin: auto;
         }
 
-        #leadersModal.modal-content {
-            position: relative;
-            z-index: 1;
-            max-height: min(78vh, 620px);
+        #leadersModal.modal-content,
+        #challengesModal.modal-content {
+            width: min(95vw, 560px) !important;
+            max-width: 560px !important;
         }
 
         #shopModal.modal-content,
         #cosmeticsModal.modal-content {
-            width: min(95vw, 840px) !important;
-            max-width: 840px !important;
+            width: min(95vw, 880px) !important;
+            max-width: 880px !important;
         }
 
         /* --- 3D BUTONLAR --- */
@@ -441,25 +549,26 @@
                 overflow:hidden;
                 align-items:center;
                 justify-content:center;
-                padding:12px;
+                padding:8px;
             }
-            .modal-tab {
-                top:8px;
-                left:10px;
-                max-width:calc(100% - 66px);
-                padding:2px 10px;
-                font-size:.95rem;
-                white-space:nowrap;
-                overflow:hidden;
-                text-overflow:ellipsis;
+            .modal-header-bar {
+                margin-bottom:4px;
             }
-            .modal-content > button[onclick*="closeAllModals"] {
-                top:8px !important;
-                right:10px !important;
+            .modal-badge-title {
+                font-size:1rem;
+                padding:3px 10px;
+            }
+            .modal-close-btn {
+                width:32px;
+                height:32px;
+                min-width:32px;
+                min-height:32px;
+                font-size:1.15rem;
             }
             .modal-content .panel-inset,
             .modal-content .item-card,
             .modal-content .tab-btn,
+            .modal-content .taming-tab,
             .modal-content input,
             .modal-content button { min-width:0; max-width:100%; }
             #settingsModal > div:last-child { max-height:none !important; overflow:visible !important; }
@@ -470,8 +579,6 @@
             #serverModal .grid.grid-cols-6 > div:nth-child(4),
             #serverModal .grid.grid-cols-6 > div:nth-child(5) { display:none; }
             #serverModal .grid.grid-cols-6 > div:nth-child(6) { grid-column:span 2 / span 2; }
-            #cosmeticsModal .flex.flex-col.sm\:flex-row,
-            #shopModal .flex.flex-col.sm\:flex-row { min-width:0; }
             #cosmeticsModal .panel-inset,
             #shopModal .panel-inset { max-width:100%; }
         }
@@ -564,11 +671,14 @@
         <!-- Sağ Bölüm (Desktop / Geniş Ekranlar) -->
         <div class="hidden lg:flex flex-col items-end gap-2 pointer-events-auto">
             <div class="flex gap-2 mb-1">
+                <button onclick="openModal('challengesModal'); updateChallengeProgress(); playSfx('click')" class="btn-3d btn-play px-3 py-1 font-io text-xs flex items-center gap-1.5 stroke-text" title="Günlük Görevler">
+                    <i class="fa-solid fa-star text-amber-300"></i> CHALLENGES
+                </button>
                 <button onclick="openModal('helpModal'); playSfx('click')" class="btn-3d btn-action p-1 px-3" title="Nasıl Oynanır?">
                     <i class="fa-solid fa-question text-white text-lg"></i>
                 </button>
                 <button onclick="openModal('newsModal'); playSfx('click')" class="btn-3d btn-yellow px-3 py-1 font-io text-xs flex items-center gap-1.5 stroke-text-dark">
-                    DAILY NEWS <i class="fa-regular fa-newspaper text-base"></i>
+                    NEWS <i class="fa-regular fa-newspaper text-base"></i>
                 </button>
             </div>
 
@@ -658,14 +768,17 @@
     </div>
 
         <!-- Mobil İçin En Alt Hızlı Çubuk -->
-        <div class="flex lg:hidden justify-center gap-2 w-full mt-4">
-            <button onclick="openDiscord()" class="btn-3d btn-action px-3 py-1.5 font-io text-white stroke-text text-[10px] flex items-center gap-1.5">
-                <i class="fa-brands fa-discord text-[#5865F2]"></i> DISCORD
+        <div class="flex lg:hidden justify-center gap-1.5 w-full mt-4 flex-wrap">
+            <button onclick="openModal('challengesModal'); updateChallengeProgress(); playSfx('click')" class="btn-3d btn-play px-2.5 py-1.5 font-io text-white stroke-text text-[10px] flex items-center gap-1">
+                <i class="fa-solid fa-star text-amber-300"></i> GÖREV
             </button>
-            <button onclick="openModal('leadersModal'); playSfx('click')" class="btn-3d btn-action px-3 py-1.5 font-io text-white stroke-text text-[10px] flex items-center gap-1.5">
-                <i class="fa-solid fa-crown text-yellow-400"></i> LEADERS
+            <button onclick="openDiscord()" class="btn-3d btn-action px-2.5 py-1.5 font-io text-white stroke-text text-[10px] flex items-center gap-1">
+                <i class="fa-brands fa-discord text-[#5865F2]"></i> DC
             </button>
-            <button onclick="openModal('partyModal'); playSfx('click')" class="btn-3d btn-action px-3 py-1.5 font-io text-white stroke-text text-[10px] flex items-center gap-1.5">
+            <button onclick="openModal('leadersModal'); playSfx('click')" class="btn-3d btn-action px-2.5 py-1.5 font-io text-white stroke-text text-[10px] flex items-center gap-1">
+                <i class="fa-solid fa-crown text-yellow-400"></i> SIRA
+            </button>
+            <button onclick="openModal('partyModal'); playSfx('click')" class="btn-3d btn-action px-2.5 py-1.5 font-io text-white stroke-text text-[10px] flex items-center gap-1">
                 <i class="fa-solid fa-users text-[#79D138]"></i> PARTİ
             </button>
         </div>
@@ -680,11 +793,13 @@
     <div id="modalOverlay" class="fixed inset-0 bg-black/75 z-50 hidden flex items-center justify-center p-3 sm:p-4 backdrop-blur-sm" onclick="closeAllModals()">
         
         <!-- 1. LOGIN MODALI -->
-        <div id="loginModal" class="panel-wood w-full max-w-[380px] p-2 hidden flex-col relative modal-content" onclick="event.stopPropagation()">
-            <div class="modal-tab">LOGIN</div>
-            <button onclick="closeAllModals()" class="btn-3d bg-[#F4E4C6] border-[3px] border-[var(--border-heavy)] absolute -top-4 -right-3 sm:-right-4 w-9 h-9 rounded-xl font-io text-xl flex items-center justify-center pb-1 text-[var(--border-heavy)] z-50">✕</button>
+        <div id="loginModal" class="panel-wood w-full max-w-[400px] hidden flex-col relative modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header-bar">
+                <div class="modal-badge-title"><i class="fa-solid fa-right-to-bracket text-sm"></i> LOGIN</div>
+                <button onclick="closeAllModals()" class="modal-close-btn" title="Kapat">✕</button>
+            </div>
             
-            <div class="panel-inset p-4 sm:p-5 flex flex-col mt-6 border-[3px]">
+            <div class="panel-inset p-4 sm:p-5 flex flex-col mt-1">
                 <p class="font-io text-sm text-[#F7C02D] stroke-text mb-4 text-center leading-tight">LOGIN TO YOUR ACCOUNT</p>
                 
                 <label class="text-white font-black text-xs mb-1">Username</label>
@@ -705,11 +820,13 @@
         </div>
 
         <!-- 2. REGISTER MODALI -->
-        <div id="registerModal" class="panel-wood w-full max-w-[380px] p-2 hidden flex-col relative modal-content" onclick="event.stopPropagation()">
-            <div class="modal-tab">CREATE ACCOUNT</div>
-            <button onclick="closeAllModals()" class="btn-3d bg-[#F4E4C6] border-[3px] border-[var(--border-heavy)] absolute -top-4 -right-3 sm:-right-4 w-9 h-9 rounded-xl font-io text-xl flex items-center justify-center pb-1 text-[var(--border-heavy)] z-50">✕</button>
+        <div id="registerModal" class="panel-wood w-full max-w-[400px] hidden flex-col relative modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header-bar">
+                <div class="modal-badge-title"><i class="fa-solid fa-user-plus text-sm"></i> REGISTER</div>
+                <button onclick="closeAllModals()" class="modal-close-btn" title="Kapat">✕</button>
+            </div>
             
-            <div class="panel-inset p-4 sm:p-5 flex flex-col mt-6 border-[3px]">
+            <div class="panel-inset p-4 sm:p-5 flex flex-col mt-1">
                 <div class="text-center mb-3">
                     <p class="font-io text-sm text-[#79D138] stroke-text leading-tight">JOIN FORESTBRAWL</p>
                     <p class="font-black text-[#FFDF73] text-[11px] flex items-center justify-center gap-1.5 mt-1 drop-shadow-md">
@@ -738,11 +855,13 @@
         </div>
 
         <!-- 3. PROFILE MODALI -->
-        <div id="profileModal" class="panel-wood w-full max-w-[440px] p-2 hidden flex-col relative modal-content" onclick="event.stopPropagation()">
-            <div class="modal-tab">PLAYER PROFILE</div>
-            <button onclick="closeAllModals()" class="btn-3d bg-[#F4E4C6] border-[3px] border-[var(--border-heavy)] absolute -top-4 -right-3 sm:-right-4 w-9 h-9 rounded-xl font-io text-xl flex items-center justify-center pb-1 text-[var(--border-heavy)] z-50">✕</button>
+        <div id="profileModal" class="panel-wood w-full max-w-[460px] hidden flex-col relative modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header-bar">
+                <div class="modal-badge-title"><i class="fa-solid fa-id-card text-sm"></i> PROFILE</div>
+                <button onclick="closeAllModals()" class="modal-close-btn" title="Kapat">✕</button>
+            </div>
             
-            <div class="panel-inset p-4 sm:p-5 mt-6 border-[3px] flex flex-col gap-3">
+            <div class="panel-inset p-4 sm:p-5 mt-1 flex flex-col gap-3">
                 <div class="flex items-center gap-3 bg-black/40 p-3 rounded-xl border border-white/15">
                     <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-yellow-500 to-amber-700 border-2 border-black flex items-center justify-center shadow-inner overflow-hidden">
                         <img id="prof-avatar-img" src="players/wolf.png" class="w-12 h-12 object-contain" alt="Avatar">
@@ -804,12 +923,14 @@
         </div>
 
         <!-- 4. AYARLAR MODALI -->
-        <div id="settingsModal" class="panel-wood w-full max-w-[620px] p-2 hidden flex-col relative modal-content" onclick="event.stopPropagation()">
-            <div class="modal-tab">SETTINGS</div>
-            <button onclick="closeAllModals()" class="btn-3d bg-[#F4E4C6] border-[3px] border-[var(--border-heavy)] absolute -top-4 -right-3 sm:-right-4 w-9 h-9 rounded-xl font-io text-xl flex items-center justify-center pb-1 text-[var(--border-heavy)] z-50">✕</button>
+        <div id="settingsModal" class="panel-wood w-full max-w-[620px] hidden flex-col relative modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header-bar">
+                <div class="modal-badge-title"><i class="fa-solid fa-gear text-sm"></i> SETTINGS</div>
+                <button onclick="closeAllModals()" class="modal-close-btn" title="Kapat">✕</button>
+            </div>
             
-            <div class="flex flex-col sm:flex-row gap-2 mt-6 max-h-[70vh] sm:max-h-none overflow-y-auto pr-1">
-                <div class="panel-inset p-3 sm:p-4 flex-1 flex flex-col gap-2.5 border-[3px]">
+            <div class="flex flex-col sm:flex-row gap-2 mt-1 max-h-[70vh] sm:max-h-none overflow-y-auto pr-1">
+                <div class="panel-inset p-3 sm:p-4 flex-1 flex flex-col gap-2.5">
                     <h3 class="font-io text-white stroke-text text-[13px] mb-1 text-center">Oynanış & Mobil</h3>
                     <div class="flex justify-between items-center bg-black/20 p-2 rounded-lg border border-white/10">
                         <div class="flex flex-col leading-tight w-2/3">
@@ -845,7 +966,7 @@
                 </div>
 
                 <div class="flex-1 flex flex-col gap-2">
-                    <div class="panel-inset p-3 sm:p-4 border-[3px]">
+                    <div class="panel-inset p-3 sm:p-4">
                         <h3 class="font-io text-white stroke-text text-[13px] mb-2 text-center">Ses & Efektler</h3>
                         <div class="flex justify-between items-center mb-3">
                             <div class="flex items-center gap-2">
@@ -872,7 +993,7 @@
                         </div>
                     </div>
                     
-                    <div class="panel-inset p-3 sm:p-4 flex-1 border-[3px]">
+                    <div class="panel-inset p-3 sm:p-4 flex-1">
                         <h3 class="font-io text-white stroke-text text-[13px] mb-1 text-center">Grafik & Performans</h3>
                         <div class="flex justify-between items-center bg-black/20 p-2 rounded-lg border border-white/10 mb-2">
                             <span class="text-white font-black text-xs">Bina & Karakter Gölgeleri</span>
@@ -888,14 +1009,16 @@
         </div>
 
         <!-- 5. SUNUCU SEÇİM MODALI -->
-        <div id="serverModal" class="panel-wood w-full max-w-[680px] p-2 pt-6 hidden flex-col relative modal-content" onclick="event.stopPropagation()">
-            <div class="modal-tab">SERVERS</div>
-            <button onclick="pingServer(); playSfx('click')" title="Yenile" class="btn-3d bg-[#F4E4C6] border-[3px] border-[var(--border-heavy)] absolute top-2 right-[54px] w-9 h-9 rounded-lg flex items-center justify-center text-[var(--border-heavy)] z-50">
-                <i class="fa-solid fa-rotate-right text-sm"></i>
-            </button>
-            <button onclick="closeAllModals()" class="btn-3d bg-[#F4E4C6] border-[3px] border-[var(--border-heavy)] absolute top-2 right-3 w-9 h-9 rounded-lg font-io text-xl flex items-center justify-center pb-1 text-[var(--border-heavy)] z-50">✕</button>
+        <div id="serverModal" class="panel-wood w-full max-w-[680px] hidden flex-col relative modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header-bar">
+                <div class="modal-badge-title"><i class="fa-solid fa-server text-sm"></i> SERVERS</div>
+                <div class="flex items-center gap-2">
+                    <button onclick="pingServer(); playSfx('click')" title="Yenile" class="modal-close-btn" style="font-size: 1rem;"><i class="fa-solid fa-rotate-right"></i></button>
+                    <button onclick="closeAllModals()" class="modal-close-btn" title="Kapat">✕</button>
+                </div>
+            </div>
             
-            <div class="mt-4">
+            <div class="mt-2">
                 <div class="grid grid-cols-6 gap-1 px-3 mb-2 text-white font-io stroke-text text-[10px] sm:text-xs">
                     <div class="col-span-1 text-center">Status</div>
                     <div class="col-span-2 pl-2">Server Name</div>
@@ -904,7 +1027,7 @@
                     <div class="col-span-1 text-center">Selection</div>
                 </div>
                 
-                <div class="panel-inset p-2.5 h-[280px] overflow-y-auto flex flex-col gap-2 border-[3px]">
+                <div class="panel-inset p-2.5 h-[280px] overflow-y-auto flex flex-col gap-2">
                     <div class="bg-gradient-to-r from-[#3B5A24] to-[#4F7A30] border-2 border-[#8EE84C] rounded-xl p-2.5 grid grid-cols-6 gap-1 items-center shadow-[inset_0_2px_4px_rgba(0,0,0,0.4)]">
                         <div class="col-span-1 flex justify-center items-center gap-1.5">
                             <div class="w-3.5 h-3.5 bg-[#79D138] rounded-full border-2 border-black animate-pulse shadow"></div>
@@ -946,136 +1069,208 @@
             </div>
         </div>
 
-        <!-- 6. COSMETICS / ENVANTER MODALI (SADECE SAHİP OLUNAN EŞYALAR & KUŞANMA) -->
-        <div id="cosmeticsModal" class="panel-wood w-full max-w-[840px] p-2.5 pt-6 hidden flex-col relative modal-content" onclick="event.stopPropagation()">
-            <div class="modal-tab">COSMETICS / ENVANTER</div>
-            <button onclick="closeAllModals()" class="btn-3d bg-[#F4E4C6] border-[3px] border-[var(--border-heavy)] absolute top-2 right-3 w-9 h-9 rounded-lg font-io text-xl flex items-center justify-center pb-1 text-[var(--border-heavy)] z-50">✕</button>
-            
-            <div class="mt-4 flex flex-col gap-2.5">
-                <div class="flex flex-wrap items-center justify-between gap-2 px-1">
-                    <div class="flex items-center gap-2">
-                        <button class="tab-btn active" data-cat="deriler" onclick="setCosmeticsTab('deriler')">
-                            <i class="fa-solid fa-user-ninja"></i> <span>Derilerim</span>
-                        </button>
-                        <button class="tab-btn" data-cat="kiliclar" onclick="setCosmeticsTab('kiliclar')">
-                            <i class="fa-solid fa-khanda"></i> <span>Kılıçlarım</span>
-                        </button>
-                        <button class="tab-btn" data-cat="baltalar" onclick="setCosmeticsTab('baltalar')">
-                            <i class="fa-solid fa-axe"></i> <span>Baltalarım</span>
-                        </button>
-                    </div>
-
-                    <button onclick="openShopModal(); playSfx('click')" class="btn-3d btn-yellow px-3 py-1 font-io text-xs stroke-text-dark ml-auto">
-                        <i class="fa-solid fa-store mr-1"></i> MAĞAZA (SHOP)
+        <!-- 6. COSMETICS / ENVANTER MODALI (TAMING.IO BİREBİR TASARIM) -->
+        <div id="cosmeticsModal" class="panel-wood w-full max-w-[880px] hidden flex-col relative modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header-bar flex-wrap">
+                <div class="modal-badge-title">
+                    <i class="fa-solid fa-paw text-sm"></i> COSMETICS
+                </div>
+                <div class="flex items-center gap-1.5 flex-wrap">
+                    <button class="taming-tab active" data-cat="deriler" onclick="setCosmeticsTab('deriler')">
+                        <i class="fa-solid fa-user-ninja"></i> <span>Deriler</span>
+                    </button>
+                    <button class="taming-tab" data-cat="kiliclar" onclick="setCosmeticsTab('kiliclar')">
+                        <i class="fa-solid fa-khanda"></i> <span>Kılıçlar</span>
+                    </button>
+                    <button class="taming-tab" data-cat="baltalar" onclick="setCosmeticsTab('baltalar')">
+                        <i class="fa-solid fa-axe"></i> <span>Baltalar</span>
                     </button>
                 </div>
-
-                <!-- Gövde: Sol Canlı Birebir Oyun Önizleme + Sağ Envanter Izgarası -->
-                <div class="flex flex-col sm:flex-row gap-2.5">
-                    <div class="panel-inset p-3 sm:w-[240px] flex flex-col items-center justify-between border-[3px]">
-                        <div class="text-center">
-                            <span class="font-io text-xs text-white stroke-text block">INVENTORY PREVIEW</span>
-                            <span id="cosmetic-preview-name" class="font-black text-xs text-[#F7C02D] truncate max-w-[210px] block">Kurt</span>
-                        </div>
-                        
-                        <!-- Birebir Oyun İçi Canlı Canvas -->
-                        <div class="my-2 w-44 h-44 bg-gradient-to-b from-[#1C2C14] to-[#0D1808] rounded-xl border-2 border-black/60 flex items-center justify-center relative overflow-hidden shadow-inner">
-                            <canvas id="cosmetic-preview-canvas" width="200" height="200"></canvas>
-                        </div>
-                        
-                        <div class="w-full text-center">
-                            <span id="cosmetic-preview-status" class="text-[10px] font-black text-green-400 block mb-1">EQUIPPED</span>
-                            <button id="cosmetic-preview-btn" onclick="equipCurrentCosmeticItem()" class="btn-3d btn-play w-full py-1.5 font-io text-xs stroke-text">
-                                EQUIP
-                            </button>
-                        </div>
+                <div class="flex items-center gap-2 ml-auto">
+                    <button onclick="openShopModal(); playSfx('click')" class="taming-tab text-yellow-300 font-bold hidden sm:flex items-center gap-1">
+                        <i class="fa-solid fa-store"></i> MAĞAZA
+                    </button>
+                    <button onclick="closeAllModals()" class="modal-close-btn" title="Kapat">✕</button>
+                </div>
+            </div>
+            
+            <div class="mt-2 flex flex-col md:flex-row gap-3">
+                <!-- Sol Panel: Yıldız Desenli Önizleme Kartı (Screenshot 1 Birebir) -->
+                <div class="panel-inset preview-star-pattern p-3 md:w-[260px] flex flex-col items-center justify-between border-[3px] rounded-xl relative overflow-hidden shadow-inner">
+                    <div class="text-center w-full z-10">
+                        <span class="font-io text-xs text-white/80 uppercase tracking-wider block">PREVIEW</span>
+                        <span id="cosmetic-preview-name" class="font-io text-lg sm:text-xl text-[#FFDF73] stroke-text truncate block mt-0.5">Kurt</span>
                     </div>
+                    
+                    <!-- Canlı Karakter Canvası -->
+                    <div class="my-2 w-44 h-44 flex items-center justify-center relative z-10">
+                        <canvas id="cosmetic-preview-canvas" width="200" height="200"></canvas>
+                    </div>
+                    
+                    <div class="w-full text-center z-10">
+                        <span id="cosmetic-preview-status" class="font-io text-xs text-green-400 block mb-1 stroke-text">EQUIPPED</span>
+                        <button id="cosmetic-preview-btn" onclick="equipCurrentCosmeticItem()" class="btn-3d btn-play w-full py-2 font-io text-xs stroke-text">
+                            EQUIP
+                        </button>
+                    </div>
+                </div>
 
-                    <!-- Sağ: SADECE SAHİP OLUNAN EŞYALAR -->
-                    <div class="panel-inset p-2.5 flex-1 h-[340px] sm:h-[380px] overflow-y-auto border-[3px]">
-                        <div id="cosmetic-owned-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2"></div>
+                <!-- Sağ Panel: 3x3 Izgara + Kilitli Eşyalar (Screenshot 1 Birebir) + Sayfalama -->
+                <div class="panel-inset p-3 flex-1 flex flex-col justify-between min-h-[360px] border-[3px] rounded-xl">
+                    <div id="cosmetic-owned-grid" class="grid grid-cols-3 gap-2.5 flex-1 content-start"></div>
+                    
+                    <!-- Alt Sayfalama Çubuğu (< 1 / 3 >) -->
+                    <div class="flex items-center justify-between mt-3 pt-2 border-t-2 border-[#3c1e08]/60 px-2">
+                        <button id="cosmetics-prev-btn" onclick="prevCosmeticPage()" class="btn-3d bg-[#F4E4C6] border-[3px] border-[var(--border-heavy)] w-9 h-8 rounded-lg font-io text-base text-[var(--border-heavy)] flex items-center justify-center">
+                            <i class="fa-solid fa-chevron-left"></i>
+                        </button>
+                        <span id="cosmetics-page-info" class="font-io text-xs text-[#FFDF73] stroke-text">1 - 9 / 28</span>
+                        <button id="cosmetics-next-btn" onclick="nextCosmeticPage()" class="btn-3d bg-[#F4E4C6] border-[3px] border-[var(--border-heavy)] w-9 h-8 rounded-lg font-io text-base text-[var(--border-heavy)] flex items-center justify-center">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- 7. SHOP / MAĞAZA MODALI (TÜM SATIN ALINABİLİR EŞYALAR VE FİYATLARI) -->
-        <div id="shopModal" class="panel-wood w-full max-w-[840px] p-2.5 pt-6 hidden flex-col relative modal-content" onclick="event.stopPropagation()">
-            <div class="modal-tab">SHOP / MAĞAZA</div>
-            <button onclick="closeAllModals()" class="btn-3d bg-[#F4E4C6] border-[3px] border-[var(--border-heavy)] absolute top-2 right-3 w-9 h-9 rounded-lg font-io text-xl flex items-center justify-center pb-1 text-[var(--border-heavy)] z-50">✕</button>
-            
-            <div class="mt-4 flex flex-col gap-2.5">
-                <div class="flex flex-wrap items-center justify-between gap-2 px-1">
-                    <div class="flex items-center gap-2">
-                        <button class="tab-btn active shop-tab" data-cat="deriler" onclick="setShopTab('deriler')">
-                            <i class="fa-solid fa-shirt"></i> <span>Tüm Deriler</span>
-                        </button>
-                        <button class="tab-btn shop-tab" data-cat="kiliclar" onclick="setShopTab('kiliclar')">
-                            <i class="fa-solid fa-khanda"></i> <span>Kılıçlar</span>
-                        </button>
-                        <button class="tab-btn shop-tab" data-cat="baltalar" onclick="setShopTab('baltalar')">
-                            <i class="fa-solid fa-axe"></i> <span>Baltalar</span>
-                        </button>
+        <!-- 7. SHOP / MAĞAZA MODALI (TAMING.IO BİREBİR TASARIM) -->
+        <div id="shopModal" class="panel-wood w-full max-w-[880px] hidden flex-col relative modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header-bar flex-wrap">
+                <div class="modal-badge-title">
+                    <i class="fa-solid fa-store text-sm"></i> SHOP
+                </div>
+                <div class="flex items-center gap-1.5 flex-wrap">
+                    <button class="taming-tab active shop-tab" data-cat="deriler" onclick="setShopTab('deriler')">
+                        <i class="fa-solid fa-shirt"></i> <span>Tüm Deriler</span>
+                    </button>
+                    <button class="taming-tab shop-tab" data-cat="kiliclar" onclick="setShopTab('kiliclar')">
+                        <i class="fa-solid fa-khanda"></i> <span>Kılıçlar</span>
+                    </button>
+                    <button class="taming-tab shop-tab" data-cat="baltalar" onclick="setShopTab('baltalar')">
+                        <i class="fa-solid fa-axe"></i> <span>Baltalar</span>
+                    </button>
+                </div>
+                <div class="flex items-center gap-2 ml-auto">
+                    <div class="gold-pill text-xs px-2.5 py-1">
+                        <i class="fa-solid fa-coins text-[#F7C02D]"></i>
+                        <span id="shop-gold-display">1,500</span>
                     </div>
-
-                    <div class="panel-inset px-3.5 py-1.5 flex items-center gap-1.5 border-[2px] ml-auto">
-                        <i class="fa-solid fa-coins text-yellow-400 text-sm"></i>
-                        <span id="shop-gold-display" class="font-io text-sm text-[#FFDF73] stroke-text">1,500</span>
+                    <button onclick="closeAllModals()" class="modal-close-btn" title="Kapat">✕</button>
+                </div>
+            </div>
+            
+            <div class="mt-2 flex flex-col md:flex-row gap-3">
+                <!-- Sol Panel: Önizleme -->
+                <div class="panel-inset preview-star-pattern p-3 md:w-[260px] flex flex-col items-center justify-between border-[3px] rounded-xl relative overflow-hidden shadow-inner">
+                    <div class="text-center w-full z-10">
+                        <span class="font-io text-xs text-white/80 uppercase tracking-wider block">SHOP PREVIEW</span>
+                        <span id="shop-preview-name" class="font-io text-lg sm:text-xl text-[#FFDF73] stroke-text truncate block mt-0.5">Kurt</span>
+                    </div>
+                    
+                    <div class="my-2 w-44 h-44 flex items-center justify-center relative z-10">
+                        <canvas id="shop-preview-canvas" width="200" height="200"></canvas>
+                    </div>
+                    
+                    <div class="w-full text-center z-10">
+                        <span id="shop-preview-status" class="font-io text-xs text-yellow-400 block mb-1 stroke-text">COST: 0 🪙</span>
+                        <button id="shop-preview-btn" onclick="buyCurrentShopItem()" class="btn-3d btn-yellow w-full py-2 font-io text-xs stroke-text-dark">
+                            SATIN AL
+                        </button>
                     </div>
                 </div>
 
-                <div class="flex flex-col sm:flex-row gap-2.5">
-                    <div class="panel-inset p-3 sm:w-[240px] flex flex-col items-center justify-between border-[3px]">
-                        <div class="text-center">
-                            <span class="font-io text-xs text-white stroke-text block">SHOP PREVIEW</span>
-                            <span id="shop-preview-name" class="font-black text-xs text-[#F7C02D] truncate max-w-[210px] block">Alev Tilkisi</span>
-                        </div>
-                        
-                        <div class="my-2 w-44 h-44 bg-gradient-to-b from-[#1C2C14] to-[#0D1808] rounded-xl border-2 border-black/60 flex items-center justify-center relative overflow-hidden shadow-inner">
-                            <canvas id="shop-preview-canvas" width="200" height="200"></canvas>
-                        </div>
-                        
-                        <div class="w-full text-center">
-                            <span id="shop-preview-status" class="text-[10px] font-black text-yellow-400 block mb-1">COST: 300 🪙</span>
-                            <button id="shop-preview-btn" class="btn-3d btn-red w-full py-1.5 font-io text-xs stroke-text">
-                                SATIN AL
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Sağ: TÜM MAĞAZA EŞYALARI -->
-                    <div class="panel-inset p-2.5 flex-1 h-[340px] sm:h-[380px] overflow-y-auto border-[3px]">
-                        <div id="shop-all-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2"></div>
+                <!-- Sağ Panel: 3x3 Mağaza Kataloğu + Sayfalama -->
+                <div class="panel-inset p-3 flex-1 flex flex-col justify-between min-h-[360px] border-[3px] rounded-xl">
+                    <div id="shop-all-grid" class="grid grid-cols-3 gap-2.5 flex-1 content-start"></div>
+                    
+                    <div class="flex items-center justify-between mt-3 pt-2 border-t-2 border-[#3c1e08]/60 px-2">
+                        <button id="shop-prev-btn" onclick="prevShopPage()" class="btn-3d bg-[#F4E4C6] border-[3px] border-[var(--border-heavy)] w-9 h-8 rounded-lg font-io text-base text-[var(--border-heavy)] flex items-center justify-center">
+                            <i class="fa-solid fa-chevron-left"></i>
+                        </button>
+                        <span id="shop-page-info" class="font-io text-xs text-[#FFDF73] stroke-text">1 - 9 / 28</span>
+                        <button id="shop-next-btn" onclick="nextShopPage()" class="btn-3d bg-[#F4E4C6] border-[3px] border-[var(--border-heavy)] w-9 h-8 rounded-lg font-io text-base text-[var(--border-heavy)] flex items-center justify-center">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- 8. LİDERLER MODALI -->
-        <div id="leadersModal" class="panel-wood w-full max-w-[500px] p-2.5 pt-6 hidden flex-col relative modal-content" onclick="event.stopPropagation()">
-            <div class="modal-tab">LEADERBOARD</div>
-            <button onclick="loadLeaderboard(); playSfx('click')" title="Yenile" class="btn-3d bg-[#F4E4C6] border-[3px] border-[var(--border-heavy)] absolute top-2 right-[54px] w-9 h-9 rounded-lg flex items-center justify-center text-[var(--border-heavy)] z-50">
-                <i class="fa-solid fa-rotate-right text-sm"></i>
-            </button>
-            <button onclick="closeAllModals()" class="btn-3d bg-[#F4E4C6] border-[3px] border-[var(--border-heavy)] absolute top-2 right-3 w-9 h-9 rounded-lg font-io text-xl flex items-center justify-center pb-1 text-[var(--border-heavy)] z-50">✕</button>
+        <!-- 8. LİDERLER MODALI (TAMING.IO BİREBİR TASARIM) -->
+        <div id="leadersModal" class="panel-wood w-full max-w-[560px] hidden flex-col relative modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header-bar flex-wrap">
+                <div class="modal-badge-title">
+                    <i class="fa-solid fa-trophy text-sm"></i> LEADERBOARD
+                </div>
+                
+                <!-- Arama Kutusu (Screenshot 4 Birebir) -->
+                <div class="flex items-center bg-[#2f1707] border-2 border-[#5c3010] rounded-lg px-2.5 py-1 text-xs ml-auto">
+                    <input id="lb-search-input" type="text" placeholder="Oyuncu ara..." class="bg-transparent text-white font-io text-xs outline-none w-24 sm:w-32 placeholder-white/40" oninput="filterLeaderboard(this.value)">
+                    <i class="fa-solid fa-magnifying-glass text-white/60 text-xs ml-1"></i>
+                </div>
+                
+                <button onclick="loadLeaderboard(); playSfx('click')" title="Yenile" class="modal-close-btn" style="font-size: 1rem;"><i class="fa-solid fa-rotate-right"></i></button>
+                <button onclick="closeAllModals()" class="modal-close-btn" title="Kapat">✕</button>
+            </div>
             
-            <div class="flex gap-1.5 mt-4 px-1">
-                <button id="lb-tab-top" onclick="setLeaderboardTab('all'); playSfx('click')" class="btn-3d btn-play flex-1 py-1.5 font-io text-[11px] stroke-text">🏆 EN İYİLER</button>
-                <button id="lb-tab-recent" onclick="setLeaderboardTab('recent'); playSfx('click')" class="btn-3d bg-[#6b4932] border-[2px] border-[#3a1e06] text-white/80 flex-1 py-1.5 font-io text-[11px] stroke-text">⏱️ SON MAÇLAR</button>
-                <button id="lb-tab-kills" onclick="setLeaderboardTab('kills'); playSfx('click')" class="btn-3d bg-[#6b4932] border-[2px] border-[#3a1e06] text-white/80 flex-1 py-1.5 font-io text-[11px] stroke-text">⚔️ EN ÇOK ÖLDÜREN</button>
+            <!-- Filtre Sekmeleri (Screenshot 4 Birebir) -->
+            <div class="flex gap-1.5 mt-2">
+                <button id="lb-tab-top" onclick="setLeaderboardTab('all'); playSfx('click')" class="taming-tab active flex-1 justify-center py-1.5 font-io text-xs">
+                    <i class="fa-solid fa-crown text-yellow-300"></i> EN İYİLER
+                </button>
+                <button id="lb-tab-recent" onclick="setLeaderboardTab('recent'); playSfx('click')" class="taming-tab flex-1 justify-center py-1.5 font-io text-xs">
+                    <i class="fa-solid fa-clock-rotate-left"></i> SON MAÇLAR
+                </button>
+                <button id="lb-tab-kills" onclick="setLeaderboardTab('kills'); playSfx('click')" class="taming-tab flex-1 justify-center py-1.5 font-io text-xs">
+                    <i class="fa-solid fa-skull-crossbones text-red-400"></i> EN ÇOK ÖLDÜREN
+                </button>
             </div>
 
-            <div class="panel-inset p-3 mt-2 h-[320px] overflow-y-auto border-[3px] flex flex-col gap-2">
+            <!-- Tablo Başlıkları -->
+            <div class="grid grid-cols-12 px-3 pt-2 text-[10px] sm:text-xs font-io text-[#FFDF73] stroke-text uppercase">
+                <div class="col-span-2">SIRA</div>
+                <div class="col-span-2">ROZET</div>
+                <div class="col-span-4">OYUNCU</div>
+                <div class="col-span-4 text-right">SKOR / ALTIN</div>
+            </div>
+
+            <div class="panel-inset p-2.5 mt-1 h-[340px] overflow-y-auto flex flex-col gap-1.5">
                 <div id="leaderboard-list" class="flex flex-col gap-1.5"></div>
             </div>
+
+            <!-- Alt Sayfalama (Screenshot 4 Birebir) -->
+            <div id="lb-pagination" class="flex justify-center items-center gap-1.5 mt-2"></div>
         </div>
 
-        <!-- 9. PARTİ MODALI -->
-        <div id="partyModal" class="panel-wood w-full max-w-[400px] p-2.5 pt-6 hidden flex-col relative modal-content" onclick="event.stopPropagation()">
-            <div class="modal-tab">PARTY SYSTEM</div>
-            <button onclick="closeAllModals()" class="btn-3d bg-[#F4E4C6] border-[3px] border-[var(--border-heavy)] absolute top-2 right-3 w-9 h-9 rounded-lg font-io text-xl flex items-center justify-center pb-1 text-[var(--border-heavy)] z-50">✕</button>
+        <!-- 9. GÖREVLER / CHALLENGES MODALI (TAMING.IO SCREENSHOT 3 BİREBİR) -->
+        <div id="challengesModal" class="panel-wood w-full max-w-[560px] hidden flex-col relative modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header-bar">
+                <div class="modal-badge-title">
+                    <i class="fa-solid fa-star text-sm text-amber-500"></i> CHALLENGES
+                </div>
+                <div class="flex items-center gap-1.5 bg-[#2f1707] border-2 border-[#5c3010] px-3 py-1 rounded-full text-[11px] font-io text-[#fcd55c]">
+                    <i class="fa-solid fa-stopwatch text-xs"></i> 19s 16dk kaldı
+                </div>
+                <button onclick="closeAllModals()" class="modal-close-btn" title="Kapat">✕</button>
+            </div>
             
-            <div class="panel-inset p-4 mt-4 border-[3px] flex flex-col gap-3">
+            <div class="text-center font-io text-xs text-[#FFDF73] stroke-text my-1">
+                Görevleri tamamla, altın 🪙 ve yıldız ⭐ ödüllerini kap!
+            </div>
+
+            <div class="panel-inset p-3 max-h-[380px] overflow-y-auto flex flex-col gap-2">
+                <div id="challenge-list" class="flex flex-col gap-2.5"></div>
+            </div>
+        </div>
+
+        <!-- 10. PARTİ MODALI -->
+        <div id="partyModal" class="panel-wood w-full max-w-[420px] hidden flex-col relative modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header-bar">
+                <div class="modal-badge-title"><i class="fa-solid fa-users text-sm"></i> PARTY SYSTEM</div>
+                <button onclick="closeAllModals()" class="modal-close-btn" title="Kapat">✕</button>
+            </div>
+            
+            <div class="panel-inset p-4 mt-2 flex flex-col gap-3">
                 <button onclick="createParty()" class="btn-3d btn-yellow w-full py-2.5 font-io text-sm stroke-text-dark border-[3px]">
                     <i class="fa-solid fa-plus mr-1.5"></i> YENİ PARTİ OLUŞTUR
                 </button>
@@ -1093,12 +1288,14 @@
             </div>
         </div>
 
-        <!-- 10. NASIL OYNANIR & YARDIM MODALI -->
-        <div id="helpModal" class="panel-wood w-full max-w-[460px] p-2.5 pt-6 hidden flex-col relative modal-content" onclick="event.stopPropagation()">
-            <div class="modal-tab">HOW TO PLAY</div>
-            <button onclick="closeAllModals()" class="btn-3d bg-[#F4E4C6] border-[3px] border-[var(--border-heavy)] absolute top-2 right-3 w-9 h-9 rounded-lg font-io text-xl flex items-center justify-center pb-1 text-[var(--border-heavy)] z-50">✕</button>
+        <!-- 11. NASIL OYNANIR & YARDIM MODALI -->
+        <div id="helpModal" class="panel-wood w-full max-w-[460px] hidden flex-col relative modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header-bar">
+                <div class="modal-badge-title"><i class="fa-solid fa-question text-sm"></i> HOW TO PLAY</div>
+                <button onclick="closeAllModals()" class="modal-close-btn" title="Kapat">✕</button>
+            </div>
             
-            <div class="panel-inset p-4 mt-4 border-[3px] flex flex-col gap-2.5 text-white">
+            <div class="panel-inset p-4 mt-2 flex flex-col gap-2.5 text-white">
                 <div class="flex items-center gap-3 bg-black/30 p-2 rounded-lg">
                     <span class="font-io text-[#F7C02D] text-lg w-7 text-center">W A S D</span>
                     <span class="text-xs font-black">Hareket et (veya ekrandaki sanal joystick)</span>
@@ -1118,18 +1315,21 @@
             </div>
         </div>
 
-        <!-- 11. GÜNLÜK HABERLER -->
-        <div id="newsModal" class="panel-wood w-full max-w-[440px] p-2.5 pt-6 hidden flex-col relative modal-content" onclick="event.stopPropagation()">
-            <div class="modal-tab">DAILY NEWS</div>
-            <button onclick="closeAllModals()" class="btn-3d bg-[#F4E4C6] border-[3px] border-[var(--border-heavy)] absolute top-2 right-3 w-9 h-9 rounded-lg font-io text-xl flex items-center justify-center pb-1 text-[var(--border-heavy)] z-50">✕</button>
+        <!-- 12. GÜNLÜK HABERLER -->
+        <div id="newsModal" class="panel-wood w-full max-w-[440px] hidden flex-col relative modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header-bar">
+                <div class="modal-badge-title"><i class="fa-regular fa-newspaper text-sm"></i> DAILY NEWS</div>
+                <button onclick="closeAllModals()" class="modal-close-btn" title="Kapat">✕</button>
+            </div>
             
-            <div class="panel-inset p-4 mt-4 border-[3px] flex flex-col gap-3 text-white">
+            <div class="panel-inset p-4 mt-2 flex flex-col gap-3 text-white">
                 <div class="bg-black/30 p-3 rounded-xl border border-yellow-500/30">
-                    <span class="text-yellow-400 font-io text-xs block">✨ v2.6 GÜNCELLEMESİ</span>
+                    <span class="text-yellow-400 font-io text-xs block">✨ v2.8 GÜNCELLEMESİ</span>
                     <p class="text-xs font-black text-gray-200 mt-1 leading-relaxed">
-                        • Karakter, el ve silah hizalaması oyun içi render ile %100 eşitlendi.<br>
-                        • Envanter (Cosmetics) sadece sahip olunan eşyaları gösterir.<br>
-                        • Mağaza (Shop) tüm satın alınabilir eşyaları sunar.
+                        • Taming.io standartlarında eksiksiz ahşap menü tasarımı ve 3D butonlar.<br>
+                        • Giriş ekranı arkasında yaşayan gerçek orman dünyası simülasyonu.<br>
+                        • Envanter & Mağaza sayfalaması ve kilit rozetleri.<br>
+                        • Görevler (Challenges) ödül sistemi.
                     </p>
                 </div>
             </div>
@@ -1722,8 +1922,11 @@
         }
 
         /* ════════════════════════════════════════════════════════════════
-           7. COSMETICS (ENVANTER - SADECE SAHİP OLUNAN EŞYALAR)
+           7. COSMETICS (ENVANTER - TAMING.IO 3x3 SAYFALAMA & KİLİTLİ GÖRÜNÜM)
         ════════════════════════════════════════════════════════════════ */
+        let _cosmeticPage = 0;
+        const COSMETICS_PAGE_SIZE = 9;
+
         function openCosmeticsModal() {
             openModal('cosmeticsModal');
             setCosmeticsTab(_cosmeticTab);
@@ -1731,7 +1934,8 @@
 
         function setCosmeticsTab(cat) {
             _cosmeticTab = cat;
-            document.querySelectorAll('#cosmeticsModal .tab-btn').forEach(btn => {
+            _cosmeticPage = 0;
+            document.querySelectorAll('#cosmeticsModal .taming-tab').forEach(btn => {
                 if (btn.dataset.cat === cat) btn.classList.add('active');
                 else btn.classList.remove('active');
             });
@@ -1739,90 +1943,117 @@
             playSfx('click');
         }
 
+        function prevCosmeticPage() {
+            if (_cosmeticPage > 0) {
+                _cosmeticPage--;
+                renderCosmeticsOwnedGrid();
+                playSfx('click');
+            }
+        }
+
+        function nextCosmeticPage() {
+            const allItems = ALL_ITEMS_MAP[_cosmeticTab] || [];
+            if ((_cosmeticPage + 1) * COSMETICS_PAGE_SIZE < allItems.length) {
+                _cosmeticPage++;
+                renderCosmeticsOwnedGrid();
+                playSfx('click');
+            }
+        }
+
         function renderCosmeticsOwnedGrid() {
             const grid = document.getElementById('cosmetic-owned-grid');
             if (!grid) return;
             grid.innerHTML = '';
             const allItems = ALL_ITEMS_MAP[_cosmeticTab] || [];
-            // SADECE SAHİP OLUNANLARI FİLTRELE
-            const ownedItems = allItems.filter(item => isItemOwned(item));
+            const total = allItems.length;
+            const startIdx = _cosmeticPage * COSMETICS_PAGE_SIZE;
+            const endIdx = Math.min(startIdx + COSMETICS_PAGE_SIZE, total);
+            const pageItems = allItems.slice(startIdx, endIdx);
 
-            if (ownedItems.length === 0) {
-                grid.innerHTML = `
-                    <div class="col-span-full py-10 flex flex-col items-center justify-center text-center">
-                        <i class="fa-solid fa-lock text-3xl text-gray-500 mb-2"></i>
-                        <span class="font-io text-white text-sm stroke-text">Henüz bu kategoride kilit açmadın.</span>
-                        <button onclick="openShopModal(); playSfx('click')" class="btn-3d btn-yellow px-4 py-1.5 font-io text-xs stroke-text-dark mt-3">
-                            MAĞAZADAN SATIN AL
-                        </button>
-                    </div>
-                `;
-                return;
-            }
+            const pageInfo = document.getElementById('cosmetics-page-info');
+            if (pageInfo) pageInfo.textContent = `${startIdx + 1} - ${endIdx} / ${total}`;
 
-            ownedItems.forEach(item => {
-                let isEquipped = false;
-                if (_cosmeticTab === 'deriler') {
-                    isEquipped = (_currentSkin === item.id);
-                } else {
-                    isEquipped = (_equippedWeapon === item.id);
-                }
+            const prevBtn = document.getElementById('cosmetics-prev-btn');
+            const nextBtn = document.getElementById('cosmetics-next-btn');
+            if (prevBtn) prevBtn.style.opacity = _cosmeticPage === 0 ? '0.4' : '1';
+            if (nextBtn) nextBtn.style.opacity = endIdx >= total ? '0.4' : '1';
+
+            pageItems.forEach(item => {
+                const owned = isItemOwned(item);
+                const isEquipped = (_cosmeticTab === 'deriler') ? (_currentSkin === item.id) : (_equippedWeapon === item.id);
+                const isSelected = _cosmeticPreviewItem && _cosmeticPreviewItem.item.id === item.id;
 
                 const card = document.createElement('div');
-                card.className = `item-card rarity-${item.rarity || 'common'} ${isEquipped ? 'equipped' : ''}`;
+                card.className = `taming-card relative p-2 rounded-xl border-[3.5px] cursor-pointer flex flex-col items-center justify-between transition-transform duration-75 hover:scale-105 select-none ${
+                    isEquipped ? 'bg-[#2a4515] border-[#79d138] shadow-[0_0_12px_rgba(121,209,56,0.5)]' :
+                    isSelected ? 'bg-[#502e12] border-[#fce072]' :
+                    owned ? 'bg-[#3b200e] border-[#281204]' : 'bg-[#261306] border-[#1a0c04] opacity-75'
+                }`;
                 card.onclick = () => selectCosmeticPreviewItem(item, _cosmeticTab);
 
+                // Asma Kilit Rozeti (Kilitli ise - Screenshot 1 Birebir)
+                if (!owned) {
+                    const lock = document.createElement('div');
+                    lock.className = 'lock-badge';
+                    lock.innerHTML = '<i class="fa-solid fa-lock"></i>';
+                    card.appendChild(lock);
+                }
+
                 const imgWrap = document.createElement('div');
-                imgWrap.className = 'w-16 h-16 my-1 flex items-center justify-center relative';
+                imgWrap.className = 'w-14 h-14 my-1 flex items-center justify-center relative';
                 const img = document.createElement('img');
                 img.src = item.img;
-                img.className = 'max-w-full max-h-full object-contain drop-shadow-md';
+                img.className = `max-w-full max-h-full object-contain drop-shadow-md ${!owned ? 'grayscale-[50%] brightness-75' : ''}`;
                 img.alt = item.name;
                 imgWrap.appendChild(img);
                 card.appendChild(imgWrap);
 
                 const nameSpan = document.createElement('span');
-                nameSpan.className = 'font-io text-white text-[10px] text-center stroke-text truncate w-full';
+                nameSpan.className = 'font-io text-white text-[10px] text-center stroke-text truncate w-full mt-0.5';
                 nameSpan.textContent = item.name;
                 card.appendChild(nameSpan);
-
-                const actionDiv = document.createElement('div');
-                actionDiv.className = 'mt-1.5 w-full';
-                if (isEquipped) {
-                    actionDiv.innerHTML = `<div class="bg-green-600 text-white font-io text-[9px] py-1 rounded text-center stroke-text">EQUIPPED</div>`;
-                } else {
-                    actionDiv.innerHTML = `<button onclick="event.stopPropagation(); equipCosmeticItem('${item.id}', '${_cosmeticTab}')" class="btn-3d btn-yellow w-full py-0.5 font-io text-[9px] stroke-text-dark">EQUIP</button>`;
-                }
-                card.appendChild(actionDiv);
 
                 grid.appendChild(card);
             });
 
-            if (ownedItems.length > 0) {
-                const currentEquipped = ownedItems.find(i => (_cosmeticTab === 'deriler' ? i.id === _currentSkin : i.id === _equippedWeapon)) || ownedItems[0];
+            if (!_cosmeticPreviewItem || _cosmeticPreviewItem.cat !== _cosmeticTab) {
+                const currentEquipped = allItems.find(i => (_cosmeticTab === 'deriler' ? i.id === _currentSkin : i.id === _equippedWeapon)) || allItems[0];
                 selectCosmeticPreviewItem(currentEquipped, _cosmeticTab);
             }
         }
 
         function selectCosmeticPreviewItem(item, cat) {
             _cosmeticPreviewItem = { item, cat };
-            document.getElementById('cosmetic-preview-name').textContent = item.name;
-            
-            let isEquipped = (_cosmeticTab === 'deriler') ? (_currentSkin === item.id) : (_equippedWeapon === item.id);
+            const nameEl = document.getElementById('cosmetic-preview-name');
+            if (nameEl) nameEl.textContent = item.name;
+
+            const owned = isItemOwned(item);
+            const isEquipped = (cat === 'deriler') ? (_currentSkin === item.id) : (_equippedWeapon === item.id);
             const statusEl = document.getElementById('cosmetic-preview-status');
             const btn = document.getElementById('cosmetic-preview-btn');
-            
+
             if (isEquipped) {
                 statusEl.textContent = 'EQUIPPED';
-                statusEl.className = 'text-[10px] font-black text-green-400 block mb-1';
+                statusEl.className = 'font-io text-xs text-[#79d138] block mb-1 stroke-text';
                 btn.textContent = 'EQUIPPED';
-                btn.className = 'btn-3d bg-green-700 w-full py-1.5 font-io text-xs stroke-text opacity-75 pointer-events-none';
-            } else {
+                btn.className = 'btn-3d bg-green-700 w-full py-2 font-io text-xs stroke-text opacity-80 pointer-events-none';
+                btn.onclick = null;
+            } else if (owned) {
                 statusEl.textContent = 'UNLOCKED';
-                statusEl.className = 'text-[10px] font-black text-yellow-400 block mb-1';
+                statusEl.className = 'font-io text-xs text-yellow-400 block mb-1 stroke-text';
                 btn.textContent = 'EQUIP';
-                btn.className = 'btn-3d btn-play w-full py-1.5 font-io text-xs stroke-text';
+                btn.className = 'btn-3d btn-play w-full py-2 font-io text-xs stroke-text';
                 btn.onclick = () => equipCosmeticItem(item.id, cat);
+            } else {
+                statusEl.innerHTML = `<i class="fa-solid fa-lock text-xs mr-1"></i>KİLİTLİ (${item.cost} 🪙)`;
+                statusEl.className = 'font-io text-xs text-amber-300 block mb-1 stroke-text';
+                btn.innerHTML = `MAĞAZADA AÇ (${item.cost} 🪙)`;
+                btn.className = 'btn-3d btn-yellow w-full py-2 font-io text-xs stroke-text-dark';
+                btn.onclick = () => {
+                    openShopModal();
+                    setShopTab(cat);
+                    selectShopPreviewItem(item, cat);
+                };
             }
             playSfx('click');
         }
@@ -1870,8 +2101,11 @@
         }
 
         /* ════════════════════════════════════════════════════════════════
-           8. SHOP (MAĞAZA - SADECE SATIN ALINMAMIŞ EŞYALAR)
+           8. SHOP (MAĞAZA - TAMING.IO 3x3 SAYFALAMA & ÖNİZLEME)
         ════════════════════════════════════════════════════════════════ */
+        let _shopPage = 0;
+        const SHOP_PAGE_SIZE = 9;
+
         function openShopModal() {
             openModal('shopModal');
             setShopTab(_shopTab);
@@ -1879,7 +2113,8 @@
 
         function setShopTab(cat) {
             _shopTab = cat;
-            document.querySelectorAll('#shopModal .shop-tab').forEach(btn => {
+            _shopPage = 0;
+            document.querySelectorAll('#shopModal .taming-tab').forEach(btn => {
                 if (btn.dataset.cat === cat) btn.classList.add('active');
                 else btn.classList.remove('active');
             });
@@ -1887,34 +2122,60 @@
             playSfx('click');
         }
 
+        function prevShopPage() {
+            if (_shopPage > 0) {
+                _shopPage--;
+                renderShopAllGrid();
+                playSfx('click');
+            }
+        }
+
+        function nextShopPage() {
+            const allItems = ALL_ITEMS_MAP[_shopTab] || [];
+            if ((_shopPage + 1) * SHOP_PAGE_SIZE < allItems.length) {
+                _shopPage++;
+                renderShopAllGrid();
+                playSfx('click');
+            }
+        }
+
         function renderShopAllGrid() {
             const grid = document.getElementById('shop-all-grid');
             if (!grid) return;
             grid.innerHTML = '';
-            const items = ALL_ITEMS_MAP[_shopTab] || [];
-            const unownedItems = items.filter(item => !isItemOwned(item));
+            const allItems = ALL_ITEMS_MAP[_shopTab] || [];
+            const total = allItems.length;
+            const startIdx = _shopPage * SHOP_PAGE_SIZE;
+            const endIdx = Math.min(startIdx + SHOP_PAGE_SIZE, total);
+            const pageItems = allItems.slice(startIdx, endIdx);
 
-            if (unownedItems.length === 0) {
-                grid.innerHTML = `
-                    <div class="col-span-full py-10 flex flex-col items-center justify-center text-center">
-                        <i class="fa-solid fa-circle-check text-4xl text-[#79D138] mb-2 drop-shadow-md"></i>
-                        <span class="font-io text-white text-base stroke-text">Bu kategorideki tüm eşyaları açtın!</span>
-                        <span class="text-xs font-black text-[#FFDF73] mt-1">Sahip olduğun tüm kostümleri Cosmetics (Envanter) menüsünden kuşanabilirsin.</span>
-                        <button onclick="openCosmeticsModal(); playSfx('click')" class="btn-3d btn-play px-5 py-2 font-io text-xs stroke-text mt-3">
-                            ENVANTERE GİT (COSMETICS)
-                        </button>
-                    </div>
-                `;
-                return;
-            }
+            const pageInfo = document.getElementById('shop-page-info');
+            if (pageInfo) pageInfo.textContent = `${startIdx + 1} - ${endIdx} / ${total}`;
 
-            unownedItems.forEach(item => {
+            const prevBtn = document.getElementById('shop-prev-btn');
+            const nextBtn = document.getElementById('shop-next-btn');
+            if (prevBtn) prevBtn.style.opacity = _shopPage === 0 ? '0.4' : '1';
+            if (nextBtn) nextBtn.style.opacity = endIdx >= total ? '0.4' : '1';
+
+            const userGold = getPlayerGold();
+            const goldEl = document.getElementById('shop-gold-display');
+            if (goldEl) goldEl.textContent = userGold.toLocaleString();
+
+            pageItems.forEach(item => {
+                const owned = isItemOwned(item);
+                const isEquipped = (_shopTab === 'deriler') ? (_currentSkin === item.id) : (_equippedWeapon === item.id);
+                const isSelected = _shopPreviewItem && _shopPreviewItem.item.id === item.id;
+
                 const card = document.createElement('div');
-                card.className = `item-card rarity-${item.rarity || 'common'}`;
+                card.className = `taming-card relative p-2 rounded-xl border-[3.5px] cursor-pointer flex flex-col items-center justify-between transition-transform duration-75 hover:scale-105 select-none ${
+                    isEquipped ? 'bg-[#2a4515] border-[#79d138] shadow-[0_0_12px_rgba(121,209,56,0.5)]' :
+                    isSelected ? 'bg-[#502e12] border-[#fce072]' :
+                    owned ? 'bg-[#3b200e] border-[#281204]' : 'bg-[#2f180a] border-[#201006]'
+                }`;
                 card.onclick = () => selectShopPreviewItem(item, _shopTab);
 
                 const imgWrap = document.createElement('div');
-                imgWrap.className = 'w-16 h-16 my-1 flex items-center justify-center relative';
+                imgWrap.className = 'w-14 h-14 my-1 flex items-center justify-center relative';
                 const img = document.createElement('img');
                 img.src = item.img;
                 img.className = 'max-w-full max-h-full object-contain drop-shadow-md';
@@ -1927,48 +2188,67 @@
                 nameSpan.textContent = item.name;
                 card.appendChild(nameSpan);
 
-                const actionDiv = document.createElement('div');
-                actionDiv.className = 'mt-1.5 w-full';
-                actionDiv.innerHTML = `<button onclick="event.stopPropagation(); buyShopItem('${item.id}', '${_shopTab}', ${item.cost})" class="btn-3d btn-red w-full py-0.5 font-io text-[9px] stroke-text">${item.cost} <i class="fa-solid fa-coins text-yellow-300"></i></button>`;
-                card.appendChild(actionDiv);
+                const priceTag = document.createElement('div');
+                priceTag.className = 'mt-1 w-full text-center';
+                if (isEquipped) {
+                    priceTag.innerHTML = '<span class="text-[9px] font-io text-[#79d138] stroke-text">EQUIPPED</span>';
+                } else if (owned) {
+                    priceTag.innerHTML = '<span class="text-[9px] font-io text-yellow-300 stroke-text">SAHİPSİN</span>';
+                } else {
+                    priceTag.innerHTML = `<span class="text-[9px] font-io text-amber-300 stroke-text">${item.cost} 🪙</span>`;
+                }
+                card.appendChild(priceTag);
 
                 grid.appendChild(card);
             });
 
-            if (unownedItems.length > 0) {
-                selectShopPreviewItem(unownedItems[0], _shopTab);
+            if (!_shopPreviewItem || _shopPreviewItem.cat !== _shopTab) {
+                selectShopPreviewItem(pageItems[0] || allItems[0], _shopTab);
             }
         }
 
         function selectShopPreviewItem(item, cat) {
             _shopPreviewItem = { item, cat };
-            document.getElementById('shop-preview-name').textContent = item.name;
+            const nameEl = document.getElementById('shop-preview-name');
+            if (nameEl) nameEl.textContent = item.name;
 
             const owned = isItemOwned(item);
-            const equipped = (cat === 'deriler') ? (_currentSkin === item.id) : (_equippedWeapon === item.id);
+            const isEquipped = (cat === 'deriler') ? (_currentSkin === item.id) : (_equippedWeapon === item.id);
             const statusEl = document.getElementById('shop-preview-status');
             const btn = document.getElementById('shop-preview-btn');
 
-            if (equipped) {
+            if (isEquipped) {
                 statusEl.textContent = 'EQUIPPED';
-                statusEl.className = 'text-[10px] font-black text-green-400 block mb-1';
+                statusEl.className = 'font-io text-xs text-green-400 block mb-1 stroke-text';
                 btn.textContent = 'EQUIPPED';
-                btn.className = 'btn-3d bg-green-700 w-full py-1.5 font-io text-xs stroke-text opacity-75 pointer-events-none';
+                btn.className = 'btn-3d bg-green-700 w-full py-2 font-io text-xs stroke-text opacity-75 pointer-events-none';
                 btn.onclick = null;
             } else if (owned) {
-                statusEl.textContent = 'UNLOCKED';
-                statusEl.className = 'text-[10px] font-black text-yellow-400 block mb-1';
-                btn.textContent = 'EQUIP';
-                btn.className = 'btn-3d btn-play w-full py-1.5 font-io text-xs stroke-text';
+                statusEl.textContent = 'SAHİP OLUNDU';
+                statusEl.className = 'font-io text-xs text-yellow-300 block mb-1 stroke-text';
+                btn.textContent = 'KUŞAN (EQUIP)';
+                btn.className = 'btn-3d btn-play w-full py-2 font-io text-xs stroke-text';
                 btn.onclick = () => equipCosmeticItem(item.id, cat);
             } else {
-                statusEl.innerHTML = `COST: ${item.cost} <i class="fa-solid fa-coins text-yellow-400"></i>`;
-                statusEl.className = 'text-[10px] font-black text-red-400 block mb-1';
-                btn.innerHTML = `SATIN AL (${item.cost} <i class="fa-solid fa-coins text-yellow-300"></i>)`;
-                btn.className = 'btn-3d btn-red w-full py-1.5 font-io text-xs stroke-text';
+                statusEl.innerHTML = `FİYAT: ${item.cost} 🪙`;
+                statusEl.className = 'font-io text-xs text-[#FFDF73] block mb-1 stroke-text';
+                btn.innerHTML = `SATIN AL (${item.cost} 🪙)`;
+                btn.className = 'btn-3d btn-red w-full py-2 font-io text-xs stroke-text';
                 btn.onclick = () => buyShopItem(item.id, cat, item.cost);
             }
             playSfx('click');
+        }
+
+        function buyCurrentShopItem() {
+            if (_shopPreviewItem) {
+                const item = _shopPreviewItem.item;
+                const cat = _shopPreviewItem.cat;
+                if (isItemOwned(item)) {
+                    equipCosmeticItem(item.id, cat);
+                } else {
+                    buyShopItem(item.id, cat, item.cost);
+                }
+            }
         }
 
         function buyShopItem(id, cat, cost) {
@@ -1998,16 +2278,19 @@
             playSfx('buy');
         }
 
+        /* ════════════════════════════════════════════════════════════════
+           9. CHALLENGES / GÖREVLER (TAMING.IO SCREENSHOT 3 BİREBİR)
+        ════════════════════════════════════════════════════════════════ */
         const QUESTS_LIST = [
-            { id: 'q_wolf_5', title: 'Kurt Avcısı', desc: '5 vahşi kurt öldür', icon: '🐺', key: 'wolves', target: 5, rewardCoins: 250, rewardXp: 200, color: 'amber' },
-            { id: 'q_bear_2', title: 'Büyük Ayı Terbiyecisi', desc: '2 orman ayısı alt et', icon: '🐻', key: 'bears', target: 2, rewardCoins: 500, rewardXp: 400, color: 'orange' },
-            { id: 'q_scorpion_3', title: 'Çöl Akrebi Avcısı', desc: '3 akrep yok et', icon: '🦂', key: 'scorpions', target: 3, rewardCoins: 350, rewardXp: 250, color: 'yellow' },
-            { id: 'q_spider_3', title: 'Mağara Örümceği', desc: '3 zehirli örümcek öldür', icon: '🕷️', key: 'spiders', target: 3, rewardCoins: 300, rewardXp: 220, color: 'purple' },
-            { id: 'q_pvp_kill_1', title: 'İlk Kan', desc: '1 düşman oyuncu katlet', icon: '⚔️', key: 'kills', target: 1, rewardCoins: 400, rewardXp: 300, color: 'red' },
-            { id: 'q_bounty_king_1', title: 'Kral Katili', desc: '1 Altın Kralı devir', icon: '👑', key: 'kingKills', target: 1, rewardCoins: 650, rewardXp: 500, color: 'yellow' },
-            { id: 'q_airdrop_1', title: 'Hazine Avcısı', desc: '1 Airdrop Sandığı aç', icon: '📦', key: 'airdrops', target: 1, rewardCoins: 350, rewardXp: 300, color: 'cyan' },
-            { id: 'q_build_15', title: 'Usta Mimar', desc: '15 savunma yapısı inşa et', icon: '🪵', key: 'buildings', target: 15, rewardCoins: 200, rewardXp: 150, color: 'emerald' },
-            { id: 'q_gold_1000', title: 'Zengin Savaşçı', desc: 'Toplam 1000 Altına ulaş', icon: '💎', key: 'gold', target: 1000, rewardCoins: 500, rewardXp: 400, color: 'blue' }
+            { id: 'q_wolf_5', title: 'Kill 5 wild wolves', desc: 'You can kill with a weapon or a pet', icon: '🐺', key: 'wolves', target: 5, rewardCoins: 250, rewardXp: 200 },
+            { id: 'q_bear_2', title: 'Hunt 2 wild bears', desc: 'Defeat wild forest bears in battle', icon: '🐻', key: 'bears', target: 2, rewardCoins: 500, rewardXp: 400 },
+            { id: 'q_scorpion_3', title: 'Defeat 3 desert scorpions', desc: 'Hunt scorpions in the desert sands', icon: '🦂', key: 'scorpions', target: 3, rewardCoins: 350, rewardXp: 250 },
+            { id: 'q_spider_3', title: 'Exterminate 3 spiders', desc: 'Clean poisonous spiders from the caves', icon: '🕷️', key: 'spiders', target: 3, rewardCoins: 300, rewardXp: 220 },
+            { id: 'q_pvp_kill_1', title: 'Slay 1 enemy player', desc: 'Prove your power in glorious PvP combat', icon: '⚔️', key: 'kills', target: 1, rewardCoins: 400, rewardXp: 300 },
+            { id: 'q_bounty_king_1', title: 'Dethrone the Gold King', desc: 'Kill the reigning bounty king', icon: '👑', key: 'kingKills', target: 1, rewardCoins: 650, rewardXp: 500 },
+            { id: 'q_airdrop_1', title: 'Discover 1 Airdrop Chest', desc: 'Secure high-value treasure drops on the map', icon: '📦', key: 'airdrops', target: 1, rewardCoins: 350, rewardXp: 300 },
+            { id: 'q_build_15', title: 'Construct 15 buildings', desc: 'Place spike walls, turrets or windmills', icon: '🪵', key: 'buildings', target: 15, rewardCoins: 200, rewardXp: 150 },
+            { id: 'q_gold_1000', title: 'Gather 10,000 gold', desc: 'Chop trees, mine rocks or farm windmills', icon: '🪙', key: 'gold', target: 1000, rewardCoins: 500, rewardXp: 400 }
         ];
 
         function getFullQuestProgress() {
@@ -2037,63 +2320,52 @@
 
             const progress = getFullQuestProgress();
             const claimed = getClaimedQuestsList();
-            let completedCount = 0;
 
             list.innerHTML = QUESTS_LIST.map(q => {
                 const current = Number(progress[q.key] || 0);
                 const isClaimed = claimed.includes(q.id);
                 const isCompleted = current >= q.target;
-                if (isCompleted || isClaimed) completedCount++;
-                const pct = Math.min(100, Math.round((current / q.target) * 100));
 
-                let actionButtonHtml = '';
+                let actionHtml = '';
                 if (isClaimed) {
-                    actionButtonHtml = `<span class="px-3 py-1 bg-emerald-900/60 border border-emerald-500/50 text-emerald-400 font-io text-[11px] rounded-lg">ALINDI ✅</span>`;
+                    actionHtml = `
+                        <div class="flex flex-col items-center justify-center bg-[#52290d] border-2 border-[#3c1e08] rounded-xl px-3 py-1.5 min-w-[72px]">
+                            <span class="text-green-400 font-io text-xs">ALINDI ✅</span>
+                        </div>
+                    `;
                 } else if (isCompleted) {
-                    actionButtonHtml = `
-                        <button onclick="claimQuestReward('${q.id}')" class="btn-3d btn-play px-3 py-1 font-io text-[11px] stroke-text animate-pulse shadow-lg shadow-green-500/30">
-                            ÖDÜLÜ AL 🎁
+                    actionHtml = `
+                        <button onclick="claimQuestReward('${q.id}')" class="btn-3d btn-play px-3 py-2 font-io text-xs stroke-text shadow-lg animate-pulse min-w-[72px]">
+                            AL 🎁
                         </button>
                     `;
                 } else {
-                    actionButtonHtml = `<span class="text-white/50 font-io text-[11px] bg-black/40 px-2 py-0.5 rounded border border-white/10">${Math.min(current, q.target)}/${q.target}</span>`;
+                    actionHtml = `
+                        <div class="flex flex-col items-center justify-center bg-gradient-to-b from-[#fcd55c] to-[#e6a81e] border-2 border-[#3c1e08] rounded-xl px-2.5 py-1 min-w-[68px] shadow-[0_2px_0_#3c1e08]">
+                            <span class="font-io text-xs text-[#3c1e08] leading-none">+${q.rewardCoins} 🪙</span>
+                            <span class="font-io text-[10px] text-[#3c1e08] leading-none mt-0.5">+1 ⭐</span>
+                        </div>
+                    `;
                 }
 
                 return `
-                    <div class="bg-black/35 p-2.5 rounded-xl border ${isClaimed ? 'border-emerald-500/20 opacity-75' : isCompleted ? 'border-yellow-400/60 bg-yellow-950/20' : 'border-white/10'} flex items-center justify-between gap-2.5 transition-all hover:bg-black/45">
-                        <div class="flex items-center gap-2.5 min-w-0 flex-1">
-                            <div class="w-10 h-10 bg-black/50 rounded-lg flex items-center justify-center border border-white/15 text-xl flex-shrink-0 shadow-inner">
-                                ${q.icon}
+                    <div class="bg-[#fff7dc] border-[3.5px] border-[#3c1e08] rounded-xl p-2.5 shadow-[0_3px_0_#3c1e08] flex items-center justify-between gap-3 transition-transform hover:-translate-y-0.5">
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center gap-1.5 mb-1">
+                                <span class="text-base">${q.icon}</span>
+                                <span class="font-io text-sm text-[#3c1e08] truncate tracking-wide">${q.title}</span>
                             </div>
-                            <div class="flex flex-col min-w-0 flex-1">
-                                <div class="flex items-center gap-1.5">
-                                    <span class="text-white font-black text-xs truncate">${q.title}</span>
-                                    ${isCompleted && !isClaimed ? '<span class="text-[9px] bg-yellow-500/80 text-black px-1.5 rounded font-black">HAZIR!</span>' : ''}
-                                </div>
-                                <span class="text-gray-300 text-[10px] truncate">${q.desc}</span>
-                                <div class="flex items-center gap-2 mt-1">
-                                    <span class="text-[#FFDF73] font-black text-[10px]"><i class="fa-solid fa-coins text-yellow-400 mr-0.5"></i>+${q.rewardCoins}</span>
-                                    <span class="text-emerald-400 font-black text-[10px]"><i class="fa-solid fa-bolt text-emerald-400 mr-0.5"></i>+${q.rewardXp} XP</span>
-                                </div>
-                                <div class="w-full h-1.5 bg-black/60 rounded-full overflow-hidden border border-black/40 mt-1">
-                                    <div class="h-full ${isClaimed ? 'bg-emerald-500' : isCompleted ? 'bg-yellow-400' : 'bg-[#79D138]'} rounded-full transition-all duration-300" style="width:${pct}%"></div>
-                                </div>
+                            <div class="bg-gradient-to-r from-[#8be034] to-[#68c220] border-2 border-[#3c1e08] rounded-lg px-2 py-0.5 text-[11px] font-black text-[#1e3c04] flex items-center justify-between shadow-inner">
+                                <span class="truncate">${q.desc}</span>
+                                <span class="font-io text-xs text-[#1e3c04] ml-2 flex-shrink-0">${Math.min(current, q.target)} / ${q.target}</span>
                             </div>
                         </div>
-                        <div class="flex flex-col items-end justify-center flex-shrink-0">
-                            ${actionButtonHtml}
+                        <div class="flex-shrink-0">
+                            ${actionHtml}
                         </div>
                     </div>
                 `;
             }).join('');
-
-            const badge = document.getElementById('challenge-badge-progress');
-            if (badge) {
-                badge.textContent = `${completedCount}/${QUESTS_LIST.length}`;
-                if (completedCount === QUESTS_LIST.length) {
-                    badge.className = 'bg-emerald-600 text-white px-2.5 py-0.5 rounded-full font-io text-[11px] border border-emerald-400';
-                }
-            }
         }
 
         async function claimQuestReward(questId) {
@@ -2118,11 +2390,10 @@
                     if (data.user) {
                         _currentUser = data.user;
                         localStorage.setItem('fb_auth_user', JSON.stringify(data.user));
-                        localStorage.setItem('fb_gold', data.user.coins);
-                        localStorage.setItem('fb_user_rank', data.user.rankId);
                     }
                 } catch(e) {
-                    console.error('Claim error:', e);
+                    triggerToast('Sunucu bağlantı hatası.', 'fa-triangle-exclamation');
+                    return;
                 }
             } else {
                 const claimed = getClaimedQuestsList();
@@ -2130,13 +2401,14 @@
                 claimed.push(questId);
                 localStorage.setItem('fb_claimed_quests', JSON.stringify(claimed));
                 const currentGold = getPlayerGold() + quest.rewardCoins;
-                localStorage.setItem('fb_gold', currentGold);
+                setPlayerGold(currentGold);
+                const currentXp = getPlayerTotalXp() + quest.rewardXp;
+                localStorage.setItem('fb_total_xp', currentXp);
             }
 
-            updateProfileUI();
-            updateChallengeProgress();
-            triggerToast(`🎉 +${quest.rewardCoins} Altın ve +${quest.rewardXp} XP Hesabınıza Eklendi!`, 'fa-gift');
+            triggerToast(`🎉 +${quest.rewardCoins} Altın ve +${quest.rewardXp} XP Alındı!`, 'fa-star');
             playSfx('buy');
+            updateChallengeProgress();
         }
 
         function awardChallengeProgress(id, amount = 1) {
@@ -2144,32 +2416,28 @@
         }
 
         /* ════════════════════════════════════════════════════════════════
-           9. LİDERLİK TABLOSU (100% GERÇEK VERİLER)
+           10. LEADERBOARD (TAMING.IO SCREENSHOT 4 BİREBİR ARAMA & SAYFALAMA)
         ════════════════════════════════════════════════════════════════ */
         let _currentLbTab = 'all';
+        let _lbSearchTerm = '';
+        let _lbAllEntries = [];
+        let _lbPage = 0;
+        const LB_PAGE_SIZE = 8;
 
         function setLeaderboardTab(tab) {
             _currentLbTab = tab;
-            const btnTop = document.getElementById('lb-tab-top');
-            const btnRecent = document.getElementById('lb-tab-recent');
-            const btnKills = document.getElementById('lb-tab-kills');
-
-            if (btnTop) {
-                btnTop.className = tab === 'all' 
-                    ? 'btn-3d btn-play flex-1 py-1.5 font-io text-[11px] stroke-text' 
-                    : 'btn-3d bg-[#6b4932] border-[2px] border-[#3a1e06] text-white/80 flex-1 py-1.5 font-io text-[11px] stroke-text';
-            }
-            if (btnRecent) {
-                btnRecent.className = tab === 'recent' 
-                    ? 'btn-3d btn-play flex-1 py-1.5 font-io text-[11px] stroke-text' 
-                    : 'btn-3d bg-[#6b4932] border-[2px] border-[#3a1e06] text-white/80 flex-1 py-1.5 font-io text-[11px] stroke-text';
-            }
-            if (btnKills) {
-                btnKills.className = tab === 'kills' 
-                    ? 'btn-3d btn-play flex-1 py-1.5 font-io text-[11px] stroke-text' 
-                    : 'btn-3d bg-[#6b4932] border-[2px] border-[#3a1e06] text-white/80 flex-1 py-1.5 font-io text-[11px] stroke-text';
-            }
+            _lbPage = 0;
+            document.querySelectorAll('#leadersModal .taming-tab').forEach(btn => btn.classList.remove('active'));
+            if (tab === 'all') document.getElementById('lb-tab-top')?.classList.add('active');
+            if (tab === 'recent') document.getElementById('lb-tab-recent')?.classList.add('active');
+            if (tab === 'kills') document.getElementById('lb-tab-kills')?.classList.add('active');
             loadLeaderboard();
+        }
+
+        function filterLeaderboard(val) {
+            _lbSearchTerm = (val || '').toLowerCase().trim();
+            _lbPage = 0;
+            renderLeaderboardList();
         }
 
         async function loadLeaderboard() {
@@ -2180,60 +2448,89 @@
             try {
                 const res = await fetch(`/api/leaderboard?tab=${_currentLbTab}`);
                 const data = await res.json();
-                const entries = (data && data.entries) ? data.entries : [];
-                
-                container.innerHTML = '';
-                if (entries.length === 0) {
-                    container.innerHTML = `
-                        <div class="text-center text-white/60 py-10 font-io text-xs">
-                            <i class="fa-solid fa-trophy text-2xl mb-2 text-yellow-500/40 block"></i>
-                            Henüz bu kategoride kayıtlı oyuncu skoru bulunmuyor.<br>
-                            <span class="text-yellow-400 font-black">Oyuna gir ve ilk skoru sen kaydet!</span>
-                        </div>
-                    `;
-                    return;
-                }
-
-                entries.slice(0, 50).forEach((entry, idx) => {
-                    const isTop1 = idx === 0;
-                    const isTop2 = idx === 1;
-                    const isTop3 = idx === 2;
-                    const rankId = typeof entry.rankId === 'number' ? entry.rankId : 0;
-                    const rankTitle = entry.rankName || RANKS[rankId] || 'Tohum';
-                    const scoreVal = (typeof entry.score === 'number' ? entry.score : (Number(entry.gold) || 0));
-                    
-                    const row = document.createElement('div');
-                    row.className = `flex items-center justify-between p-2 rounded-xl border ${
-                        isTop1 ? 'bg-yellow-500/25 border-yellow-500/60 shadow' :
-                        isTop2 ? 'bg-slate-400/20 border-slate-400/50' :
-                        isTop3 ? 'bg-amber-700/20 border-amber-700/50' : 'bg-black/25 border-white/10'
-                    }`;
-
-                    let timeBadge = '';
-                    if (_currentLbTab === 'recent' && entry.date) {
-                        const minsAgo = Math.max(1, Math.round((Date.now() - entry.date) / 60000));
-                        timeBadge = minsAgo < 60 ? `${minsAgo} dk önce` : `${Math.floor(minsAgo/60)} sa önce`;
-                    }
-
-                    row.innerHTML = `
-                        <div class="flex items-center gap-2 min-w-0">
-                            <span class="font-io ${isTop1 ? 'text-yellow-400 text-base' : isTop2 ? 'text-slate-300' : isTop3 ? 'text-amber-500' : 'text-gray-400'} stroke-text w-5 text-center flex-shrink-0">
-                                ${idx + 1}.
-                            </span>
-                            <div class="flex flex-col min-w-0">
-                                <span class="text-white font-black text-xs sm:text-sm drop-shadow-md truncate max-w-[150px]">${entry.name}</span>
-                                <span class="text-[9px] font-black text-yellow-300/80">Lv.${rankId + 1} ${rankTitle} ${timeBadge ? `• <span class="text-white/50">${timeBadge}</span>` : ''}</span>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-3 flex-shrink-0">
-                            <span class="text-green-400 font-black text-[10px]">⚔️ ${entry.kills || 0}</span>
-                            <span class="font-io text-yellow-400 text-xs sm:text-sm stroke-text">${scoreVal.toLocaleString()} <i class="fa-solid fa-coins text-yellow-400"></i></span>
-                        </div>
-                    `;
-                    container.appendChild(row);
-                });
+                _lbAllEntries = (data && data.entries) ? data.entries : [];
+                renderLeaderboardList();
             } catch (err) {
                 container.innerHTML = '<div class="text-center text-red-300 py-6 font-io text-xs">Sıralama verisi alınamadı. Sunucu bağlantısını kontrol edin.</div>';
+            }
+        }
+
+        function renderLeaderboardList() {
+            const container = document.getElementById('leaderboard-list');
+            if (!container) return;
+
+            let filtered = _lbAllEntries;
+            if (_lbSearchTerm) {
+                filtered = _lbAllEntries.filter(e => (e.name || '').toLowerCase().includes(_lbSearchTerm));
+            }
+
+            container.innerHTML = '';
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center text-white/60 py-10 font-io text-xs">
+                        <i class="fa-solid fa-trophy text-2xl mb-2 text-yellow-500/40 block"></i>
+                        Eşleşen skor bulunamadı.
+                    </div>
+                `;
+                const pag = document.getElementById('lb-pagination');
+                if (pag) pag.innerHTML = '';
+                return;
+            }
+
+            const totalPages = Math.ceil(filtered.length / LB_PAGE_SIZE);
+            if (_lbPage >= totalPages) _lbPage = totalPages - 1;
+            const startIdx = _lbPage * LB_PAGE_SIZE;
+            const pageItems = filtered.slice(startIdx, startIdx + LB_PAGE_SIZE);
+
+            pageItems.forEach((entry, i) => {
+                const globalIdx = startIdx + i;
+                const isTop1 = globalIdx === 0;
+                const isTop2 = globalIdx === 1;
+                const isTop3 = globalIdx === 2;
+                const rankId = typeof entry.rankId === 'number' ? entry.rankId : 0;
+                const rankTitle = entry.rankName || RANKS[rankId] || 'Tohum';
+                const scoreVal = typeof entry.score === 'number' ? entry.score : (Number(entry.gold) || 0);
+
+                const row = document.createElement('div');
+                row.className = `grid grid-cols-12 items-center p-2 rounded-xl border-2 transition-all ${
+                    isTop1 ? 'bg-gradient-to-r from-[#593910] to-[#3a2206] border-[#fce072] shadow-[0_0_10px_rgba(252,224,114,0.4)] text-[#ffe885]' :
+                    isTop2 ? 'bg-[#3b2c21] border-[#c0c8d0] text-[#e0e8f0]' :
+                    isTop3 ? 'bg-[#3b2416] border-[#d88e58] text-[#f5b584]' :
+                    'bg-[#2d1608] border-[#1d0e04] text-white/90'
+                }`;
+
+                let badgeIcon = isTop1 ? '👑' : isTop2 ? '🥈' : isTop3 ? '🥉' : (RANK_ICONS[rankId] || '🌱');
+
+                row.innerHTML = `
+                    <div class="col-span-2 font-io text-sm ${isTop1 ? 'text-[#fce072]' : isTop2 ? 'text-[#c0c8d0]' : isTop3 ? 'text-[#d88e58]' : 'text-gray-400'}">
+                        #${globalIdx + 1}
+                    </div>
+                    <div class="col-span-2 text-lg">
+                        ${badgeIcon}
+                    </div>
+                    <div class="col-span-4 flex flex-col min-w-0">
+                        <span class="font-black text-xs truncate drop-shadow">${entry.name || 'Oyuncu'}</span>
+                        <span class="text-[9px] font-black opacity-70">Lv.${rankId + 1} ${rankTitle}</span>
+                    </div>
+                    <div class="col-span-4 text-right font-io text-xs sm:text-sm text-yellow-300 stroke-text-dark">
+                        ${scoreVal.toLocaleString()} 🪙
+                    </div>
+                `;
+                container.appendChild(row);
+            });
+
+            const pag = document.getElementById('lb-pagination');
+            if (pag) {
+                pag.innerHTML = '';
+                for (let p = 0; p < Math.min(totalPages, 7); p++) {
+                    const btn = document.createElement('button');
+                    btn.className = `w-7 h-7 rounded-lg font-io text-xs flex items-center justify-center border-2 cursor-pointer ${
+                        p === _lbPage ? 'bg-[#fce072] text-[#3c1e08] border-[#3c1e08] shadow' : 'bg-[#52280d] text-white/80 border-[#3c1e08]'
+                    }`;
+                    btn.textContent = p + 1;
+                    btn.onclick = () => { _lbPage = p; renderLeaderboardList(); playSfx('click'); };
+                    pag.appendChild(btn);
+                }
             }
         }
 
@@ -2312,20 +2609,21 @@
         }
 
         /* ════════════════════════════════════════════════════════════════
-           12. CANLI VE BİREBİR OYUN İÇİ KARAKTER ÇİZİM MOTORU
+           12. GERÇEK OYUN İÇİ CANLI ORMAN SİMÜLASYONU (TAMING.IO ARKA PLAN)
         ════════════════════════════════════════════════════════════════ */
+        const _IMG_CACHE = {};
+        function getLoadedImage(src) {
+            if (!_IMG_CACHE[src]) {
+                const img = new Image();
+                img.src = src;
+                _IMG_CACHE[src] = img;
+            }
+            return _IMG_CACHE[src];
+        }
+
         const bgCanvas = document.getElementById('bgCanvas');
         const bgCtx = bgCanvas ? bgCanvas.getContext('2d') : null;
         let bgW = window.innerWidth, bgH = window.innerHeight;
-
-        const bgParticles = Array.from({ length: 26 }, () => ({
-            x: Math.random() * (window.innerWidth || 1200),
-            y: Math.random() * (window.innerHeight || 800),
-            radius: Math.random() * 3 + 1.5,
-            speedY: Math.random() * 0.45 + 0.2,
-            speedX: (Math.random() - 0.5) * 0.35,
-            alpha: Math.random() * 0.6 + 0.25
-        }));
 
         function resizeBackground() {
             if (!bgCanvas) return;
@@ -2333,6 +2631,93 @@
             bgH = bgCanvas.height = window.innerHeight;
         }
         window.addEventListener('resize', resizeBackground);
+
+        // Canlı Harita Nesneleri (Gerçek Oyun Verileri)
+        const SIM_TREES = [
+            { x: -320, y: -200, radius: 52, shake: 0 },
+            { x: 300, y: -260, radius: 48, shake: 0 },
+            { x: -220, y: 220, radius: 50, shake: 0 },
+            { x: 360, y: 160, radius: 54, shake: 0 },
+            { x: 100, y: 340, radius: 46, shake: 0 },
+            { x: -460, y: 40, radius: 50, shake: 0 }
+        ];
+
+        const SIM_ROCKS = [
+            { x: -200, y: -80, radius: 36, isGold: false },
+            { x: 320, y: -60, radius: 40, isGold: true },
+            { x: -90, y: -280, radius: 32, isGold: false },
+            { x: 210, y: 250, radius: 36, isGold: true },
+            { x: -380, y: 280, radius: 34, isGold: false }
+        ];
+
+        const SIM_BUSHES = [
+            { x: -70, y: 90, radius: 26 },
+            { x: 190, y: -160, radius: 26 },
+            { x: -320, y: -40, radius: 26 }
+        ];
+
+        // Zemin Prosedürel Dekorasyonları (Yonca, Çakıl, Çiçek)
+        const SIM_GROUND_DECORS = [];
+        for (let i = 0; i < 40; i++) {
+            SIM_GROUND_DECORS.push({
+                x: (Math.random() - 0.5) * 1600,
+                y: (Math.random() - 0.5) * 1400,
+                type: Math.floor(Math.random() * 3), // 0: yonca, 1: cakil, 2: cicek
+                size: Math.random() * 4 + 6
+            });
+        }
+
+        // Simülasyon Karakterleri ve Durumları
+        const SIM_ACTORS = {
+            // Ağaç kesen oduncu
+            lumberjack: {
+                x: -375, y: -200,
+                skin: 'wolf',
+                axeTier: 'axe-tier-1',
+                swingTimer: 0,
+                chips: [],
+                floatTexts: []
+            },
+            // Devriye atan kılıçlı savaşçı
+            scout: {
+                pathAngle: 0,
+                radius: 170,
+                centerX: 180, centerY: 30,
+                skin: 'ninja',
+                swordTier: 'sword-tier-2'
+            },
+            // Gezinen kurt mobu
+            wolf: {
+                x: -120, y: -120,
+                vx: 0.6, vy: 0.3,
+                angle: 0.4,
+                animT: 0
+            },
+            // Kamp yakınında ayı mobu
+            bear: {
+                x: 180, y: 190,
+                vx: -0.4, vy: 0.2,
+                angle: 2.8,
+                animT: 0
+            },
+            // Kamp ateşi ve duman partikülleri
+            campfire: {
+                x: 50, y: 20,
+                flameParticles: [],
+                smokeParticles: []
+            }
+        };
+
+        // Atmosferik Yüzen Parçacıklar (Ateş böcekleri ve yapraklar)
+        const SIM_AMBIENT_PARTICLES = Array.from({ length: 30 }, () => ({
+            x: (Math.random() - 0.5) * 1800,
+            y: (Math.random() - 0.5) * 1500,
+            radius: Math.random() * 2.5 + 1.2,
+            speedY: Math.random() * 0.45 + 0.2,
+            speedX: (Math.random() - 0.5) * 0.35,
+            alpha: Math.random() * 0.5 + 0.3,
+            isLeaf: Math.random() > 0.6
+        }));
 
         // OYUN İÇİ İLE %100 BİREBİR VE SAĞA BAKAN CANLI ÇİZİM MOTORU
         function drawExactInGamePlayer(ctx, cx, cy, skinId, weaponId, t, scale = 0.7) {
@@ -2368,7 +2753,7 @@
                 ctx.restore();
             }
 
-            // 3. Eller (Canlı ve Belirgin)
+            // 3. Eller
             for (let _ai = 0; _ai < 2; _ai++) {
                 const ay = _ai === 0 ? -14 : 20, sign = _ai === 0 ? -1 : 1;
                 ctx.save();
@@ -2381,7 +2766,6 @@
                 ctx.fill();
                 ctx.stroke();
 
-                // El parlama detayı
                 ctx.fillStyle = 'rgba(255,255,255,0.3)';
                 ctx.beginPath();
                 ctx.ellipse(2, -3 * sign, 7, 4, 0.2 * sign, 0, Math.PI * 2);
@@ -2405,46 +2789,415 @@
             ctx.restore();
         }
 
+        // CANLI GERÇEK OYUN ARKA PLAN SİMÜLASYON DÖNGÜSÜ
         function animateMenu() {
             _animFrame++;
-            
-            // Canlı, Parlak ve Derin Orman Arka Planı
+
             if (bgCtx) {
-                const grd = bgCtx.createRadialGradient(bgW / 2, bgH / 2, 60, bgW / 2, bgH / 2, Math.max(bgW, bgH) * 0.85);
-                grd.addColorStop(0, '#364F24');
-                grd.addColorStop(0.65, '#243717');
-                grd.addColorStop(1, '#15220E');
-                bgCtx.fillStyle = grd;
+                // Kamera Yavaş Sinüzoidal Gezinme
+                const camX = Math.sin(_animFrame * 0.0022) * 160;
+                const camY = Math.cos(_animFrame * 0.0016) * 110;
+                const originX = bgW / 2 - camX;
+                const originY = bgH / 2 - camY;
+
+                // 1. Canlı Yeşil Çim Zemin (Taming.io Gerçek Orman Rengi)
+                bgCtx.fillStyle = '#446e29';
                 bgCtx.fillRect(0, 0, bgW, bgH);
 
-                // İnce Izgara Deseni
-                bgCtx.strokeStyle = 'rgba(255,255,255,0.025)';
-                bgCtx.lineWidth = 1.5;
-                const gridSize = 100;
-                for (let x = (_animFrame * 0.2) % gridSize; x < bgW; x += gridSize) {
-                    bgCtx.beginPath(); bgCtx.moveTo(x, 0); bgCtx.lineTo(x, bgH); bgCtx.stroke();
+                // İnce Kare Izgara (Gerçek Oyun Zemin Izgarası)
+                bgCtx.strokeStyle = 'rgba(40, 68, 22, 0.45)';
+                bgCtx.lineWidth = 2;
+                const gridSize = 90;
+                const startX = (originX % gridSize) - gridSize;
+                const startY = (originY % gridSize) - gridSize;
+                for (let gx = startX; gx < bgW + gridSize; gx += gridSize) {
+                    bgCtx.beginPath(); bgCtx.moveTo(gx, 0); bgCtx.lineTo(gx, bgH); bgCtx.stroke();
                 }
-                for (let y = (_animFrame * 0.15) % gridSize; y < bgH; y += gridSize) {
-                    bgCtx.beginPath(); bgCtx.moveTo(0, y); bgCtx.lineTo(bgW, y); bgCtx.stroke();
+                for (let gy = startY; gy < bgH + gridSize; gy += gridSize) {
+                    bgCtx.beginPath(); bgCtx.moveTo(0, gy); bgCtx.lineTo(bgW, gy); bgCtx.stroke();
                 }
 
-                // Canlı Ateş Böcekleri & Parıltılar
-                bgParticles.forEach(p => {
+                bgCtx.save();
+                bgCtx.translate(originX, originY);
+
+                // 2. Prosedürel Zemin Dekorları (Yoncalar, Çakıllar, Çiçekler)
+                SIM_GROUND_DECORS.forEach(d => {
+                    bgCtx.save();
+                    bgCtx.translate(d.x, d.y);
+                    if (d.type === 0) {
+                        // 3 Yapraklı Yonca
+                        bgCtx.fillStyle = '#5c9238';
+                        for (let a = 0; a < 3; a++) {
+                            bgCtx.beginPath();
+                            const ang = (a * Math.PI * 2) / 3;
+                            bgCtx.arc(Math.cos(ang) * 4, Math.sin(ang) * 4, 3.5, 0, Math.PI * 2);
+                            bgCtx.fill();
+                        }
+                    } else if (d.type === 1) {
+                        // Pürüzsüz Dere Çakılı
+                        bgCtx.fillStyle = '#7a8570';
+                        bgCtx.beginPath();
+                        bgCtx.ellipse(0, 0, d.size, d.size * 0.7, 0.4, 0, Math.PI * 2);
+                        bgCtx.fill();
+                    } else {
+                        // Orman Kır Çiçeği
+                        bgCtx.fillStyle = '#fce072';
+                        bgCtx.beginPath();
+                        bgCtx.arc(0, 0, 2.5, 0, Math.PI * 2);
+                        bgCtx.fill();
+                    }
+                    bgCtx.restore();
+                });
+
+                // 3. Kamp Alanı (Taşlar, Odunlar, Canlı Alev ve Duman)
+                const camp = SIM_ACTORS.campfire;
+                bgCtx.save();
+                bgCtx.translate(camp.x, camp.y);
+                // Kamp taş çemberi
+                bgCtx.fillStyle = 'rgba(0,0,0,0.3)';
+                bgCtx.beginPath(); bgCtx.arc(0, 0, 36, 0, Math.PI * 2); bgCtx.fill();
+                for (let si = 0; si < 8; si++) {
+                    const sAng = (si * Math.PI * 2) / 8;
+                    bgCtx.fillStyle = '#6e6e66';
+                    bgCtx.strokeStyle = '#3a3a34';
+                    bgCtx.lineWidth = 1.5;
+                    bgCtx.beginPath();
+                    bgCtx.arc(Math.cos(sAng) * 24, Math.sin(sAng) * 24, 7, 0, Math.PI * 2);
+                    bgCtx.fill();
+                    bgCtx.stroke();
+                }
+                // Çapraz odunlar
+                bgCtx.strokeStyle = '#5a3418';
+                bgCtx.lineWidth = 6;
+                bgCtx.beginPath(); bgCtx.moveTo(-16, -16); bgCtx.lineTo(16, 16); bgCtx.stroke();
+                bgCtx.beginPath(); bgCtx.moveTo(-16, 16); bgCtx.lineTo(16, -16); bgCtx.stroke();
+
+                // Ateş partikülleri üretimi
+                if (Math.random() > 0.3) {
+                    camp.flameParticles.push({
+                        x: (Math.random() - 0.5) * 14,
+                        y: (Math.random() - 0.5) * 14,
+                        r: Math.random() * 8 + 5,
+                        life: 1
+                    });
+                }
+                if (Math.random() > 0.6) {
+                    camp.smokeParticles.push({
+                        x: (Math.random() - 0.5) * 10,
+                        y: -10,
+                        r: Math.random() * 6 + 4,
+                        life: 1
+                    });
+                }
+
+                // Canlı alev çizimi
+                for (let fi = camp.flameParticles.length - 1; fi >= 0; fi--) {
+                    const fp = camp.flameParticles[fi];
+                    fp.y -= 1.2;
+                    fp.r *= 0.94;
+                    fp.life -= 0.04;
+                    if (fp.life <= 0 || fp.r < 1) {
+                        camp.flameParticles.splice(fi, 1);
+                        continue;
+                    }
+                    bgCtx.fillStyle = fp.life > 0.5 ? 'rgba(255, 200, 30, ' + fp.life + ')' : 'rgba(230, 80, 20, ' + fp.life + ')';
+                    bgCtx.beginPath();
+                    bgCtx.arc(fp.x, fp.y, fp.r, 0, Math.PI * 2);
+                    bgCtx.fill();
+                }
+
+                // Yükselen duman çizimi
+                for (let smi = camp.smokeParticles.length - 1; smi >= 0; smi--) {
+                    const sp = camp.smokeParticles[smi];
+                    sp.y -= 0.8;
+                    sp.x += Math.sin(_animFrame * 0.05 + sp.y * 0.1) * 0.4;
+                    sp.r += 0.2;
+                    sp.life -= 0.02;
+                    if (sp.life <= 0) {
+                        camp.smokeParticles.splice(smi, 1);
+                        continue;
+                    }
+                    bgCtx.fillStyle = `rgba(160, 160, 160, ${sp.life * 0.25})`;
+                    bgCtx.beginPath();
+                    bgCtx.arc(sp.x, sp.y, sp.r, 0, Math.PI * 2);
+                    bgCtx.fill();
+                }
+                bgCtx.restore();
+
+                // 4. Çalılar & Kırmızı Elmalar (asset/bush.png, asset/apple.png)
+                const bushImg = getLoadedImage('asset/bush.png');
+                const appleImg = getLoadedImage('asset/apple.png');
+                SIM_BUSHES.forEach(b => {
+                    bgCtx.save();
+                    bgCtx.translate(b.x, b.y);
+                    bgCtx.fillStyle = 'rgba(0,0,0,0.25)';
+                    bgCtx.beginPath(); bgCtx.ellipse(0, 4, b.radius + 4, b.radius, 0, 0, Math.PI * 2); bgCtx.fill();
+                    if (bushImg && bushImg.complete && bushImg.naturalWidth > 0) {
+                        bgCtx.drawImage(bushImg, -b.radius, -b.radius, b.radius * 2, b.radius * 2);
+                    } else {
+                        bgCtx.fillStyle = '#2f661a';
+                        bgCtx.beginPath(); bgCtx.arc(0, 0, b.radius, 0, Math.PI * 2); bgCtx.fill();
+                    }
+                    // Üzerindeki kırmızı elmalar
+                    if (appleImg && appleImg.complete && appleImg.naturalWidth > 0) {
+                        bgCtx.drawImage(appleImg, -14, -10, 14, 14);
+                        bgCtx.drawImage(appleImg, 4, 2, 14, 14);
+                    }
+                    bgCtx.restore();
+                });
+
+                // 5. Kayalar & Altın Madenleri (asset/rock-forest.png, asset/gold.png)
+                const rockImg = getLoadedImage('asset/rock-forest.png');
+                const goldImg = getLoadedImage('asset/gold.png');
+                SIM_ROCKS.forEach(r => {
+                    bgCtx.save();
+                    bgCtx.translate(r.x, r.y);
+                    bgCtx.fillStyle = 'rgba(0,0,0,0.3)';
+                    bgCtx.beginPath(); bgCtx.ellipse(0, 4, r.radius + 4, r.radius * 0.9, 0, 0, Math.PI * 2); bgCtx.fill();
+
+                    if (r.isGold) {
+                        if (goldImg && goldImg.complete && goldImg.naturalWidth > 0) {
+                            bgCtx.drawImage(goldImg, -r.radius, -r.radius, r.radius * 2, r.radius * 2);
+                        } else {
+                            bgCtx.fillStyle = '#e6b820';
+                            bgCtx.beginPath(); bgCtx.arc(0, 0, r.radius, 0, Math.PI * 2); bgCtx.fill();
+                        }
+                        // Altın parıltı efekti
+                        if ((_animFrame + r.x) % 60 < 20) {
+                            bgCtx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+                            bgCtx.beginPath();
+                            bgCtx.arc(Math.sin(_animFrame * 0.1) * 10, -10, 3, 0, Math.PI * 2);
+                            bgCtx.fill();
+                        }
+                    } else {
+                        if (rockImg && rockImg.complete && rockImg.naturalWidth > 0) {
+                            bgCtx.drawImage(rockImg, -r.radius, -r.radius, r.radius * 2, r.radius * 2);
+                        } else {
+                            bgCtx.fillStyle = '#7a8277';
+                            bgCtx.beginPath(); bgCtx.arc(0, 0, r.radius, 0, Math.PI * 2); bgCtx.fill();
+                        }
+                    }
+                    bgCtx.restore();
+                });
+
+                // 6. Canlı Kurt Mobu (Dolaşan & Kuyruk Sallayan)
+                const wMob = SIM_ACTORS.wolf;
+                wMob.animT += 0.05;
+                wMob.x += Math.cos(wMob.angle) * 0.45;
+                wMob.y += Math.sin(wMob.angle) * 0.45;
+                if (Math.hypot(wMob.x - (-120), wMob.y - (-120)) > 90) {
+                    wMob.angle += Math.PI * 0.5 + Math.random() * 0.5;
+                }
+                bgCtx.save();
+                bgCtx.translate(wMob.x, wMob.y);
+                bgCtx.rotate(wMob.angle);
+                // Kurt Gölgesi
+                bgCtx.fillStyle = 'rgba(0,0,0,0.3)';
+                bgCtx.beginPath(); bgCtx.ellipse(0, 0, 24, 18, 0, 0, Math.PI * 2); bgCtx.fill();
+                // Kurt Gövdesi
+                bgCtx.fillStyle = '#6b7280';
+                bgCtx.strokeStyle = '#374151';
+                bgCtx.lineWidth = 2.5;
+                bgCtx.beginPath(); bgCtx.ellipse(0, 0, 22, 16, 0, 0, Math.PI * 2); bgCtx.fill(); bgCtx.stroke();
+                // Kulaklar
+                bgCtx.fillStyle = '#4b5563';
+                bgCtx.beginPath(); bgCtx.moveTo(10, -12); bgCtx.lineTo(16, -18); bgCtx.lineTo(6, -14); bgCtx.fill(); bgCtx.stroke();
+                bgCtx.beginPath(); bgCtx.moveTo(10, 12); bgCtx.lineTo(16, 18); bgCtx.lineTo(6, 14); bgCtx.fill(); bgCtx.stroke();
+                // Burun
+                bgCtx.fillStyle = '#1f2937';
+                bgCtx.beginPath(); bgCtx.arc(20, 0, 4, 0, Math.PI * 2); bgCtx.fill();
+                // Sallanan Kuyruk
+                const tailWag = Math.sin(wMob.animT * 4) * 0.35;
+                bgCtx.save();
+                bgCtx.translate(-20, 0);
+                bgCtx.rotate(tailWag);
+                bgCtx.strokeStyle = '#6b7280';
+                bgCtx.lineWidth = 6;
+                bgCtx.lineCap = 'round';
+                bgCtx.beginPath(); bgCtx.moveTo(0, 0); bgCtx.lineTo(-14, 0); bgCtx.stroke();
+                bgCtx.restore();
+                bgCtx.restore();
+
+                // 7. Canlı Ayı Mobu (Gezinen Büyük Ayı)
+                const bMob = SIM_ACTORS.bear;
+                bMob.animT += 0.03;
+                bMob.x += Math.cos(bMob.angle) * 0.3;
+                bMob.y += Math.sin(bMob.angle) * 0.3;
+                if (Math.hypot(bMob.x - 180, bMob.y - 190) > 80) {
+                    bMob.angle += Math.PI * 0.6;
+                }
+                bgCtx.save();
+                bgCtx.translate(bMob.x, bMob.y);
+                bgCtx.rotate(bMob.angle);
+                bgCtx.fillStyle = 'rgba(0,0,0,0.3)';
+                bgCtx.beginPath(); bgCtx.ellipse(0, 0, 32, 24, 0, 0, Math.PI * 2); bgCtx.fill();
+                // Ayı gövdesi
+                bgCtx.fillStyle = '#5c3a21';
+                bgCtx.strokeStyle = '#382110';
+                bgCtx.lineWidth = 3;
+                bgCtx.beginPath(); bgCtx.ellipse(0, 0, 28, 22, 0, 0, Math.PI * 2); bgCtx.fill(); bgCtx.stroke();
+                // Kulaklar
+                bgCtx.fillStyle = '#382110';
+                bgCtx.beginPath(); bgCtx.arc(14, -18, 6, 0, Math.PI * 2); bgCtx.fill();
+                bgCtx.beginPath(); bgCtx.arc(14, 18, 6, 0, Math.PI * 2); bgCtx.fill();
+                // Ağız/Burun bölgesi
+                bgCtx.fillStyle = '#8a5933';
+                bgCtx.beginPath(); bgCtx.arc(24, 0, 9, 0, Math.PI * 2); bgCtx.fill();
+                bgCtx.fillStyle = '#1a0e06';
+                bgCtx.beginPath(); bgCtx.arc(28, 0, 4, 0, Math.PI * 2); bgCtx.fill();
+                bgCtx.restore();
+
+                // 8. Devriye Atan Kılıçlı Oyuncu (Ninja)
+                const scout = SIM_ACTORS.scout;
+                scout.pathAngle += 0.008;
+                const scX = scout.centerX + Math.cos(scout.pathAngle) * scout.radius;
+                const scY = scout.centerY + Math.sin(scout.pathAngle) * (scout.radius * 0.65);
+                const scFace = scout.pathAngle + Math.PI / 2;
+                bgCtx.save();
+                bgCtx.translate(scX, scY);
+                bgCtx.rotate(scFace);
+                drawExactInGamePlayer(bgCtx, 0, 0, scout.skin, scout.swordTier, _animFrame, 0.65);
+                bgCtx.restore();
+
+                // 9. Ağaç Kesen Oduncu Oyuncu (Ağaca Balta Vuruyor!)
+                const lj = SIM_ACTORS.lumberjack;
+                lj.swingTimer++;
+                const isSwinging = (lj.swingTimer % 50) > 35;
+                const swingProgress = isSwinging ? ((lj.swingTimer % 50) - 35) / 15 : 0;
+                const swingAngle = Math.sin(swingProgress * Math.PI) * 0.75;
+
+                bgCtx.save();
+                bgCtx.translate(lj.x, lj.y);
+                bgCtx.rotate(0.25 + swingAngle);
+                drawExactInGamePlayer(bgCtx, 0, 0, lj.skin, lj.axeTier, _animFrame, 0.68);
+                bgCtx.restore();
+
+                // Ağaca vuruş anı (swingProgress zirvede)
+                if (isSwinging && (lj.swingTimer % 50) === 42) {
+                    SIM_TREES[0].shake = 7;
+                    // Tahta kıymıkları fırlat
+                    for (let ci = 0; ci < 5; ci++) {
+                        lj.chips.push({
+                            x: -330 + (Math.random() - 0.5) * 10,
+                            y: -200 + (Math.random() - 0.5) * 10,
+                            vx: (Math.random() - 0.5) * 3 - 1,
+                            vy: (Math.random() - 0.5) * 3,
+                            life: 1
+                        });
+                    }
+                    // Yüzen Odun Kazancı Metni (+10 🪵)
+                    lj.floatTexts.push({
+                        text: '+10 🪵',
+                        x: -340,
+                        y: -220,
+                        alpha: 1
+                    });
+                }
+
+                // Odun parçacıkları güncelle ve çiz
+                for (let cidx = lj.chips.length - 1; cidx >= 0; cidx--) {
+                    const chip = lj.chips[cidx];
+                    chip.x += chip.vx;
+                    chip.y += chip.vy;
+                    chip.life -= 0.05;
+                    if (chip.life <= 0) {
+                        lj.chips.splice(cidx, 1);
+                        continue;
+                    }
+                    bgCtx.fillStyle = `rgba(139, 90, 43, ${chip.life})`;
+                    bgCtx.fillRect(chip.x, chip.y, 4, 3);
+                }
+
+                // Yüzen Metinler (+10 🪵)
+                for (let ft = lj.floatTexts.length - 1; ft >= 0; ft--) {
+                    const txtObj = lj.floatTexts[ft];
+                    txtObj.y -= 0.7;
+                    txtObj.alpha -= 0.02;
+                    if (txtObj.alpha <= 0) {
+                        lj.floatTexts.splice(ft, 1);
+                        continue;
+                    }
+                    bgCtx.save();
+                    bgCtx.font = 'bold 15px "Lilita One", sans-serif';
+                    bgCtx.fillStyle = `rgba(255, 230, 120, ${txtObj.alpha})`;
+                    bgCtx.strokeStyle = `rgba(40, 20, 5, ${txtObj.alpha})`;
+                    bgCtx.lineWidth = 3;
+                    bgCtx.strokeText(txtObj.text, txtObj.x, txtObj.y);
+                    bgCtx.fillText(txtObj.text, txtObj.x, txtObj.y);
+                    bgCtx.restore();
+                }
+
+                // 10. Ağaçlar (asset/tree-forest.png - Sallanma ve Zemin Gölgesi ile)
+                const treeImg = getLoadedImage('asset/tree-forest.png');
+                SIM_TREES.forEach((t, ti) => {
+                    bgCtx.save();
+                    let sx = 0, sy = 0;
+                    if (t.shake > 0) {
+                        sx = (Math.random() - 0.5) * t.shake;
+                        sy = (Math.random() - 0.5) * t.shake;
+                        t.shake *= 0.85;
+                        if (t.shake < 0.2) t.shake = 0;
+                    }
+                    bgCtx.translate(t.x + sx, t.y + sy);
+
+                    // Ağaç zemin gölgesi
+                    bgCtx.fillStyle = 'rgba(0,0,0,0.32)';
+                    bgCtx.beginPath();
+                    bgCtx.ellipse(0, 10, t.radius + 6, t.radius * 0.85, 0, 0, Math.PI * 2);
+                    bgCtx.fill();
+
+                    if (treeImg && treeImg.complete && treeImg.naturalWidth > 0) {
+                        bgCtx.drawImage(treeImg, -t.radius, -t.radius, t.radius * 2, t.radius * 2);
+                    } else {
+                        bgCtx.fillStyle = '#2d5a1b';
+                        bgCtx.strokeStyle = '#1a380e';
+                        bgCtx.lineWidth = 4;
+                        bgCtx.beginPath();
+                        bgCtx.arc(0, 0, t.radius, 0, Math.PI * 2);
+                        bgCtx.fill();
+                        bgCtx.stroke();
+                    }
+                    bgCtx.restore();
+                });
+
+                // 11. Atmosferik Parçacıklar (Ateş Böcekleri & Uçuşan Yapraklar)
+                SIM_AMBIENT_PARTICLES.forEach(p => {
                     p.y -= p.speedY;
                     p.x += p.speedX;
-                    if (p.y < 0) p.y = bgH;
-                    if (p.x < 0) p.x = bgW;
-                    if (p.x > bgW) p.x = 0;
+                    if (p.y < -750) p.y = 750;
+                    if (p.x < -900) p.x = 900;
+                    if (p.x > 900) p.x = -900;
 
-                    const pulse = p.alpha * (0.6 + Math.sin(_animFrame * 0.05 + p.x) * 0.4);
-                    bgCtx.fillStyle = `rgba(180, 240, 70, ${pulse})`;
-                    bgCtx.shadowColor = '#b4f046';
-                    bgCtx.shadowBlur = 6;
-                    bgCtx.beginPath();
-                    bgCtx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-                    bgCtx.fill();
-                    bgCtx.shadowBlur = 0;
+                    if (p.isLeaf) {
+                        bgCtx.save();
+                        bgCtx.translate(p.x, p.y);
+                        bgCtx.rotate(_animFrame * 0.03);
+                        bgCtx.fillStyle = `rgba(180, 130, 40, ${p.alpha})`;
+                        bgCtx.beginPath();
+                        bgCtx.ellipse(0, 0, p.radius * 2.2, p.radius * 1.2, 0, 0, Math.PI * 2);
+                        bgCtx.fill();
+                        bgCtx.restore();
+                    } else {
+                        const pulse = p.alpha * (0.6 + Math.sin(_animFrame * 0.06 + p.x) * 0.4);
+                        bgCtx.fillStyle = `rgba(210, 255, 80, ${pulse})`;
+                        bgCtx.shadowColor = '#d2ff50';
+                        bgCtx.shadowBlur = 6;
+                        bgCtx.beginPath();
+                        bgCtx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                        bgCtx.fill();
+                        bgCtx.shadowBlur = 0;
+                    }
                 });
+
+                bgCtx.restore();
+
+                // 12. Kenar Vinyet Efekti (UI Elemanlarının Bembeyaz & Net Okunması İçin)
+                const vignette = bgCtx.createRadialGradient(bgW / 2, bgH / 2, Math.min(bgW, bgH) * 0.45, bgW / 2, bgH / 2, Math.max(bgW, bgH) * 0.85);
+                vignette.addColorStop(0, 'rgba(0, 0, 0, 0.05)');
+                vignette.addColorStop(0.7, 'rgba(0, 0, 0, 0.35)');
+                vignette.addColorStop(1, 'rgba(0, 0, 0, 0.68)');
+                bgCtx.fillStyle = vignette;
+                bgCtx.fillRect(0, 0, bgW, bgH);
             }
 
             // 1. Ana Ekran Aktif Karakter Canvası (Canlı & Sağa Bakan)

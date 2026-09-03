@@ -785,24 +785,61 @@ function serveStatic(request, response, requestPath) {
 const io = new Server(server, {
   path: '/api/socket.io',
   pingInterval: 10000,
-  pingTimeout: 5000,
+  pingTimeout: 15000,
+  perMessageDeflate: false, // Disabling compression on high-frequency small packets eliminates CPU lag & buffer bloat
+  maxHttpBufferSize: 1e6,
   cors: {
     origin: (origin, callback) => callback(null, !origin || allowedOrigins.has(origin)),
     credentials: true,
   },
 });
 
-function compactState(state) {
+function compactState(state, full = false) {
   const score = Number(state.score ?? state.sc ?? 0) || 0;
-  return {
-    n: state.name || 'Oyuncu', sk: state.skin || 'default', x: state.x || 0, y: state.y || 0,
-    a: state.angle || 0, hp: state.hp ?? 100, mhp: state.maxHp ?? 100, w: state.weapon || 1,
+  const res = {
+    x: Math.round((state.x || 0) * 10) / 10, y: Math.round((state.y || 0) * 10) / 10,
+    a: state.angle !== undefined ? Math.round(state.angle * 100) / 100 : 0, hp: state.hp ?? 100, mhp: state.maxHp ?? 100, w: state.weapon || 1,
     atk: Boolean(state.isAttacking), k: state.kills || 0, xp: state.xp || 0, g: state.gold || 0,
     sc: score, at: state.axeTier || 0, st: state.swordTier || 0, rk: state.rankId || 0,
-    color: state.color || '#8B5E3A', team: state.team || '', clanId: state.clanId || '', clanTag: state.clanTag || '', acc: state.acc || {}, vx: state.vx || 0, vy: state.vy || 0,
-    bx: typeof state.buildX === 'number' ? state.buildX : null, by: typeof state.buildY === 'number' ? state.buildY : null,
+    vx: state.vx ? Math.round(state.vx * 10) / 10 : 0, vy: state.vy ? Math.round(state.vy * 10) / 10 : 0,
+    bx: typeof state.buildX === 'number' ? Math.round(state.buildX) : null, by: typeof state.buildY === 'number' ? Math.round(state.buildY) : null,
     sq: state.stateSeq || 0, tm: state.stateAt || Date.now(),
     trappedBy: state.trappedBy || null, trappedX: state.trappedX ?? null, trappedY: state.trappedY ?? null,
+  };
+  if (full) {
+    res.n = state.name || 'Oyuncu';
+    res.sk = state.skin || 'default';
+    res.color = state.color || '#8B5E3A';
+    res.team = state.team || '';
+    res.clanId = state.clanId || '';
+    res.clanTag = state.clanTag || '';
+    res.acc = state.acc || {};
+  }
+  return res;
+}
+
+function compactFullState(state) {
+  return compactState(state, true);
+}
+
+function compactMobTick(mob) {
+  return {
+    id: mob.id,
+    x: Math.round(mob.x),
+    y: Math.round(mob.y),
+    vx: Math.round((mob.vx || 0) * 10) / 10,
+    vy: Math.round((mob.vy || 0) * 10) / 10,
+    angle: mob.angle !== undefined ? Math.round(mob.angle * 100) / 100 : 0,
+    hp: mob.hp,
+    maxHp: mob.maxHp,
+    radius: mob.radius || 46,
+    color: mob.color || '#6b4932',
+    outline: mob.outline || '#28170d',
+    eyes: mob.eyes || '#ffcc66',
+    shape: mob.shape || 'wolf',
+    typeName: mob.typeName || '🐺 Kurt',
+    state: mob.state || 'idle',
+    hitFlash: mob.hitFlash || 0,
   };
 }
 
@@ -842,13 +879,8 @@ function relayToOthers(socket, event, payload) {
   socket.broadcast.emit(event, payload);
 }
 
-let mobBroadcastTick = 0;
 function broadcastMobStates(changed) {
-  mobBroadcastTick++;
-  for (const [id, client] of io.sockets.sockets) {
-    if (client.data.isSpectator && mobBroadcastTick % 3 !== 0) continue;
-    client.volatile.emit('mob_states', changed);
-  }
+  io.volatile.emit('mob_states', changed);
 }
 
 const MAX_MOBS = 32;
@@ -1219,10 +1251,37 @@ setInterval(() => {
     mob.x = Math.max(-3650, Math.min(3650, mob.x));
     mob.y = Math.max(-3650, Math.min(3650, mob.y));
 
-    changed.push(publicMob(mob));
+    changed.push(compactMobTick(mob));
   }
   if (changed.length) broadcastMobStates(changed);
 }, 100);
+
+// 30Hz Server Game Tick: Batches all living player states into ONE ultra-compact broadcast packet (eliminates packet flood & buffer bloat)
+setInterval(() => {
+  if (players.size === 0) return;
+  const batch = {};
+  let count = 0;
+  for (const [id, p] of players) {
+    if (!p || (p.hp ?? 0) <= 0) continue;
+    batch[id] = compactState(p, false);
+    count++;
+  }
+  if (count > 0) {
+    io.volatile.emit('players', batch);
+  }
+}, 33);
+
+// Periodic self_state confirmation (1Hz) to confirm server stats and reconcile any edge-case desync
+setInterval(() => {
+  if (players.size === 0) return;
+  for (const [id, p] of players) {
+    if (!p || (p.hp ?? 0) <= 0) continue;
+    const s = io.sockets.sockets.get(id);
+    if (s && s.connected) {
+      s.emit('self_state', { x: p.x, y: p.y, hp: p.hp, sc: p.score, g: p.gold, seq: p.stateSeq || 0 });
+    }
+  }
+}, 1000);
 
 setInterval(broadcastMobIds, 2000);
 
@@ -1327,7 +1386,7 @@ io.on('connection', (socket) => {
     }
     players.set(socket.id, state);
     ensureMobs(state.x || 0, state.y || 0);
-    const others = Object.fromEntries([...players].filter(([id]) => id !== socket.id).map(([id, player]) => [id, compactState(player)]));
+    const others = Object.fromEntries([...players].filter(([id]) => id !== socket.id).map(([id, player]) => [id, compactFullState(player)]));
     socket.emit('welcome', {
       id: socket.id,
       players: others,
@@ -1340,7 +1399,7 @@ io.on('connection', (socket) => {
       isHost: players.size === 1
     });
     socket.emit('mob_ids', [...mobs.keys()]);
-    socket.broadcast.emit('player_join', { id: socket.id, state: compactState(state) });
+    socket.broadcast.emit('player_join', { id: socket.id, state: compactFullState(state) });
     broadcastOnlineCount();
     updateBounty();
   });
@@ -1351,6 +1410,7 @@ io.on('connection', (socket) => {
       x: Math.round((Math.random() * 2 - 1) * 3200),
       y: Math.round((Math.random() * 2 - 1) * 3200)
     };
+    deletePlayerBuildings(socket.id);
     if (!player) {
       player = {
         id: socket.id,
@@ -1366,6 +1426,7 @@ io.on('connection', (socket) => {
         vx: 0,
         vy: 0,
         angle: 0,
+        stateSeq: 0,
         stateAt: Date.now()
       };
       players.set(socket.id, player);
@@ -1380,11 +1441,12 @@ io.on('connection', (socket) => {
       player.kills = 0;
       player.gold = 0;
       player.trappedBy = null;
+      player.stateSeq = 0;
       player.stateAt = Date.now();
     }
     socket.emit('own_respawn', { x: spawnPt.x, y: spawnPt.y });
-    socket.emit('self_state', { x: spawnPt.x, y: spawnPt.y, hp: player.hp, sc: player.score, g: player.gold });
-    io.emit('player_respawn', { id: socket.id, state: compactState(player) });
+    socket.emit('self_state', { x: spawnPt.x, y: spawnPt.y, hp: player.hp, sc: player.score, g: player.gold, seq: 0 });
+    io.emit('player_respawn', { id: socket.id, state: compactFullState(player) });
     broadcastOnlineCount();
   });
 
@@ -1399,20 +1461,30 @@ io.on('connection', (socket) => {
     let acceptedX = incomingX;
     let acceptedY = incomingY;
 
-    if (incomingSeq !== null && incomingSeq <= (player.stateSeq || 0)) {
+    // Sequence check with wrap tolerance: drop strictly older packets unless a wrap/respawn happened
+    if (incomingSeq !== null && incomingSeq <= (player.stateSeq || 0) && (player.stateSeq - incomingSeq < 1000)) {
       return;
     }
 
+    let needsPosCorrection = false;
     if (Number.isFinite(incomingX) && Number.isFinite(incomingY)) {
       const dx = incomingX - prevX;
       const dy = incomingY - prevY;
-      const maxStep = 180;
+      const dist = Math.hypot(dx, dy);
       const worldLimit = 7200;
-      if (Math.abs(dx) > maxStep || Math.abs(dy) > maxStep || Math.abs(incomingX) > worldLimit || Math.abs(incomingY) > worldLimit) {
-        acceptedX = prevX;
-        acceptedY = prevY;
-        data.vx = 0;
-        data.vy = 0;
+      const maxAllowedDist = 320; // Allows bursts up to ~400ms lag without falsely freezing the player
+      if (Math.abs(incomingX) > worldLimit || Math.abs(incomingY) > worldLimit) {
+        acceptedX = Math.max(-worldLimit, Math.min(worldLimit, incomingX));
+        acceptedY = Math.max(-worldLimit, Math.min(worldLimit, incomingY));
+        needsPosCorrection = true;
+      } else if (dist > maxAllowedDist) {
+        // Smoothly clamp displacement in direction of movement instead of freezing completely
+        const ratio = maxAllowedDist / dist;
+        acceptedX = prevX + dx * ratio;
+        acceptedY = prevY + dy * ratio;
+        data.vx = (data.vx || 0) * ratio;
+        data.vy = (data.vy || 0) * ratio;
+        needsPosCorrection = true;
       }
     }
 
@@ -1448,16 +1520,19 @@ io.on('connection', (socket) => {
         const distance = Math.sqrt(distanceSquared) || 0.01;
         player.x += (dx / distance) * (minDistance - distance);
         player.y += (dy / distance) * (minDistance - distance);
+        needsPosCorrection = true;
         break;
       }
     }
     const incomingScore = Number(data.score ?? data.sc ?? player.score ?? 0) || 0;
     player.score = Math.max(player.score || 0, incomingScore);
     if (typeof data.sc !== 'undefined') player.sc = Number(data.sc) || 0;
-    if (incomingSeq !== null && incomingSeq > (player.stateSeq || 0)) player.stateSeq = incomingSeq;
+    if (incomingSeq !== null) player.stateSeq = incomingSeq;
     player.stateAt = Date.now();
-    socket.emit('self_state', { x: player.x, y: player.y, hp: player.hp, sc: player.score, g: player.gold, seq: player.stateSeq || incomingSeq || 0 });
-    socket.broadcast.volatile.emit('players', { [socket.id]: compactState(player) });
+
+    if (needsPosCorrection) {
+      socket.emit('pos_correction', { x: player.x, y: player.y, seq: player.stateSeq || 0 });
+    }
   });
 
   socket.on('swing', (data = {}) => {
@@ -1678,22 +1753,6 @@ io.on('connection', (socket) => {
     relayToOthers(socket, 'res_sync', { idx: data.idx, shake: true });
   });
 
-  socket.on('mob_hit_req', (data = {}) => {
-    const player = players.get(socket.id);
-    const mob = mobs.get(String(data.mobId || ''));
-    if (!player || !mob || mob.hp <= 0) return;
-    const now = Date.now();
-    const hitKey = `${socket.id}:${mob.id}`;
-    if (now - (mobHitCooldowns.get(hitKey) || 0) < 100) return;
-    mobHitCooldowns.set(hitKey, now);
-    const damage = Math.max(1, Math.min(120, Number(data.dmg) || 0));
-    mob.hp = Math.max(0, mob.hp - damage);
-    if (mob.hp > 0) return;
-    mobs.delete(mob.id);
-    io.emit('mob_dead', { id: mob.id });
-    socket.emit('mob_kill_reward', { xp: mob.xpReward, gold: mob.goldReward, score: Math.round(mob.xpReward * 0.75 + mob.goldReward * 3), typeName: mob.typeName });
-  });
-
   socket.on('chat', (data = {}) => io.emit('chat', { name: players.get(socket.id)?.name || 'Oyuncu', msg: String(data.msg || '').slice(0, 200), id: socket.id }));
   socket.on('ping_req', (data) => socket.emit('pong_res', typeof data === 'object' && data ? data : { t: data }));
   socket.on('player_dead', (data = {}) => {
@@ -1713,19 +1772,6 @@ io.on('connection', (socket) => {
     }
     deletePlayerBuildings(pid);
     relayToOthers(socket, 'player_dead', { id: pid });
-  });
-  socket.on('respawn', () => {
-    const player = players.get(socket.id);
-    if (!player) return;
-    deletePlayerBuildings(socket.id);
-    player.hp = player.maxHp ?? 250;
-    const spawnX = Math.round((Math.random() * 2 - 1) * 2200);
-    const spawnY = Math.round((Math.random() * 2 - 1) * 2200);
-    player.x = spawnX; player.y = spawnY;
-    player.trappedBy = null;
-    socket.emit('own_respawn', { x: spawnX, y: spawnY });
-    socket.broadcast.emit('player_respawn', { id: socket.id, state: compactState(player) });
-    socket.broadcast.emit('players', { [socket.id]: compactState(player) });
   });
   socket.on('eat_apple', () => {
     const player = players.get(socket.id);
@@ -1770,7 +1816,7 @@ io.on('connection', (socket) => {
     }
   });
 
-  for (const event of ['pvp_hit', 'pvp_confirm', 'pvp_kill_confirm', 'pvp_killed', 'pvp_kill_feed', 'kill_streak', 'server_announce', 'build_limit_reached', 'bounty_update', 'bounty_kill_reward', 'trap_triggered', 'spike_dmg_confirm', 'boost_received', 'res_sync', 'res_respawn', 'mob_spawn', 'mob_states', 'mob_states_b', 'mob_ids', 'mob_kill_reward', 'mob_killed_broadcast', 'mob_update', 'mob_trapped', 'boss_telegraph', 'mob_trap_freed', 'mob_dead', 'mob_attack', 'spike_push', 'trap_victim_push', 'trap_victim_freed', 'train_tick', 'train_state', 'train_hit', 'train_boarded', 'train_board_denied', 'train_exited']) {
+  for (const event of ['kill_streak', 'server_announce', 'build_limit_reached', 'res_respawn', 'boss_telegraph', 'spike_push', 'trap_victim_freed', 'train_tick', 'train_state', 'train_hit', 'train_board_denied']) {
     socket.on(event, (data) => relayToOthers(socket, event, { ...(data || {}), fromId: socket.id }));
   }
 

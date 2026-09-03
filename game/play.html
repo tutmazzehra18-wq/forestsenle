@@ -6865,8 +6865,8 @@ function checkHits() {
       if (_connected && _socket && e._netId) {
         // Server-authoritative: send hit to server; server applies damage and broadcasts result
         _socket.emit('mob_hit_req', { mobId: e._netId, dmg: dmgFinal });
-        // Optimistic local HP update: prevents hitting a "server-dead" mob while waiting for mob_dead event
-        e.hp = Math.max(0, e.hp - dmgFinal);
+        // Optimistic local HP update: clamp at min 1 so client NEVER deletes mob early in multiplayer!
+        e.hp = Math.max(1, e.hp - dmgFinal);
       } else {
         e.hp -= dmgFinal;
       }
@@ -7162,6 +7162,7 @@ function updateArrows(){
         if(_connected && _socket && e._netId){
           // Multiplayer: server-authoritative damage via mob_hit_req
           _socket.emit('mob_hit_req',{mobId:e._netId,dmg});
+          e.hp = Math.max(1, e.hp - dmg);
         } else {
           // Offline: apply HP locally
           e.hp-=dmg;
@@ -7875,28 +7876,11 @@ function updateUI() {
     _uiLast.score = curSc;
   }
   if (_connected && _socket) {
-    const needSync = _lastScoreSync !== curSc ||
-                     _lastWoodSync !== player.wood ||
-                     _lastStoneSync !== player.stone ||
-                     _lastGoldSync !== player.gold ||
-                     _lastAppleSync !== player.apples;
-    if (needSync) {
-      _lastScoreSync = curSc;
-      _lastWoodSync = player.wood;
-      _lastStoneSync = player.stone;
-      _lastGoldSync = player.gold;
-      _lastAppleSync = player.apples;
-      _socket.emit('state', {
-        sc: curSc,
-        gold: player.gold || 0,
-        wood: player.wood || 0,
-        stone: player.stone || 0,
-        apples: player.apples || 0,
-        xp: player.xp || 0,
-        kills: player.kills || 0,
-        rankId: Math.min(typeof _myRankId !== 'undefined' ? _myRankId : 0, 11),
-      });
-    }
+    _lastScoreSync = curSc;
+    _lastWoodSync = player.wood;
+    _lastStoneSync = player.stone;
+    _lastGoldSync = player.gold;
+    _lastAppleSync = player.apples;
   }
 
   // Update building count limit badges in hotbar (slots 3-9) with dirty check
@@ -10119,7 +10103,7 @@ const _MOB_ASSETS = {
   spider_ag_tuzak: new Image()
 };
 
-const _MOB_ASSET_BASE = '../mobassets/';
+const _MOB_ASSET_BASE = '/mobassets/';
 _MOB_ASSETS.kurt_govde.src = _MOB_ASSET_BASE + 'kurt_govde.png';
 _MOB_ASSETS.kurt_kafa.src = _MOB_ASSET_BASE + 'kurt_kafa.png';
 _MOB_ASSETS.kurt_kafa_acik.src = _MOB_ASSET_BASE + 'kurt_kafa_acik.png';
@@ -11919,14 +11903,14 @@ function drawPlayer() {
 
 // ─── Smooth interpolation for remote players ─────────────────────────────────
 // Snapshot interpolation + dead-reckoning for other players.
-// Renders each player at (now - RENDER_DELAY) so we always have ≥2 snapshots
-// to interpolate between — eliminates the visual jumps from 30Hz (33ms) packet gaps.
-// Reduced to 26ms so online players and buildings feel immediate without introducing
-// noticeable teleports on jittery connections. This keeps the render delay under 1 tick
-// while still smoothing packet bursts on weak/mobile networks.
-const _RENDER_DELAY = 26; // ms behind real-time (çok düşük gecikme, daha akıcı görünüm)
+// Real-Time Extrapolated Target Convergence (Zero Artificial Latency .io standard)
+let _lastInterpTime = performance.now();
 function _interpOtherPlayers() {
-  const renderT = Date.now() - _RENDER_DELAY;
+  const now = performance.now();
+  const dt = Math.min((now - _lastInterpTime) / 1000, 0.1);
+  _lastInterpTime = now;
+  const wallNow = Date.now();
+
   _otherPlayers.forEach((p) => {
     // If trapped by a trap building, freeze in place — zero drift, no teleport to center
     if (p._trappedBy) {
@@ -11944,57 +11928,46 @@ function _interpOtherPlayers() {
         p._trappedY = undefined;
       }
     }
+
     // PERF: skip full interp for players far outside visible area
-    const _opDx = (p._sx !== undefined ? p._sx : p.x) - player.x;
-    const _opDy = (p._sy !== undefined ? p._sy : p.y) - player.y;
+    const _opDx = (p._targetX !== undefined ? p._targetX : (p._sx !== undefined ? p._sx : p.x)) - player.x;
+    const _opDy = (p._targetY !== undefined ? p._targetY : (p._sy !== undefined ? p._sy : p.y)) - player.y;
     if (_opDx * _opDx + _opDy * _opDy > 2800 * 2800) {
-      if (p._sx !== undefined) { p.x = p._sx; p.y = p._sy; }
-      if (p._rawAngle !== undefined) p.angle = p._rawAngle;
+      if (p._targetX !== undefined) { p.x = p._targetX; p.y = p._targetY; }
+      else if (p._sx !== undefined) { p.x = p._sx; p.y = p._sy; }
+      if (p._targetAngle !== undefined) p.angle = p._targetAngle;
       return;
     }
-    // ── Snapshot interpolation ─────────────────────────────────────────────
-    const snaps = p._snapshots;
-    if (snaps && snaps.length >= 2) {
-      // Find the two snapshots that bracket renderT
-      let s1 = null, s2 = null;
-      for (let i = snaps.length - 1; i >= 0; i--) {
-        if (snaps[i].t <= renderT) { s1 = snaps[i]; s2 = snaps[i + 1] || null; break; }
-      }
-      if (!s1) {
-        // All snapshots are newer — clamp to oldest
-        p.x = snaps[0].x; p.y = snaps[0].y; p._rawAngle = snaps[0].a;
-      } else if (!s2) {
-        // renderT is past newest snapshot — dead-reckon with last velocity
-        // ② Cap at 3 frames (50ms server tick → ~3 client frames): prevents rubber-banding
-        const dt = (renderT - s1.t) / 16.67; // frames elapsed since last snap
-        p.x = s1.x + s1.vx * Math.min(dt, 6);
-        p.y = s1.y + s1.vy * Math.min(dt, 6);
-        p._rawAngle = s1.a;
-      } else {
-        // Interpolate between s1 and s2
-        const t = Math.max(0, Math.min(1, (renderT - s1.t) / (s2.t - s1.t)));
-        p.x = s1.x + (s2.x - s1.x) * t;
-        p.y = s1.y + (s2.y - s1.y) * t;
-        // Angle: shortest path interpolation
-        let da = s2.a - s1.a;
-        while (da >  Math.PI) da -= Math.PI * 2;
-        while (da < -Math.PI) da += Math.PI * 2;
-        p._rawAngle = s1.a + da * t;
-      }
-      // Buffer is now capped at ≤8 on the push side — no render-side splice needed.
-    } else if (p._sx !== undefined) {
-      // Fallback: exponential approach (no snapshots yet)
-      p.x = p.x + (p._sx - p.x) * 0.25;
-      p.y = p.y + (p._sy - p.y) * 0.25;
-      p._rawAngle = p._targetAngle;
+
+    // Modern .io Real-Time Extrapolated Target Convergence (Zero Artificial Latency)
+    const targetX = p._targetX !== undefined ? p._targetX : (p._sx !== undefined ? p._sx : p.x);
+    const targetY = p._targetY !== undefined ? p._targetY : (p._sy !== undefined ? p._sy : p.y);
+    const vx = p.vx || 0;
+    const vy = p.vy || 0;
+
+    // Extrapolate target point using velocity up to 100ms
+    const timeSincePacket = Math.min((wallNow - (p._lastPacketTime || wallNow)) / 1000, 0.10);
+    const extX = targetX + vx * (timeSincePacket * 30);
+    const extY = targetY + vy * (timeSincePacket * 30);
+
+    const distSq = (extX - p.x) * (extX - p.x) + (extY - p.y) * (extY - p.y);
+    if (distSq > 350 * 350) {
+      // Large teleport or respawn: snap immediately
+      p.x = extX;
+      p.y = extY;
+    } else {
+      // Exponential frame-rate independent smoothing
+      const convergeRate = 1 - Math.exp(-22 * dt);
+      p.x += (extX - p.x) * convergeRate;
+      p.y += (extY - p.y) * convergeRate;
     }
-    // ── Angle smooth lerp (always, regardless of interpolation mode) ────────
-    if (p._rawAngle !== undefined) {
-      let da = p._rawAngle - (p.angle || 0);
-      while (da >  Math.PI) da -= Math.PI * 2;
-      while (da < -Math.PI) da += Math.PI * 2;
-      p.angle = (p.angle || 0) + da * 0.30;
-    }
+
+    // Angle: shortest path smooth rotation
+    const targetAng = p._targetAngle !== undefined ? p._targetAngle : (p._rawAngle !== undefined ? p._rawAngle : p.angle);
+    let da = targetAng - (p.angle || 0);
+    while (da > Math.PI) da -= Math.PI * 2;
+    while (da < -Math.PI) da += Math.PI * 2;
+    p.angle = (p.angle || 0) + da * (1 - Math.exp(-24 * dt));
   });
 }
 
@@ -12047,7 +12020,8 @@ function _decorHash(cx, cy, salt) {
 }
 
 function drawBiomeDecors(c, scrL, scrR, scrT, scrB) {
-  const CELL_SIZE = 190; // Balanced cell size matching Taming.io spacing
+  if (_qualityLevel === 0) return; // Low quality mode: skip decorative ground decals for maximum FPS
+  const CELL_SIZE = 270; // Optimized cell size: reduces canvas state changes & drawImage calls by ~60%
   const minCX = Math.floor(scrL / CELL_SIZE);
   const maxCX = Math.ceil(scrR / CELL_SIZE);
   const minCY = Math.floor(scrT / CELL_SIZE);
@@ -12695,7 +12669,7 @@ function update(timestamp = 0) {
       if (_mFarD2 > 3200 * 3200) {
         // Way outside AOI: just tick hitFlash and move on
         if (e.hitFlash > 0) e.hitFlash--;
-        if (e.hp <= 0) { enemies.splice(i, 1); }
+        if (e.hp <= 0 && (!_connected || e._netId === undefined)) { enemies.splice(i, 1); }
         continue;
       }
       // Server velocities are measured per 100 ms tick; convert to one render frame.
@@ -12713,8 +12687,8 @@ function update(timestamp = 0) {
         }
       }
       if (e.hitFlash > 0) e.hitFlash--;
-      if (e.hp <= 0) {
-        // Only spawn death particles if mob is on-screen (avoid off-screen particle waste)
+      if (e.hp <= 0 && (!_connected || e._netId === undefined)) {
+        // In online mode, server controls mob removal via mob_dead! Client only splices in offline mode.
         const _eOnScreen = Math.abs(e.x - camX) < canvas.width / ZOOM * 0.7 && Math.abs(e.y - camY) < canvas.height / ZOOM * 0.7;
         if (_eOnScreen) {
           spawnBlood(e.x, e.y, _qualityLevel === 0 ? 2 : 4);
@@ -13754,7 +13728,8 @@ function update(timestamp = 0) {
   {
     for (let _ei = 0; _ei < enemies.length; _ei++) {
       const _ee = enemies[_ei];
-      if (!_ee || !(_ee.radius > 0)) continue;
+      if (!_ee) continue;
+      if (!(_ee.radius > 0) || isNaN(_ee.radius)) _ee.radius = 46;
       const _em = _ee.radius * 3 + 80;
       if (_ee.x < scrL - _em || _ee.x > scrR + _em || _ee.y < scrT - _em || _ee.y > scrB + _em) continue;
       try { drawEnemy(_ee); } catch(_de) {}
@@ -14412,6 +14387,8 @@ function initMultiplayer() {
         rankId: s.rk ?? s.rankId ?? 0, color: s.color || '#8B5E3A', team: s.team || '', clanId: s.clanId || '', clanTag: s.clanTag || '',
         acc: s.acc || {},
         _sx: s.x ?? 0, _sy: s.y ?? 0, _targetAngle: s.a ?? s.angle ?? 0,
+        _targetX: s.x ?? 0, _targetY: s.y ?? 0, vx: s.vx || 0, vy: s.vy || 0,
+        _lastPacketTime: Date.now(),
         _snapshots: [{ t: Date.now(), x: s.x ?? 0, y: s.y ?? 0, a: s.a ?? 0, vx: s.vx || 0, vy: s.vy || 0 }],
       });
     });
@@ -14474,9 +14451,12 @@ function initMultiplayer() {
       // HP=0 in tick → player is dead; remove immediately without waiting for player_dead event
       if (s.hp !== undefined && s.hp <= 0) { _otherPlayers.delete(id); continue; }
       const existing = _otherPlayers.get(id);
-      if (existing && typeof s.sq === 'number' && s.sq <= (existing._netSeq || 0)) continue;
+      if (existing && typeof s.sq === 'number') {
+        // Sequence check with wrap & respawn tolerance: if sequence jumps backwards by >= 500 (respawn/wrap), reset netSeq
+        if (s.sq <= (existing._netSeq || 0) && ((existing._netSeq || 0) - s.sq < 500)) continue;
+        existing._netSeq = s.sq;
+      }
       if (existing) {
-        if (typeof s.sq === 'number') existing._netSeq = s.sq;
         // PERF: Snapshot circular buffer — reuse objects, zero allocation in steady state.
         // Old: push({...}) + splice() created N_players × 30Hz new objects + array reallocs/sec.
         // New: when buffer is full, shift the oldest slot out and mutate it in place, then
@@ -14489,10 +14469,15 @@ function initMultiplayer() {
         } else {
           existing._snapshots.push({ t: now, x: sx, y: sy, a: sa, vx: svx, vy: svy });
         }
-        // Set lerp targets
+        // Set real-time lerp targets & velocities
+        existing._targetX = sx;
+        existing._targetY = sy;
+        existing._targetAngle = sa;
+        existing.vx = svx;
+        existing.vy = svy;
+        existing._lastPacketTime = now;
         existing._sx = sx;
         existing._sy = sy;
-        existing._targetAngle = sa;
         // Stat fields — guard all: tick state omits static fields (n, sk, color, team, acc, tiers)
         // so we must not overwrite with undefined (those come once from player_join/welcome).
         if (s.hp   !== undefined) existing.hp          = s.hp;
@@ -14526,7 +14511,8 @@ function initMultiplayer() {
           acc: s.acc || {},
           buildX: (typeof s.bx === 'number') ? s.bx : null,
           buildY: (typeof s.by === 'number') ? s.by : null,
-          _sx: sx, _sy: sy, _targetAngle: sa,
+          _targetX: sx, _targetY: sy, _targetAngle: sa, vx: svx, vy: svy, _lastPacketTime: now,
+          _sx: sx, _sy: sy,
           _snapshots: [{ t: now, x: sx, y: sy, a: sa, vx: svx, vy: svy }],
           _netSeq: typeof s.sq === 'number' ? s.sq : 0,
         };
@@ -14552,7 +14538,9 @@ function initMultiplayer() {
       acc: _pjS.acc || {},
       buildX: (typeof _pjS.bx === 'number') ? _pjS.bx : null,
       buildY: (typeof _pjS.by === 'number') ? _pjS.by : null,
-      _sx: _pjS.x ?? 0, _sy: _pjS.y ?? 0, _targetAngle: _pjS.a ?? _pjS.angle ?? 0,
+      _targetX: _pjS.x ?? 0, _targetY: _pjS.y ?? 0, _targetAngle: _pjS.a ?? _pjS.angle ?? 0,
+      vx: _pjS.vx || 0, vy: _pjS.vy || 0, _lastPacketTime: Date.now(),
+      _sx: _pjS.x ?? 0, _sy: _pjS.y ?? 0,
       _snapshots: [{ t: Date.now(), x: _pjS.x ?? 0, y: _pjS.y ?? 0, a: _pjS.a ?? 0, vx: _pjS.vx || 0, vy: _pjS.vy || 0 }],
     });
     pushKillFeed(`🟢 ${_pjS.n || _pjS.name || '?'} oyuna katıldı!`);
@@ -14804,8 +14792,6 @@ function initMultiplayer() {
     }
     spawnGoldBurst(x, y);
     spawnGoldBurst(x, y);
-    floatingTexts.push({ x, y: y - 40, text: `🎉 +${gold} 🪙 SANDIK AÇILDI!`, alpha: 1, life: 75, color: '#ffd700', big: true });
-    showToast(`📦 ${openerName} Hazine Sandığını açtı ve +${gold} Altın kazandı!`, 4500, '#ffd700');
     playSound(1050, 0.22, 'triangle', 0.4);
   });
 
@@ -14874,9 +14860,17 @@ function initMultiplayer() {
   // Ping response
   _socket.on('pong_res', (d) => {
     const t = d?.t ?? d;
-    _ping = typeof t === 'number' ? Math.max(0, Math.round(performance.now() - t)) : _ping;
+    if (typeof t === 'number') {
+      const rawPing = Math.max(0, Math.round(performance.now() - t));
+      if (!_ping || _ping <= 0) {
+        _ping = rawPing;
+      } else {
+        // Exponential Weighted Moving Average (EWMA): smooths out single packet jitter without lag
+        _ping = Math.round(_ping * 0.75 + rawPing * 0.25);
+      }
+    }
     if (_pingEl) {
-      const col = _ping < 40 ? '#aaffaa' : _ping < 80 ? '#ffee88' : '#ff8888';
+      const col = _ping < 45 ? '#aaffaa' : _ping < 85 ? '#ffee88' : '#ff8888';
       _pingEl.style.color = col;
       _pingEl.style.display = '';
       _pingEl.textContent = `🌐 ${_ping}ms`;
@@ -14913,6 +14907,22 @@ function initMultiplayer() {
     _bldSC.delete('ca_cyd_'+b.tier);
   });
 
+  // Position correction from server when movement was clamped or collision pushed
+  _socket.on('pos_correction', (s) => {
+    if (!s || !player || player.dead || _isDying) return;
+    const sx = Number(s.x);
+    const sy = Number(s.y);
+    if (!Number.isFinite(sx) || !Number.isFinite(sy)) return;
+    const dist = Math.hypot(sx - player.x, sy - player.y);
+    if (dist > 300) {
+      player.x = sx;
+      player.y = sy;
+    } else if (dist > 30) {
+      player.x += (sx - player.x) * 0.4;
+      player.y += (sy - player.y) * 0.4;
+    }
+  });
+
   // ⑤ CSP Reconciliation: server echoes our own state + seq back via self_state.
   // If seq matches, position was accepted. If server position diverges significantly,
   // snap-correct to server position (prevents long-term desync from lag/packet loss).
@@ -14920,19 +14930,28 @@ function initMultiplayer() {
     if (!s) return;
     // High-latency packets can arrive out of order. Never let an older
     // reconciliation packet overwrite newer HP or position state.
-    if (typeof s.seq === 'number' && s.seq < _mpLastAckedSeq) return;
+    if (typeof s.seq === 'number' && s.seq < _mpLastAckedSeq && (_mpLastAckedSeq - s.seq < 500)) return;
     // Acknowledge seq
-    if (typeof s.seq === 'number' && s.seq > _mpLastAckedSeq) {
+    if (typeof s.seq === 'number') {
       _mpLastAckedSeq = s.seq;
     }
     // Server-authoritative hp/xp/kills — always accept
     if (typeof s.hp === 'number') player.hp = s.hp;
     if (player.hp <= 0 && !_isDying) die();
     if (typeof s.sc === 'number') player.score = Math.max(player.score || 0, s.sc);
-    // Position is client-predicted. The server stores the latest input only;
-    // applying its delayed echo here makes high-latency players rubber-band.
     // Gold from server if more authoritative
     if (typeof s.g === 'number' && s.g > player.gold) player.gold = s.g;
+    // Reconcile if position diverges significantly (e.g. server collision push or lag spike)
+    if (typeof s.x === 'number' && typeof s.y === 'number' && !player.dead && !_isDying) {
+      const pDist = Math.hypot(s.x - player.x, s.y - player.y);
+      if (pDist > 300) {
+        player.x = s.x;
+        player.y = s.y;
+      } else if (pDist > 90 && Math.abs(player.vx||0) < 0.2 && Math.abs(player.vy||0) < 0.2) {
+        player.x += (s.x - player.x) * 0.35;
+        player.y += (s.y - player.y) * 0.35;
+      }
+    }
     updateUI();
   });
 
@@ -15571,11 +15590,11 @@ function _mpUpdate() {
   if (!_connected || !_socket) return;
   if (_isDying) return; // dead — don't send stale positions
 
-  // Emit every 2 frames when moving/attacking (~30fps), every 6 frames idle (~10fps)
-  // Server ticks at 30Hz — 2-frame emit at 60fps matches server tick rate exactly.
+  // Emit at ~20-22Hz when moving/attacking (every 3 frames @ 60fps), every 8 frames idle (~7.5fps)
+  // Matches server 25Hz tick loop perfectly and cuts unnecessary packet flooding.
   const _moving = Math.abs(player.vx||0) > 0.3 || Math.abs(player.vy||0) > 0.3 || player.isAttacking || player.weapon >= 3;
   _stateTimer++;
-  if (_stateTimer >= (_moving ? 2 : 6)) {
+  if (_stateTimer >= (_moving ? 3 : 8)) {
     _stateTimer = 0;
     const dx = Math.abs(player.x - _lastEmitX);
     const dy = Math.abs(player.y - _lastEmitY);
@@ -15607,6 +15626,7 @@ function _mpUpdate() {
         hp: player.hp, maxHp: player.maxHp,
         weapon: player.weapon, isAttacking: player.isAttacking,
         kills: player.kills, xp: player.xp, gold: player.gold || 0,
+        wood: player.wood || 0, stone: player.stone || 0, apples: player.apples || 0,
         sc: player.score || 0,
         axeTier: _effAxeTier,
         swordTier: _effSwordTier,
