@@ -11666,6 +11666,22 @@ const _WING_COLORS = {
 };
 let _ghostBuildPos = null;
 let enemies = [];
+const _MOB_RENDER_DELAY_MS = 100;
+function _recordNetMobSnapshot(mob, state, receivedAt = Date.now()) {
+  if (!mob || !state || !Number.isFinite(state.x) || !Number.isFinite(state.y)) return;
+  if (!Array.isArray(mob._snapshots)) mob._snapshots = [];
+  const snapshots = mob._snapshots;
+  const last = snapshots[snapshots.length - 1];
+  const time = last && receivedAt <= last.t ? last.t + 1 : receivedAt;
+  snapshots.push({
+    t: time,
+    x: state.x,
+    y: state.y,
+    vx: (Number(state.vx) || 0) * 20,
+    vy: (Number(state.vy) || 0) * 20
+  });
+  while (snapshots.length > 6) snapshots.shift();
+}
 // Boss attack telegraph overlays — drawn on ground before mobs
 let bossTelegraphs = [];
 // PERF: Pre-allocated map reused every mob_states call (was new Map() every 50ms = 20Hz GC pressure)
@@ -26935,7 +26951,7 @@ function update(timestamp = 0) {
   for (let i = enemies.length - 1; i >= 0; i--) {
     const e = enemies[i];
 
-    // ── Online mode: server-authoritative mobs — dead-reckoning + lerp ──
+    // ── Online mode: render server snapshots on a buffered timeline ──
     if (_serverMobAuthority && e._netId !== undefined) {
       // PERF: skip dead-reckoning for mobs far outside AOI — server won't send updates for them
       const _mFarDx = e.x - player.x, _mFarDy = e.y - player.y;
@@ -26946,22 +26962,31 @@ function update(timestamp = 0) {
         if (e.hp <= 0 && (!_serverMobAuthority || e._netId === undefined)) { enemies.splice(i, 1); }
         continue;
       }
-      // Ultra-smooth real-time extrapolated mob convergence (60/120/144fps stutter-free)
+      // Interpolate buffered server states between frames; extrapolate only at buffer edges.
       if (e._targetX !== undefined) {
-        const _mDistSq = (e._targetX - e.x) ** 2 + (e._targetY - e.y) ** 2;
-        if (_mDistSq > 600 * 600) {
-          e.x = e._targetX;
-          e.y = e._targetY;
+        const snapshots = e._snapshots;
+        const sampled = typeof NetworkPhysics !== 'undefined' &&
+          typeof NetworkPhysics.sampleMotionSnapshots === 'function' &&
+          snapshots?.length
+          ? NetworkPhysics.sampleMotionSnapshots(snapshots, wallNow - _MOB_RENDER_DELAY_MS)
+          : null;
+        if (sampled) {
+          e.x = sampled.x;
+          e.y = sampled.y;
         } else {
-          const _timeSince = Math.min(0.12, (wallNow - (e._lastPacketTime || wallNow)) / 1000);
-          const _vxSec = (e.vx || 0) * 20;
-          const _vySec = (e.vy || 0) * 20;
-          const _extX = e._targetX + _vxSec * _timeSince;
-          const _extY = e._targetY + _vySec * _timeSince;
-          const _dtSec = Math.max(0.001, Math.min(0.1, (_dt || 1) / 60));
-          const _converge = 1 - Math.exp(-18 * _dtSec);
-          e.x += (_extX - e.x) * _converge;
-          e.y += (_extY - e.y) * _converge;
+          const _mDistSq = (e._targetX - e.x) ** 2 + (e._targetY - e.y) ** 2;
+          if (_mDistSq > 600 * 600) {
+            e.x = e._targetX;
+            e.y = e._targetY;
+          } else {
+            const _timeSince = Math.min(0.12, (wallNow - (e._lastPacketTime || wallNow)) / 1000);
+            const _extX = e._targetX + (e.vx || 0) * 20 * _timeSince;
+            const _extY = e._targetY + (e.vy || 0) * 20 * _timeSince;
+            const _dtSec = Math.max(0.001, Math.min(0.1, (_dt || 1) / 60));
+            const _converge = 1 - Math.exp(-18 * _dtSec);
+            e.x += (_extX - e.x) * _converge;
+            e.y += (_extY - e.y) * _converge;
+          }
         }
       }
       if (e.hitFlash > 0) e.hitFlash--;
@@ -30844,6 +30869,8 @@ function initMultiplayer() {
       already.x = m.x; already.y = m.y;
       already._targetX = m.x; already._targetY = m.y;
       already.vx = m.vx || 0; already.vy = m.vy || 0;
+      already._snapshots = [];
+      _recordNetMobSnapshot(already, m, now);
       already.hp = m.hp; already.maxHp = m.maxHp || m.hp;
       if (m.color) already.color = m.color;
       if (m.outline) already.outline = m.outline;
@@ -30863,7 +30890,7 @@ function initMultiplayer() {
       already._lastPacketTime = now;
       return;
     }
-    enemies.push({
+    const newMob = {
       _netId: m.id, x: m.x, y: m.y, _targetX: m.x, _targetY: m.y,
       vx: m.vx||0, vy: m.vy||0,
       hp: m.hp, maxHp: m.maxHp||m.hp, radius: m.radius||46,
@@ -30874,7 +30901,9 @@ function initMultiplayer() {
       dmg: m.dmg||28, speed: 0, xpReward: m.xpReward||50, goldReward: m.goldReward||20,
       provoked: true, lastHit: 0, lastBuildHit: 0, lastSpikeHit: 0, lastResHit: 0, lastHitSwingId: -1,
       angle: m.angle || 0, _targetAngle: m.angle || 0, _stateSeq: m.seq || 0, _stateAt: m.ts || now, _lastPacketTime: now, _lastSeen: now, isBoss: m.isBoss||false
-    });
+    };
+    _recordNetMobSnapshot(newMob, m, now);
+    enemies.push(newMob);
   });
 
   // ── Mob states from server (authoritative, all players receive) ───────
@@ -30891,6 +30920,7 @@ function initMultiplayer() {
         if (!_acceptMobSequence(ex, m.seq, m.ts)) continue;
         ex._targetX = m.x; ex._targetY = m.y;
         ex.vx = m.vx||0; ex.vy = m.vy||0;
+        _recordNetMobSnapshot(ex, m, now);
         ex.hp = m.hp;
         if (typeof m.maxHp === 'number') ex.maxHp = m.maxHp;
         if (m.hitFlash > 0) ex.hitFlash = m.hitFlash;
@@ -30920,6 +30950,7 @@ function initMultiplayer() {
           provoked: true, lastHit: 0, lastBuildHit: 0, lastSpikeHit: 0, lastResHit: 0, lastHitSwingId: -1,
           angle: m.angle||0, _targetAngle: m.angle||0, _stateSeq: m.seq || 0, _stateAt: m.ts || now, _lastPacketTime: now, _lastSeen: now, isBoss: m.isBoss||false
         };
+        _recordNetMobSnapshot(newMob, m, now);
         enemies.push(newMob);
         _enemyLocalMap.set(m.id, newMob);
       }
@@ -30956,6 +30987,7 @@ function initMultiplayer() {
       if (ex) {
         ex._targetX = x; ex._targetY = y;
         ex.vx = vx; ex.vy = vy; ex.hp = hp;
+        _recordNetMobSnapshot(ex, { x, y, vx, vy }, now);
         if (ang > -9000) ex._targetAngle = ang;
         else if (vx !== 0 || vy !== 0) ex._targetAngle = Math.atan2(vy, vx);
         ex._lastSeen = now;
@@ -30977,6 +31009,7 @@ function initMultiplayer() {
           angle: ang > -9000 ? ang : 0, _targetAngle: ang > -9000 ? ang : 0, _lastSeen: now, isBoss: false,
           enraged: Boolean(hp && hp < tDef.maxHp * 0.4)
         };
+        _recordNetMobSnapshot(newMob, { x, y, vx, vy }, now);
         enemies.push(newMob);
         _enemyLocalMap.set(id, newMob);
       }

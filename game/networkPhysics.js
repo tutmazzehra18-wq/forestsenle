@@ -334,6 +334,53 @@
     return bestAngle;
   }
 
+  function sampleMotionSnapshots(snapshots, time, maxExtrapolation = 100) {
+    if (!Array.isArray(snapshots) || snapshots.length === 0 || !Number.isFinite(time)) return null;
+
+    const first = snapshots[0];
+    if (time <= first.t) {
+      const elapsed = Math.max(-maxExtrapolation, time - first.t) / 1000;
+      return {
+        x: first.x + (Number(first.vx) || 0) * elapsed,
+        y: first.y + (Number(first.vy) || 0) * elapsed
+      };
+    }
+
+    let index = 0;
+    while (index < snapshots.length - 1 && snapshots[index + 1].t < time) index++;
+    const from = snapshots[index];
+    const to = snapshots[index + 1];
+
+    if (!to) {
+      const elapsed = Math.max(0, Math.min(maxExtrapolation, time - from.t)) / 1000;
+      return {
+        x: from.x + (Number(from.vx) || 0) * elapsed,
+        y: from.y + (Number(from.vy) || 0) * elapsed
+      };
+    }
+
+    const durationMs = to.t - from.t;
+    if (durationMs <= 0) return { x: to.x, y: to.y };
+    const duration = durationMs / 1000;
+    const progress = Math.max(0, Math.min(1, (time - from.t) / durationMs));
+    const t2 = progress * progress;
+    const t3 = t2 * progress;
+    const h00 = 2 * t3 - 3 * t2 + 1;
+    const h10 = t3 - 2 * t2 + progress;
+    const h01 = -2 * t3 + 3 * t2;
+    const h11 = t3 - t2;
+    const margin = Math.hypot(to.x - from.x, to.y - from.y) * 0.05 + 1;
+    const sample = {
+      x: h00 * from.x + h10 * duration * (Number(from.vx) || 0) +
+        h01 * to.x + h11 * duration * (Number(to.vx) || 0),
+      y: h00 * from.y + h10 * duration * (Number(from.vy) || 0) +
+        h01 * to.y + h11 * duration * (Number(to.vy) || 0)
+    };
+    sample.x = Math.max(Math.min(from.x, to.x) - margin, Math.min(Math.max(from.x, to.x) + margin, sample.x));
+    sample.y = Math.max(Math.min(from.y, to.y) - margin, Math.min(Math.max(from.y, to.y) + margin, sample.y));
+    return sample;
+  }
+
   /**
    * 3. Smooth Server Reconciliation Engine
    * 
@@ -520,6 +567,7 @@
     resolveCollision,
     projectVelocitySlide,
     steerAroundCircles,
+    sampleMotionSnapshots,
     SmoothReconciler,
     solveMultipleCollisions
   };
