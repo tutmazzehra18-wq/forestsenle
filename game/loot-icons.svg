@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg">
+  <symbol id="loot-head" viewBox="0 0 64 64">
+    <path d="M11 37 7 15l14 10 11-18 11 18 14-10-4 22-8 5H19z" fill="currentColor" stroke="#f8fafc" stroke-opacity=".75" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M15 37h34l-3 12H18z" fill="#0f172a" fill-opacity=".65"/>
+    <path d="m27 30 5-8 5 8-5 6z" fill="#fff" fill-opacity=".92"/>
+    <path d="M21 43h22" stroke="#fff" stroke-opacity=".58" stroke-width="2"/>
+  </symbol>
+  <symbol id="loot-amulet" viewBox="0 0 64 64">
+    <path d="M14 9c1 17 5 25 18 27 13-2 17-10 18-27" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+    <path d="m32 29 12 13-12 15-12-15z" fill="currentColor" stroke="#f8fafc" stroke-opacity=".8" stroke-width="2" stroke-linejoin="round"/>
+    <path d="m32 35 6 7-6 8-6-8z" fill="#fff" fill-opacity=".72"/>
+  </symbol>
+  <symbol id="loot-gloves" viewBox="0 0 64 64">
+    <path d="M17 34V14a4 4 0 0 1 8 0v13-17a4 4 0 0 1 8 0v17-14a4 4 0 0 1 8 0v17-9a4 4 0 0 1 8 0v19c0 12-8 18-20 18S14 52 14 43v-8a4 4 0 0 1 8-1z" fill="currentColor" stroke="#f8fafc" stroke-opacity=".72" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M22 39h23M28 47h12" stroke="#fff" stroke-opacity=".65" stroke-width="3" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="loot-chest" viewBox="0 0 64 64">
+    <path d="m22 9 10 7 10-7 14 5-6 17-6 3v22H20V34l-6-3-6-17z" fill="currentColor" stroke="#f8fafc" stroke-opacity=".76" stroke-width="2" stroke-linejoin="round"/>
+    <path d="m22 10 10 10 10-10M32 20v35M15 31h34" fill="none" stroke="#fff" stroke-opacity=".66" stroke-width="2"/>
+    <path d="m32 27 4 5-4 5-4-5z" fill="#fff"/>
+  </symbol>
+  <symbol id="loot-ring" viewBox="0 0 64 64">
+    <circle cx="32" cy="38" r="17" fill="none" stroke="currentColor" stroke-width="8"/>
+    <circle cx="32" cy="38" r="10" fill="none" stroke="#0f172a" stroke-opacity=".78" stroke-width="2"/>
+    <path d="m32 5 12 13-12 12-12-12z" fill="currentColor" stroke="#fff" stroke-opacity=".8" stroke-width="2" stroke-linejoin="round"/>
+    <path d="m32 10 6 8-6 6-6-6z" fill="#fff" fill-opacity=".78"/>
+  </symbol>
+  <symbol id="loot-weapon" viewBox="0 0 64 64">
+    <path d="m42 6 16 16-30 30-9-7-7-9z" fill="currentColor" stroke="#f8fafc" stroke-opacity=".82" stroke-width="2" stroke-linejoin="round"/>
+    <path d="m15 34 15 15M9 41l14 14-8 4-10-10zM43 8l13 13" fill="none" stroke="#f8fafc" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="m33 21 10 10" stroke="#fff" stroke-opacity=".78" stroke-width="3"/>
+  </symbol>
+  <symbol id="loot-pants" viewBox="0 0 64 64">
+    <path d="M13 8h38l-4 48H34l-2-23-3 23H17z" fill="currentColor" stroke="#f8fafc" stroke-opacity=".76" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M16 17h32M32 10v22M21 46h9M35 46h9" fill="none" stroke="#fff" stroke-opacity=".65" stroke-width="2"/>
+  </symbol>
+  <symbol id="loot-shield" viewBox="0 0 64 64">
+    <path d="M32 5 54 13v17c0 15-10 25-22 30C20 55 10 45 10 30V13z" fill="currentColor" stroke="#f8fafc" stroke-opacity=".85" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M32 11v43M16 19l16-6 16 6v11H16z" fill="none" stroke="#fff" stroke-opacity=".64" stroke-width="2"/>
+    <path d="m32 20 7 8-7 10-7-10z" fill="#fff" fill-opacity=".86"/>
+  </symbol>
+  <symbol id="loot-boots" viewBox="0 0 64 64">
+    <path d="M15 8h20v27l13 8c4 2 6 5 6 10v4H11v-9l6-7z" fill="currentColor" stroke="#f8fafc" stroke-opacity=".8" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M18 18h14M18 25h14M17 48h28M34 38l12 7" fill="none" stroke="#fff" stroke-opacity=".72" stroke-width="2.5"/>
+  </symbol>
+</svg>

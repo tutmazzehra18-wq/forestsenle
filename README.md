@@ -7,24 +7,24 @@ A multiplayer real-time browser-based RPG game built with Node.js and Socket.IO.
 - **Real-time Multiplayer**: Play with others using WebSocket (Socket.IO)
 - **Progressive Web App**: Works offline with Service Worker
 - **Rich Game World**:
-  - 80+ unique mob types across different biomes
+  - 18 unique mob types across 4 distinct biomes
   - 28+ playable character skins
   - Dynamic weapon tiers and equipment system
-  - Player ranking system (12 tiers)
+  - Player ranking system (12 tier titles, 100 levels)
   - Clan and party systems
   - Building placement and resource management
 
 - **Player Systems**:
   - Account creation and authentication
   - Persistent player profiles and stats
-  - Leaderboards (top 100 players)
+  - Leaderboards (top 50 players)
   - XP-based progression
   - Shop and inventory system
 
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Node.js 24.x or higher
+- Node.js 22.5.0 or higher
 - npm or yarn
 
 ### Local Development
@@ -32,6 +32,9 @@ A multiplayer real-time browser-based RPG game built with Node.js and Socket.IO.
 ```bash
 # Install dependencies
 npm install
+
+# Generate optimized tiered building sprites
+npm run build:assets
 
 # Set environment variables (optional)
 export AUTH_SECRET="your-secret-key"
@@ -48,7 +51,7 @@ The game will be available at `http://localhost:3000`
 See `.env.example` for all available options:
 - `PORT` - Server port (default: 3000)
 - `AUTH_SECRET` - Secret key for authentication (change in production!)
-- `DATA_FILE` - Path to persistent data file (default: ./forest-data.json)
+- `DATABASE_FILE` - Path to the persistent SQLite database (default: ./forestbrawl.db)
 - `NODE_ENV` - Environment mode (development/production)
 
 ## 📁 Project Structure
@@ -62,10 +65,10 @@ See `.env.example` for all available options:
 │   ├── sw.js              # Service Worker (offline support)
 │   ├── manifest.json      # PWA configuration
 │   ├── asset/             # Game sprites and assets
-│   ├── mobs/              # Enemy mob sprites (80+)
+│   ├── mobs/              # Enemy mob sprites (18 types)
 │   ├── players/           # Character skins (28+)
 │   └── weapons/           # Weapon assets
-├── forest-data.json       # Persistent player/clan data
+├── forestbrawl.db         # Persistent SQLite player/clan data
 ├── package.json           # Dependencies
 ├── render.yaml            # Render.com deployment config
 └── DEPLOYMENT.md          # Deployment guide
@@ -76,22 +79,33 @@ See `.env.example` for all available options:
 ### Core Gameplay
 - Navigate a procedurally generated forest world
 - Fight mobs to gain XP and coins
-- Build structures (farms, fences, gates)
+- Toggle automatic melee attacks with the AUTO button beside Inventory; it targets nearby mobs and bosses and continues to use server-enforced attack cooldowns. The “Premium” label does not require a purchase.
+- Mobs are server-authoritative while connected and use local AI after connection fallback; their attacks damage windmills, walls, and fortifications in both modes. Spike hits share one server cooldown, trap captures have a 3-second hold with a short same-trap re-entry cooldown, trap damage is applied on the server, and online building melee hits are validated against range and facing.
+- Combat scales gradually with weapon tiers and level differences; a level-one player needs about five basic hits to defeat a level-one hare, and mob chases stop at attack range to prevent direction jitter. Player-versus-player hits are capped relative to maximum health, melee swings have a server-enforced cooldown, and world-boss melee/turret hits are capped so high-tier damage or passive contact cannot skip boss progression.
+- Crafted and purchased equipment ownership and equipped gear survive death and respawning. Match resources reset on death, while match kills, gold, and XP are recorded from pre-reset values.
+- Place and upgrade eight structure types across six visual tiers
+- Click one of your structures to upgrade it alone or upgrade all owned structures of that type
 - Join clans and parties
 - Climb the leaderboard
 
+### Building Tiers
+- Source artwork lives in `tier1builds/` through `tier6builds/`
+- `npm run build:assets` aligns the layered artwork and generates optimized WebP sprites in `buildassets/tier-sprites/`
+- Inventory build icons and the upgrade panel tier previews use those generated tier sprites, including each structure's layered parts.
+- Structure tiers improve durability and their role-specific effect; server validation keeps multiplayer upgrades authoritative
+- The upgrade panel supports desktop, mobile portrait, and mobile landscape layouts
+
 ### Player Progression
-- 12 ranking tiers: Tohum → Tanrısal
+- 12 ranking titles (100 levels): Tohum → Tanrısal
 - XP-based level progression
 - Equipment upgrades
 - Cosmetic skins and accessories
 
 ### Biomes
-- Forest (spiders, basic mobs)
-- Desert (scorpions, desert creatures)
-- Snow (ice mobs, winter creatures)
-- Swamp (poison creatures, swamp dwellers)
-- Dark Forest (boss mobs, rare creatures)
+- Forest (wolf, scorpion, bear, spider, wild boar, hornet, grizzly bear, elder wendigo, treant boss)
+- Winter (polar bear, frost fox, mammoth)
+- Desert (sand viper, dune scorpion, dune lizard)
+- Lava (magma hound, fire drake, obsidian golem)
 
 ## 🔌 API Endpoints
 
@@ -100,7 +114,7 @@ See `.env.example` for all available options:
 | POST | `/api/auth/register` | Create account |
 | POST | `/api/auth/login` | User login |
 | GET | `/api/auth/me` | Get current user |
-| GET | `/api/leaderboard` | Top 100 players |
+| GET | `/api/leaderboard` | Top 50 players |
 | GET | `/api/profile` | User profile |
 | POST | `/api/shop/buy` | Purchase item |
 | GET | `/api/health` | Health check |

@@ -9,7 +9,7 @@ Before deploying to Render, set these environment variables in your Render dashb
 AUTH_SECRET=<generate-secure-random-string>
 PORT=3000
 NODE_ENV=production
-DATA_FILE=/var/data/forest-data.json
+DATABASE_FILE=/var/data/forestbrawl.db
 ```
 
 **To generate a secure AUTH_SECRET:**
@@ -53,7 +53,7 @@ git push -u origin main
    - Add a Persistent Disk
    - Mount point: `/var/data`
    - Size: 0.5GB (minimum for game data)
-   - Update `DATA_FILE` env var to: `/var/data/forest-data.json`
+   - Set `DATABASE_FILE` to: `/var/data/forestbrawl.db`
 
 ### 4. Deployment
 
@@ -100,7 +100,7 @@ https://<your-service-name>.onrender.com
 
 ### Issue: Game data not persisting
 - Verify persistent disk is mounted to `/var/data`
-- Ensure `DATA_FILE` env var points to `/var/data/forest-data.json`
+- Ensure `DATABASE_FILE` points to `/var/data/forestbrawl.db`
 - Render stores persistent disk data between restarts
 
 ### Issue: Players can't connect
@@ -116,10 +116,7 @@ In Render dashboard:
 
 ## Performance Tips
 
-1. **Database**: Currently uses JSON file. For production with many players:
-   - Consider migrating to MongoDB or PostgreSQL
-   - Use Redis for session management
-   - Implement player caching
+1. **Database**: SQLite is initialized automatically on server start. Keep `/var/data/forestbrawl.db` on the persistent VDS/Render disk.
 
 2. **Scaling**: 
    - Free tier: ~10-50 concurrent players
@@ -155,6 +152,34 @@ If deployment breaks:
 4. Or revert code in GitHub and push
 
 ## Support
+
+### VDS Terminal Setup
+
+```bash
+cd /path/to/h
+node --version  # Must be v22.5.0 or newer
+npm ci
+cp .env.example .env
+nano .env
+```
+
+Before starting, set non-empty production values in `.env` for `AUTH_SECRET`, `OWNER_USERNAME`, and `OWNER_PASSWORD`. Set `NODE_ENV=production`, `PORT=3000`, and `DATABASE_FILE` to a writable persistent path. Keep `.env` private and do not commit it. Generate a secret with `openssl rand -hex 32` and paste it into `.env`.
+
+Start or restart the PM2 service:
+
+```bash
+pm2 start ecosystem.config.cjs --update-env
+pm2 save
+```
+
+Check that the Node process responds locally before debugging Nginx:
+
+```bash
+curl http://127.0.0.1:3000/api/health
+pm2 logs forestbrawl --lines 100
+```
+
+If the local health check works but the public domain returns `502`, verify the Nginx upstream points to `http://127.0.0.1:3000` and inspect `pm2 logs forestbrawl` for startup or crash errors. The startup log must contain `listening on 0.0.0.0:3000`.
 
 - Render Docs: https://render.com/docs
 - Socket.IO: https://socket.io/docs/

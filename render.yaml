@@ -3,9 +3,24 @@ services:
     name: forestbrawl
     runtime: node
     region: frankfurt
-    plan: free
+    plan: starter
     dir: .
-    buildCommand: npm ci
+    buildCommand: npm ci --include=dev && npm run build:assets
     startCommand: npm start
     healthCheckPath: /api/health
     autoDeploy: true
+    disk:
+      name: forestbrawl-data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_FILE
+        value: /var/data/forestbrawl.db
+      - key: OWNER_USERNAME
+        sync: false
+      - key: OWNER_PASSWORD
+        sync: false
+      - key: AUTH_SECRET
+        generateValue: true

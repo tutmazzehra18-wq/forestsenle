@@ -1,0 +1,490 @@
+{
+  "format": "ForestBrawl missing Canvas-drawn gameplay art",
+  "sourceResolution": "4096px-wide transparent PNG sprite atlases",
+  "included": "Active mob animation atlases without a dedicated atlas, special minerals, generated player skins, Canvas-drawn player accessories, and the resource machine building.",
+  "excluded": "Existing image-backed game art, interface graphics, and transient particle/VFX rendering.",
+  "frameLayout": "8 columns; mob rows are idle, walk, attack",
+  "buildCommand": "npm run build:missing-assets",
+  "assets": [
+    {
+      "name": "Mob animasyonu: wolf",
+      "category": "mob",
+      "source": "game/procedural-assets/4k/missing/mobs/wolf.png",
+      "sourceUrl": "/game/procedural-assets/4k/missing/mobs/wolf.png",
+      "sourceWidth": 4096,
+      "sourceHeight": 1536,
+      "frames": 8,
+      "frameLayout": "8 columns: idle, walk, attack rows"
+    },
+    {
+      "name": "Mob animasyonu: spider",
+      "category": "mob",
+      "source": "game/procedural-assets/4k/missing/mobs/spider.png",
+      "sourceUrl": "/game/procedural-assets/4k/missing/mobs/spider.png",
+      "sourceWidth": 4096,
+      "sourceHeight": 1536,
+      "frames": 8,
+      "frameLayout": "8 columns: idle, walk, attack rows"
+    },
+    {
+      "name": "Mob animasyonu: scorpion",
+      "category": "mob",
+      "source": "game/procedural-assets/4k/missing/mobs/scorpion.png",
+      "sourceUrl": "/game/procedural-assets/4k/missing/mobs/scorpion.png",
+      "sourceWidth": 4096,
+      "sourceHeight": 1536,
+      "frames": 8,
+      "frameLayout": "8 columns: idle, walk, attack rows"
+    },
+    {
+      "name": "Mob animasyonu: bear",
+      "category": "mob",
+      "source": "game/procedural-assets/4k/missing/mobs/bear.png",
+      "sourceUrl": "/game/procedural-assets/4k/missing/mobs/bear.png",
+      "sourceWidth": 4096,
+      "sourceHeight": 1536,
+      "frames": 8,
+      "frameLayout": "8 columns: idle, walk, attack rows"
+    },
+    {
+      "name": "Kaynak animasyonu: diamond",
+      "category": "mineral",
+      "source": "game/procedural-assets/4k/missing/resources/diamond.png",
+      "sourceUrl": "/game/procedural-assets/4k/missing/resources/diamond.png",
+      "sourceWidth": 4096,
+      "sourceHeight": 512,
+      "frames": 8,
+      "frameLayout": "8 animation frames"
+    },
+    {
+      "name": "Kaynak animasyonu: amethyst",
+      "category": "mineral",
+      "source": "game/procedural-assets/4k/missing/resources/amethyst.png",
+      "sourceUrl": "/game/procedural-assets/4k/missing/resources/amethyst.png",
+      "sourceWidth": 4096,
+      "sourceHeight": 512,
+      "frames": 8,
+      "frameLayout": "8 animation frames"
+    },
+    {
+      "name": "Kaynak animasyonu: redite",
+      "category": "mineral",
+      "source": "game/procedural-assets/4k/missing/resources/redite.png",
+      "sourceUrl": "/game/procedural-assets/4k/missing/resources/redite.png",
+      "sourceWidth": 4096,
+      "sourceHeight": 512,
+      "frames": 8,
+      "frameLayout": "8 animation frames"
+    },
+    {
+      "name": "Oyuncu görünümü: skin_aurora",
+      "category": "skin",
+      "source": "game/procedural-assets/4k/missing/skins/skin_aurora.png",
+      "sourceUrl": "/game/procedural-assets/4k/missing/skins/skin_aurora.png",
+      "sourceWidth": 4096,
+      "sourceHeight": 512,
+      "frames": 8,
+      "frameLayout": "8 animation frames"
+    },
+    {
+      "name": "Oyuncu görünümü: skin_storm",
+      "category": "skin",
+      "source": "game/procedural-assets/4k/missing/skins/skin_storm.png",
+      "sourceUrl": "/game/procedural-assets/4k/missing/skins/skin_storm.png",
+      "sourceWidth": 4096,
+      "sourceHeight": 512,
+      "frames": 8,
+      "frameLayout": "8 animation frames"
+    },
+    {
+      "name": "Oyuncu görünümü: skin_magma",
+      "category": "skin",
+      "source": "game/procedural-assets/4k/missing/skins/skin_magma.png",
+      "sourceUrl": "/game/procedural-assets/4k/missing/skins/skin_magma.png",
+      "sourceWidth": 4096,
+      "sourceHeight": 512,
+      "frames": 8,
+      "frameLayout": "8 animation frames"
+    },
+    {
+      "name": "Oyuncu görünümü: skin_void",
+      "category": "skin",
+      "source": "game/procedural-assets/4k/missing/skins/skin_void.png",
+      "sourceUrl": "/game/procedural-assets/4k/missing/skins/skin_void.png",
+      "sourceWidth": 4096,
+      "sourceHeight": 512,
+      "frames": 8,
+      "frameLayout": "8 animation frames"
+    },
+    {
+      "name": "Oyuncu görünümü: skin_solar",
+      "category": "skin",
+      "source": "game/procedural-assets/4k/missing/skins/skin_solar.png",
+      "sourceUrl": "/game/procedural-assets/4k/missing/skins/skin_solar.png",
+      "sourceWidth": 4096,
+      "sourceHeight": 512,
+      "frames": 8,
+      "frameLayout": "8 animation frames"
+    },
+    {
+      "name": "Oyuncu görünümü: skin_moon",
+      "category": "skin",
+      "source": "game/procedural-assets/4k/missing/skins/skin_moon.png",
+      "sourceUrl": "/game/procedural-assets/4k/missing/skins/skin_moon.png",
+      "sourceWidth": 4096,
+      "sourceHeight": 512,
+      "frames": 8,
+      "frameLayout": "8 animation frames"
+    },
+    {
+      "name": "Oyuncu görünümü: skin_emerald",
+      "category": "skin",
+      "source": "game/procedural-assets/4k/missing/skins/skin_emerald.png",
+      "sourceUrl": "/game/procedural-assets/4k/missing/skins/skin_emerald.png",
+      "sourceWidth": 4096,
+      "sourceHeight": 512,
+      "frames": 8,
+      "frameLayout": "8 animation frames"
+    },
+    {
+      "name": "Oyuncu görünümü: skin_sapphire",
+      "category": "skin",
+      "source": "game/procedural-assets/4k/missing/skins/skin_sapphire.png",
+      "sourceUrl": "/game/procedural-assets/4k/missing/skins/skin_sapphire.png",
+      "sourceWidth": 4096,
+      "sourceHeight": 512,
+      "frames": 8,
+      "frameLayout": "8 animation frames"
+    },
+    {
+      "name": "Oyuncu görünümü: skin_ruby",
+      "category": "skin",
+      "source": "game/procedural-assets/4k/missing/skins/skin_ruby.png",
+      "sourceUrl": "/game/procedural-assets/4k/missing/skins/skin_ruby.png",
+      "sourceWidth": 4096,
+      "sourceHeight": 512,
+      "frames": 8,
+      "frameLayout": "8 animation frames"
+    },
+    {
+      "name": "Oyuncu görünümü: skin_amethyst",
+      "category": "skin",
+      "source": "game/procedural-assets/4k/missing/skins/skin_amethyst.png",
+      "sourceUrl": "/game/procedural-assets/4k/missing/skins/skin_amethyst.png",
+      "sourceWidth": 4096,
+      "sourceHeight": 512,
+      "frames": 8,
+      "frameLayout": "8 animation frames"
+    },
+    {
+      "name": "Oyuncu görünümü: skin_cyber",
+      "category": "skin",
+      "source": "game/procedural-assets/4k/missing/skins/skin_cyber.png",
+      "sourceUrl": "/game/procedural-assets/4k/missing/skins/skin_cyber.png",
+      "sourceWidth": 4096,
+      "sourceHeight": 512,
+      "frames": 8,
+      "frameLayout": "8 animation frames"
+    },
+    {
+      "name": "Oyuncu görünümü: skin_steam",
+      "category": "skin",
+      "source": "game/procedural-assets/4k/missing/skins/skin_steam.png",
+      "sourceUrl": "/game/procedural-assets/4k/missing/skins/skin_steam.png",
+      "sourceWidth": 4096,
+      "sourceHeight": 512,
+      "frames": 8,
+      "frameLayout": "8 animation frames"
+    },
+    {
+      "name": "Oyuncu görünümü: skin_icefire",
+      "category": "skin",
+      "source": "game/procedural-assets/4k/missing/skins/skin_icefire.png",
+      "sourceUrl": "/game/procedural-assets/4k/missing/skins/skin_icefire.png",
+      "sourceWidth": 4096,
+      "sourceHeight": 512,
+      "frames": 8,
+      "frameLayout": "8 animation frames"
+    },
+    {
+      "name": "Oyuncu görünümü: skin_thunder",
+      "category": "skin",
+      "source": "game/procedural-assets/4k/missing/skins/skin_thunder.png",
+      "sourceUrl": "/game/procedural-assets/4k/missing/skins/skin_thunder.png",
+      "sourceWidth": 4096,
+      "sourceHeight": 512,
+      "frames": 8,
+      "frameLayout": "8 animation frames"
+    },
+    {
+      "name": "Oyuncu görünümü: skin_blossom",
+      "category": "skin",
+      "source": "game/procedural-assets/4k/missing/skins/skin_blossom.png",
+      "sourceUrl": "/game/procedural-assets/4k/missing/skins/skin_blossom.png",
+      "sourceWidth": 4096,
+      "sourceHeight": 512,
+      "frames": 8,
+      "frameLayout": "8 animation frames"
+    },
+    {
+      "name": "Oyuncu görünümü: skin_reef",
+      "category": "skin",
+      "source": "game/procedural-assets/4k/missing/skins/skin_reef.png",
+      "sourceUrl": "/game/procedural-assets/4k/missing/skins/skin_reef.png",
+      "sourceWidth": 4096,
+      "sourceHeight": 512,
+      "frames": 8,
+      "frameLayout": "8 animation frames"
+    },
+    {
+      "name": "Oyuncu görünümü: skin_desert",
+      "category": "skin",
+      "source": "game/procedural-assets/4k/missing/skins/skin_desert.png",
+      "sourceUrl": "/game/procedural-assets/4k/missing/skins/skin_desert.png",
+      "sourceWidth": 4096,
+      "sourceHeight": 512,
+      "frames": 8,
+      "frameLayout": "8 animation frames"
+    },
+    {
+      "name": "Oyuncu görünümü: skin_frostwolf",
+      "category": "skin",
+      "source": "game/procedural-assets/4k/missing/skins/skin_frostwolf.png",
+      "sourceUrl": "/game/procedural-assets/4k/missing/skins/skin_frostwolf.png",
+      "sourceWidth": 4096,
+      "sourceHeight": 512,
+      "frames": 8,
+      "frameLayout": "8 animation frames"
+    },
+    {
+      "name": "Oyuncu görünümü: skin_shadow",
+      "category": "skin",
+      "source": "game/procedural-assets/4k/missing/skins/skin_shadow.png",
+      "sourceUrl": "/game/procedural-assets/4k/missing/skins/skin_shadow.png",
+      "sourceWidth": 4096,
+      "sourceHeight": 512,
+      "frames": 8,
+      "frameLayout": "8 animation frames"
+    },
+    {
+      "name": "Oyuncu görünümü: skin_chroma",
+      "category": "skin",
+      "source": "game/procedural-assets/4k/missing/skins/skin_chroma.png",
+      "sourceUrl": "/game/procedural-assets/4k/missing/skins/skin_chroma.png",
+      "sourceWidth": 4096,
+      "sourceHeight": 512,
+      "frames": 8,
+      "frameLayout": "8 animation frames"
+    },
+    {
+      "name": "Oyuncu aksesuarı: w_angel",
+      "category": "accessory",
+      "source": "game/procedural-assets/4k/missing/wings/w_angel.png",
+      "sourceUrl": "/game/procedural-assets/4k/missing/wings/w_angel.png",
+      "sourceWidth": 4096,
+      "sourceHeight": 512,
+      "frames": 8,
+      "frameLayout": "8 animation frames"
+    },
+    {
+      "name": "Oyuncu aksesuarı: w_devil",
+      "category": "accessory",
+      "source": "game/procedural-assets/4k/missing/wings/w_devil.png",
+      "sourceUrl": "/game/procedural-assets/4k/missing/wings/w_devil.png",
+      "sourceWidth": 4096,
+      "sourceHeight": 512,
+      "frames": 8,
+      "frameLayout": "8 animation frames"
+    },
+    {
+      "name": "Oyuncu aksesuarı: w_dragon",
+      "category": "accessory",
+      "source": "game/procedural-assets/4k/missing/wings/w_dragon.png",
+      "sourceUrl": "/game/procedural-assets/4k/missing/wings/w_dragon.png",
+      "sourceWidth": 4096,
+      "sourceHeight": 512,
+      "frames": 8,
+      "frameLayout": "8 animation frames"
+    },
+    {
+      "name": "Oyuncu aksesuarı: w_fairy",
+      "category": "accessory",
+      "source": "game/procedural-assets/4k/missing/wings/w_fairy.png",
+      "sourceUrl": "/game/procedural-assets/4k/missing/wings/w_fairy.png",
+      "sourceWidth": 4096,
+      "sourceHeight": 512,
+      "frames": 8,
+      "frameLayout": "8 animation frames"
+    },
+    {
+      "name": "Oyuncu aksesuarı: w_bat",
+      "category": "accessory",
+      "source": "game/procedural-assets/4k/missing/wings/w_bat.png",
+      "sourceUrl": "/game/procedural-assets/4k/missing/wings/w_bat.png",
+      "sourceWidth": 4096,
+      "sourceHeight": 512,
+      "frames": 8,
+      "frameLayout": "8 animation frames"
+    },
+    {
+      "name": "Oyuncu aksesuarı: h_party",
+      "category": "accessory",
+      "source": "game/procedural-assets/4k/missing/hats/h_party.png",
+      "sourceUrl": "/game/procedural-assets/4k/missing/hats/h_party.png",
+      "sourceWidth": 4096,
+      "sourceHeight": 512,
+      "frames": 8,
+      "frameLayout": "8 animation frames"
+    },
+    {
+      "name": "Oyuncu aksesuarı: h_cowboy",
+      "category": "accessory",
+      "source": "game/procedural-assets/4k/missing/hats/h_cowboy.png",
+      "sourceUrl": "/game/procedural-assets/4k/missing/hats/h_cowboy.png",
+      "sourceWidth": 4096,
+      "sourceHeight": 512,
+      "frames": 8,
+      "frameLayout": "8 animation frames"
+    },
+    {
+      "name": "Oyuncu aksesuarı: h_viking",
+      "category": "accessory",
+      "source": "game/procedural-assets/4k/missing/hats/h_viking.png",
+      "sourceUrl": "/game/procedural-assets/4k/missing/hats/h_viking.png",
+      "sourceWidth": 4096,
+      "sourceHeight": 512,
+      "frames": 8,
+      "frameLayout": "8 animation frames"
+    },
+    {
+      "name": "Oyuncu aksesuarı: h_santa",
+      "category": "accessory",
+      "source": "game/procedural-assets/4k/missing/hats/h_santa.png",
+      "sourceUrl": "/game/procedural-assets/4k/missing/hats/h_santa.png",
+      "sourceWidth": 4096,
+      "sourceHeight": 512,
+      "frames": 8,
+      "frameLayout": "8 animation frames"
+    },
+    {
+      "name": "Oyuncu aksesuarı: h_wizard",
+      "category": "accessory",
+      "source": "game/procedural-assets/4k/missing/hats/h_wizard.png",
+      "sourceUrl": "/game/procedural-assets/4k/missing/hats/h_wizard.png",
+      "sourceWidth": 4096,
+      "sourceHeight": 512,
+      "frames": 8,
+      "frameLayout": "8 animation frames"
+    },
+    {
+      "name": "Oyuncu aksesuarı: h_crown",
+      "category": "accessory",
+      "source": "game/procedural-assets/4k/missing/hats/h_crown.png",
+      "sourceUrl": "/game/procedural-assets/4k/missing/hats/h_crown.png",
+      "sourceWidth": 4096,
+      "sourceHeight": 512,
+      "frames": 8,
+      "frameLayout": "8 animation frames"
+    },
+    {
+      "name": "Oyuncu aksesuarı: f_mustache",
+      "category": "accessory",
+      "source": "game/procedural-assets/4k/missing/faces/f_mustache.png",
+      "sourceUrl": "/game/procedural-assets/4k/missing/faces/f_mustache.png",
+      "sourceWidth": 4096,
+      "sourceHeight": 512,
+      "frames": 8,
+      "frameLayout": "8 animation frames"
+    },
+    {
+      "name": "Oyuncu aksesuarı: f_glasses",
+      "category": "accessory",
+      "source": "game/procedural-assets/4k/missing/faces/f_glasses.png",
+      "sourceUrl": "/game/procedural-assets/4k/missing/faces/f_glasses.png",
+      "sourceWidth": 4096,
+      "sourceHeight": 512,
+      "frames": 8,
+      "frameLayout": "8 animation frames"
+    },
+    {
+      "name": "Oyuncu aksesuarı: f_tusks",
+      "category": "accessory",
+      "source": "game/procedural-assets/4k/missing/faces/f_tusks.png",
+      "sourceUrl": "/game/procedural-assets/4k/missing/faces/f_tusks.png",
+      "sourceWidth": 4096,
+      "sourceHeight": 512,
+      "frames": 8,
+      "frameLayout": "8 animation frames"
+    },
+    {
+      "name": "Oyuncu aksesuarı: f_angry",
+      "category": "accessory",
+      "source": "game/procedural-assets/4k/missing/faces/f_angry.png",
+      "sourceUrl": "/game/procedural-assets/4k/missing/faces/f_angry.png",
+      "sourceWidth": 4096,
+      "sourceHeight": 512,
+      "frames": 8,
+      "frameLayout": "8 animation frames"
+    },
+    {
+      "name": "Oyuncu aksesuarı: f_mask",
+      "category": "accessory",
+      "source": "game/procedural-assets/4k/missing/faces/f_mask.png",
+      "sourceUrl": "/game/procedural-assets/4k/missing/faces/f_mask.png",
+      "sourceWidth": 4096,
+      "sourceHeight": 512,
+      "frames": 8,
+      "frameLayout": "8 animation frames"
+    },
+    {
+      "name": "Oyuncu aksesuarı: a_cape",
+      "category": "accessory",
+      "source": "game/procedural-assets/4k/missing/accessories/a_cape.png",
+      "sourceUrl": "/game/procedural-assets/4k/missing/accessories/a_cape.png",
+      "sourceWidth": 4096,
+      "sourceHeight": 512,
+      "frames": 8,
+      "frameLayout": "8 animation frames"
+    },
+    {
+      "name": "Oyuncu aksesuarı: a_tail",
+      "category": "accessory",
+      "source": "game/procedural-assets/4k/missing/accessories/a_tail.png",
+      "sourceUrl": "/game/procedural-assets/4k/missing/accessories/a_tail.png",
+      "sourceWidth": 4096,
+      "sourceHeight": 512,
+      "frames": 8,
+      "frameLayout": "8 animation frames"
+    },
+    {
+      "name": "Oyuncu aksesuarı: a_halo",
+      "category": "accessory",
+      "source": "game/procedural-assets/4k/missing/accessories/a_halo.png",
+      "sourceUrl": "/game/procedural-assets/4k/missing/accessories/a_halo.png",
+      "sourceWidth": 4096,
+      "sourceHeight": 512,
+      "frames": 8,
+      "frameLayout": "8 animation frames"
+    },
+    {
+      "name": "Oyuncu aksesuarı: a_backpack",
+      "category": "accessory",
+      "source": "game/procedural-assets/4k/missing/accessories/a_backpack.png",
+      "sourceUrl": "/game/procedural-assets/4k/missing/accessories/a_backpack.png",
+      "sourceWidth": 4096,
+      "sourceHeight": 512,
+      "frames": 8,
+      "frameLayout": "8 animation frames"
+    },
+    {
+      "name": "Yapı görseli: kaynak makinesi",
+      "category": "building",
+      "source": "game/procedural-assets/4k/missing/buildings/resource-machine.png",
+      "sourceUrl": "/game/procedural-assets/4k/missing/buildings/resource-machine.png",
+      "sourceWidth": 4096,
+      "sourceHeight": 512,
+      "frames": 6,
+      "frameLayout": "6 columns: building tiers 1-6"
+    }
+  ]
+}

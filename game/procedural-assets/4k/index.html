@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10141e">
+  <title>ForestBrawl 4K Asset Paketi</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+      background: #10141e;
+      color: #f1f5f9;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; background: radial-gradient(ellipse at top, #1d2a3b, #10141e 55%); }
+    main { width: min(1040px, calc(100% - 32px)); margin: 0 auto; padding: 56px 0 72px; }
+    header { margin-bottom: 28px; }
+    .eyebrow { color: #7debd1; font-size: .75rem; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
+    h1 { margin: 10px 0; font-size: clamp(2rem, 6vw, 3.4rem); letter-spacing: -.045em; }
+    header p { max-width: 680px; color: #b8c3d1; line-height: 1.65; }
+    .notice { padding: 14px 16px; border: 1px solid #29465a; border-radius: 14px; background: #142230; color: #d8e6ef; }
+    .toolbar { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin: 26px 0 16px; }
+    input { width: min(420px, 100%); padding: 12px 14px; border: 1px solid #334155; border-radius: 10px; background: #111a27; color: inherit; font: inherit; }
+    a { color: inherit; }
+    .toolbar-actions { display: flex; align-items: center; gap: 14px; }
+    .manifest { color: #7debd1; font-size: .9rem; white-space: nowrap; }
+    button { padding: 11px 14px; border: 0; border-radius: 10px; background: #137966; color: white; font: inherit; font-size: .9rem; font-weight: 800; cursor: pointer; }
+    button:hover:not(:disabled) { background: #15977e; }
+    button:disabled { cursor: wait; opacity: .65; }
+    #status { color: #94a3b8; font-size: .9rem; }
+    #assets { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 10px; }
+    .asset { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-width: 0; padding: 14px; border: 1px solid #263449; border-radius: 12px; background: #151d2a; }
+    .asset-name { overflow-wrap: anywhere; font-weight: 700; }
+    .asset-meta { margin-top: 5px; color: #94a3b8; font-size: .78rem; }
+    .download { flex: 0 0 auto; padding: 9px 12px; border-radius: 9px; background: #137966; color: white; font-size: .85rem; font-weight: 800; text-decoration: none; }
+    .download:hover { background: #15977e; }
+    @media (max-width: 520px) {
+      main { padding-top: 34px; }
+      .toolbar { align-items: stretch; flex-direction: column; }
+      .toolbar-actions { align-items: stretch; flex-direction: column; }
+      .asset { align-items: flex-start; flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div class="eyebrow">ForestBrawl · Asset Kütüphanesi</div>
+      <h1>Eksik çizimlerin 4K asset paketi</h1>
+      <p>Bu sayfada yalnızca hâlâ Canvas/JavaScript ile çizilen ve kendine ait görsel atlası bulunmayan oynanış görselleri bulunur.</p>
+      <div class="notice">Önceden görsel dosyası kullanan mob, kaynak, silah, tırpan, kask, oyuncu, köy, dekor ve yapı asset’leri bu pakete alınmaz ve olduğu gibi korunur. Paket; eksik mob animasyon atlaslarını, özel mineralleri, üretilen oyuncu görünümlerini ve Canvas aksesuarlarını içerir. Bu atlasların orijinal 4K PNG dosyaları korunur; oyun kullanırken bellekte daha hafif kopyalarını kullanır. Geçici parçacık/hasar efektleri ile arayüz çizimleri paket kapsamı dışındadır.</div>
+      <p>Yeni eksik atlasları üretmek için <code>npm run build:missing-assets</code> komutunu çalıştırın. Chromium kurulu değilse önce <code>npx playwright install chromium</code> komutunu kullanın.</p>
+    </header>
+    <div class="toolbar">
+      <input id="search" type="search" placeholder="Asset adı ara…" aria-label="Asset ara">
+      <div class="toolbar-actions">
+        <button id="download-zip" type="button" disabled>4K paketini ZIP indir</button>
+        <a class="manifest" href="./missing/manifest.json">Eksik asset manifesti</a>
+      </div>
+    </div>
+    <div id="status" role="status">Asset listesi yükleniyor…</div>
+    <section id="assets" aria-label="İndirilebilir assetler"></section>
+  </main>
+  <script>
+    const status = document.getElementById('status');
+    const list = document.getElementById('assets');
+    const search = document.getElementById('search');
+    const zipButton = document.getElementById('download-zip');
+    let assets = [];
+    const assetSourcePrefix = 'game/procedural-assets/4k/missing/';
+
+    function getAssetUrl(asset) {
+      if (typeof asset.source !== 'string' || !asset.source.startsWith(assetSourcePrefix)) {
+        throw new Error(`Eksik asset yolu geçersiz: ${asset.source}`);
+      }
+      const relativePath = asset.source.slice(assetSourcePrefix.length);
+      if (!relativePath || relativePath.split('/').some(segment => !segment || segment === '.' || segment === '..')) {
+        throw new Error(`Eksik asset yolu geçersiz: ${asset.source}`);
+      }
+      return new URL(`./missing/${relativePath.split('/').map(encodeURIComponent).join('/')}`, document.baseURI);
+    }
+
+    const crcTable = new Uint32Array(256);
+    for (let i = 0; i < crcTable.length; i++) {
+      let value = i;
+      for (let bit = 0; bit < 8; bit++) value = value & 1 ? 0xedb88320 ^ (value >>> 1) : value >>> 1;
+      crcTable[i] = value >>> 0;
+    }
+
+    function crc32(bytes) {
+      let crc = 0xffffffff;
+      for (const byte of bytes) crc = crcTable[(crc ^ byte) & 0xff] ^ (crc >>> 8);
+      return (crc ^ 0xffffffff) >>> 0;
+    }
+
+    function buildZip(entries) {
+      const now = new Date();
+      const dosTime = (now.getHours() << 11) | (now.getMinutes() << 5) | (now.getSeconds() >> 1);
+      const dosDate = ((now.getFullYear() - 1980) << 9) | ((now.getMonth() + 1) << 5) | now.getDate();
+      const encoder = new TextEncoder();
+      const parts = [];
+      const centralParts = [];
+      let offset = 0;
+
+      for (const entry of entries) {
+        const name = encoder.encode(entry.name);
+        const checksum = crc32(entry.bytes);
+        const local = new Uint8Array(30);
+        const localView = new DataView(local.buffer);
+        localView.setUint32(0, 0x04034b50, true);
+        localView.setUint16(4, 20, true);
+        localView.setUint16(6, 0x0800, true);
+        localView.setUint16(8, 0, true);
+        localView.setUint16(10, dosTime, true);
+        localView.setUint16(12, dosDate, true);
+        localView.setUint32(14, checksum, true);
+        localView.setUint32(18, entry.bytes.length, true);
+        localView.setUint32(22, entry.bytes.length, true);
+        localView.setUint16(26, name.length, true);
+        parts.push(local, name, entry.bytes);
+
+        const central = new Uint8Array(46);
+        const centralView = new DataView(central.buffer);
+        centralView.setUint32(0, 0x02014b50, true);
+        centralView.setUint16(4, 20, true);
+        centralView.setUint16(6, 20, true);
+        centralView.setUint16(8, 0x0800, true);
+        centralView.setUint16(10, 0, true);
+        centralView.setUint16(12, dosTime, true);
+        centralView.setUint16(14, dosDate, true);
+        centralView.setUint32(16, checksum, true);
+        centralView.setUint32(20, entry.bytes.length, true);
+        centralView.setUint32(24, entry.bytes.length, true);
+        centralView.setUint16(28, name.length, true);
+        centralView.setUint32(38, 0, true);
+        centralView.setUint32(42, offset, true);
+        centralParts.push(central, name);
+        offset += local.length + name.length + entry.bytes.length;
+      }
+
+      const centralSize = centralParts.reduce((total, part) => total + part.length, 0);
+      const end = new Uint8Array(22);
+      const endView = new DataView(end.buffer);
+      endView.setUint32(0, 0x06054b50, true);
+      endView.setUint16(8, entries.length, true);
+      endView.setUint16(10, entries.length, true);
+      endView.setUint32(12, centralSize, true);
+      endView.setUint32(16, offset, true);
+      return new Blob([...parts, ...centralParts, end], { type: 'application/zip' });
+    }
+
+    async function downloadZip() {
+      if (!assets.length || zipButton.disabled) return;
+      zipButton.disabled = true;
+      zipButton.textContent = 'ZIP hazırlanıyor…';
+      status.style.color = '#94a3b8';
+      const entries = [];
+      try {
+        for (let index = 0; index < assets.length; index++) {
+          const asset = assets[index];
+          status.textContent = `ZIP hazırlanıyor: ${index + 1} / ${assets.length} · ${asset.name}`;
+          const url = getAssetUrl(asset);
+          let response;
+          try {
+            response = await fetch(url);
+          } catch (error) {
+            throw new Error(`${asset.source} alınamadı (${url.href}): ${error.message}`);
+          }
+          if (!response.ok) throw new Error(`${asset.source} indirilemedi (HTTP ${response.status}).`);
+          entries.push({
+            name: asset.source.replace(/^game\/procedural-assets\/4k\//, ''),
+            bytes: new Uint8Array(await response.arrayBuffer()),
+          });
+        }
+        status.textContent = 'ZIP hazırlanıyor: manifest ekleniyor…';
+        const manifestResponse = await fetch('./missing/manifest.json', { cache: 'no-cache' });
+        if (!manifestResponse.ok) throw new Error(`Manifest indirilemedi (HTTP ${manifestResponse.status}).`);
+        entries.push({
+          name: 'manifest.json',
+          bytes: new Uint8Array(await manifestResponse.arrayBuffer()),
+        });
+        const zip = buildZip(entries);
+        const objectUrl = URL.createObjectURL(zip);
+        const link = document.createElement('a');
+        link.href = objectUrl;
+        link.download = 'ForestBrawl-4K-Assets.zip';
+        link.click();
+        window.setTimeout(() => URL.revokeObjectURL(objectUrl), 60_000);
+        status.textContent = `${assets.length} PNG atlas ve manifest ZIP olarak indirildi (${(zip.size / 1024 / 1024).toFixed(1)} MB).`;
+      } catch (error) {
+        status.textContent = `ZIP oluşturulamadı: ${error.message}`;
+        status.style.color = '#fca5a5';
+      } finally {
+        zipButton.disabled = false;
+        zipButton.textContent = '4K paketini ZIP indir';
+      }
+    }
+
+    function renderAssets() {
+      const query = search.value.trim().toLocaleLowerCase('tr');
+      list.replaceChildren();
+      const visible = assets.filter(asset => asset.name.toLocaleLowerCase('tr').includes(query));
+      for (const asset of visible) {
+        const card = document.createElement('article');
+        card.className = 'asset';
+        const details = document.createElement('div');
+        const name = document.createElement('div');
+        name.className = 'asset-name';
+        name.textContent = asset.name;
+        const meta = document.createElement('div');
+        meta.className = 'asset-meta';
+        meta.textContent = `${asset.sourceWidth} × ${asset.sourceHeight} · PNG`;
+        details.append(name, meta);
+        const link = document.createElement('a');
+        link.className = 'download';
+        try {
+          link.href = getAssetUrl(asset).href;
+        } catch (error) {
+          status.textContent = error.message;
+          status.style.color = '#fca5a5';
+          continue;
+        }
+        link.download = asset.source.split('/').pop();
+        link.textContent = 'İndir';
+        card.append(details, link);
+        list.append(card);
+      }
+      status.textContent = `${visible.length} / ${assets.length} atlas gösteriliyor`;
+    }
+
+    search.addEventListener('input', renderAssets);
+    zipButton.addEventListener('click', downloadZip);
+    fetch('./missing/manifest.json', { cache: 'no-cache' })
+      .then(response => {
+        if (!response.ok) throw new Error(`Manifest isteği başarısız: HTTP ${response.status}`);
+        return response.json();
+      })
+      .then(manifest => {
+        if (!Array.isArray(manifest.assets)) throw new Error('Manifest asset listesi içermiyor.');
+        assets = manifest.assets;
+        zipButton.disabled = assets.length === 0;
+        renderAssets();
+      })
+      .catch(error => {
+        status.textContent = `Asset listesi yüklenemedi: ${error.message}`;
+        status.style.color = '#fca5a5';
+      });
+  </script>
+</body>
+</html>
