@@ -280,6 +280,60 @@
     return false;
   }
 
+  function steerAroundCircles(x, y, targetX, targetY, entityRadius, obstacles, lookAhead, currentAngle) {
+    const targetDx = targetX - x;
+    const targetDy = targetY - y;
+    if (!Number.isFinite(targetDx) || !Number.isFinite(targetDy)) return null;
+
+    const distance = Math.hypot(targetDx, targetDy);
+    if (distance < 1e-6) return null;
+
+    const desiredAngle = Math.atan2(targetDy, targetDx);
+    const length = Math.max(1, Math.min(Number(lookAhead) || 1, distance));
+    const blockers = Array.isArray(obstacles) ? obstacles : [];
+    const turnPenalty = Number.isFinite(currentAngle)
+      ? Math.min(12, Math.max(2, (Number(entityRadius) || 0) * 0.2))
+      : 0;
+    const candidates = [0, 0.42, -0.42, 0.84, -0.84, 1.26, -1.26, 1.68, -1.68, Math.PI];
+    let bestAngle = desiredAngle;
+    let bestScore = -Infinity;
+
+    for (let i = 0; i < candidates.length; i++) {
+      const angle = desiredAngle + candidates[i];
+      const endX = x + Math.cos(angle) * length;
+      const endY = y + Math.sin(angle) * length;
+      let score = Math.cos(candidates[i]) * length;
+      if (turnPenalty) {
+        const turn = Math.atan2(Math.sin(angle - currentAngle), Math.cos(angle - currentAngle));
+        score -= Math.abs(turn) * turnPenalty;
+      }
+
+      for (let j = 0; j < blockers.length; j++) {
+        const obstacle = blockers[j];
+        if (!obstacle || !Number.isFinite(obstacle.x) || !Number.isFinite(obstacle.y)) continue;
+        const dx = obstacle.x - x;
+        const dy = obstacle.y - y;
+        const projection = Math.max(0, Math.min(1, (dx * Math.cos(angle) + dy * Math.sin(angle)) / length));
+        if (projection <= 0.04) continue;
+        const closestX = x + (endX - x) * projection;
+        const closestY = y + (endY - y) * projection;
+        const clearance = Math.hypot(obstacle.x - closestX, obstacle.y - closestY);
+        const required = Math.max(0, Number(entityRadius) || 0) + Math.max(0, Number(obstacle.radius) || 0) + 10;
+        if (clearance < required) {
+          const penetration = required - clearance;
+          score -= penetration * 2.5 + 18;
+        }
+      }
+
+      if (score > bestScore) {
+        bestScore = score;
+        bestAngle = angle;
+      }
+    }
+
+    return bestAngle;
+  }
+
   /**
    * 3. Smooth Server Reconciliation Engine
    * 
@@ -465,6 +519,7 @@
     resolveCircleBox,
     resolveCollision,
     projectVelocitySlide,
+    steerAroundCircles,
     SmoothReconciler,
     solveMultipleCollisions
   };

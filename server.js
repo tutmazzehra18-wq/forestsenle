@@ -6986,6 +6986,31 @@ function broadcastMobIds() {
 }
 
 // The server owns mob positions so every connected player renders the same world.
+function steerMobAroundObstacles(mob, targetX, targetY, desiredAngle, tickScale) {
+  if (typeof NetworkPhysics.steerAroundCircles !== 'function') return Number.isFinite(desiredAngle) ? desiredAngle : 0;
+
+  const radius = Number(mob.radius) || MOB_RADIUS;
+  const speed = Math.hypot(mob.vx || 0, mob.vy || 0);
+  const lookAhead = Math.max(radius * 2, Math.min(180, radius + speed * tickScale * 6));
+  const queryRadius = lookAhead + radius + MAX_RESOURCE_COLLISION_RADIUS;
+  const obstacles = nearbyServerObstacles(mob.x, mob.y, queryRadius);
+  for (const building of nearbyBuildings(mob.x, mob.y, lookAhead + radius + 120)) {
+    if ([4, 5, 6, 8, 9].includes(Number(building.type))) continue;
+    obstacles.push({
+      x: building.x,
+      y: building.y,
+      radius: buildingCollisionRadius(building)
+    });
+  }
+  const angle = NetworkPhysics.steerAroundCircles(
+    mob.x, mob.y,
+    targetX ?? (mob.x + Math.cos(desiredAngle) * lookAhead),
+    targetY ?? (mob.y + Math.sin(desiredAngle) * lookAhead),
+    radius, obstacles, lookAhead, mob.angle
+  );
+  return Number.isFinite(angle) ? angle : (Number.isFinite(desiredAngle) ? desiredAngle : 0);
+}
+
 let lastMobTickAt = Date.now();
 setInterval(() => {
   const hasSpectators = [...io.sockets.sockets.values()].some(client => client.data.isSpectator);
@@ -6998,6 +7023,8 @@ setInterval(() => {
   for (const mob of mobs.values()) {
     mob.stateSeq = (mob.stateSeq || 0) + 1;
     mob.stateAt = now;
+    const tickStartX = mob.x;
+    const tickStartY = mob.y;
     if (mob.trappedBy) {
       const b = buildings.get(mob.trappedBy);
       if (b && (b.hp ?? 100) > 0 && now < (mob.trappedUntil || 0)) {
@@ -7102,12 +7129,13 @@ setInterval(() => {
       const distance = Math.sqrt(targetDistance);
       const spd = ((mob.speed || MOB_SPEED) * 0.5) * (mob.isEnraged ? 1.28 : 1.0);
       const stopDistance = (mob.radius || MOB_RADIUS) + 30;
-      const targetAngle = distance > 1 ? Math.atan2(target.y - mob.y, target.x - mob.x) : mob.angle;
-      mob.angle = targetAngle;
+      const targetAngle = distance > 1e-6 ? Math.atan2(target.y - mob.y, target.x - mob.x) : (mob.angle || 0);
       const approachDistance = Math.max(0, distance - stopDistance);
       const chaseSpeed = Math.min(spd, approachDistance / tickScale);
-      mob.vx = Math.cos(targetAngle) * chaseSpeed;
-      mob.vy = Math.sin(targetAngle) * chaseSpeed;
+      const steeringAngle = steerMobAroundObstacles(mob, target.x, target.y, targetAngle, tickScale);
+      mob.angle = steeringAngle;
+      mob.vx = Math.cos(steeringAngle) * chaseSpeed;
+      mob.vy = Math.sin(steeringAngle) * chaseSpeed;
 
       let abilityFired = false;
       const shape = mob.shape || '';
@@ -7310,13 +7338,16 @@ setInterval(() => {
       if (mob.y > maxY) { mob.wanderAngle = -Math.PI * (0.3 + Math.random() * 0.4); mob.y = maxY - 10; }
       else if (mob.y < minY) { mob.wanderAngle = Math.PI * (0.3 + Math.random() * 0.4); mob.y = minY + 10; }
 
-      mob.angle = mob.wanderAngle;
-      mob.vx = Math.cos(mob.wanderAngle) * wspd;
-      mob.vy = Math.sin(mob.wanderAngle) * wspd;
+      const steeringAngle = steerMobAroundObstacles(
+        mob, null, null, mob.wanderAngle, tickScale
+      );
+      mob.angle = steeringAngle;
+      mob.vx = Math.cos(steeringAngle) * wspd;
+      mob.vy = Math.sin(steeringAngle) * wspd;
     }
 
-    const previousX = mob.x;
-    const previousY = mob.y;
+    const previousX = tickStartX;
+    const previousY = tickStartY;
     mob.x += mob.vx * tickScale;
     mob.y += mob.vy * tickScale;
 
@@ -7369,15 +7400,17 @@ setInterval(() => {
       const ox = mob.x - obs.x, oy = mob.y - obs.y;
       const oDist2 = ox * ox + oy * oy;
       const minODist = mob.radius + obs.radius;
-      if (oDist2 < minODist * minODist && oDist2 > 0) {
-        const oDist = Math.sqrt(oDist2) || 1;
+      if (oDist2 < minODist * minODist) {
+        const oDist = Math.sqrt(oDist2);
+        const nx = oDist > 1e-6 ? ox / oDist : Math.cos(Number(mob.angle) || 0);
+        const ny = oDist > 1e-6 ? oy / oDist : Math.sin(Number(mob.angle) || 0);
         const push = minODist - oDist;
-        mob.x += (ox / oDist) * push;
-        mob.y += (oy / oDist) * push;
-        const dot = mob.vx * (ox / oDist) + mob.vy * (oy / oDist);
+        mob.x += nx * push;
+        mob.y += ny * push;
+        const dot = mob.vx * nx + mob.vy * ny;
         if (dot < 0) {
-          mob.vx -= dot * (ox / oDist);
-          mob.vy -= dot * (oy / oDist);
+          mob.vx -= dot * nx;
+          mob.vy -= dot * ny;
         }
       }
     }

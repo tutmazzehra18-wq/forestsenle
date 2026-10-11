@@ -8831,7 +8831,7 @@ const _MOB_VISUAL_SIZE_MULTIPLIERS = Object.freeze({
   wild_hare: 1.3,
   forest_deer: 1.2,
   forest_hornet: 1.5,
-  wolf: 1.3,
+  wolf: 1.5,
   wild_boar: 1.2,
   spider: 1.25,
   scorpion: 1.35,
@@ -20738,7 +20738,7 @@ function updateAndDrawMobAttackEffects(ctx) {
 function _drawSpriteWolf(ctx, e, R, isMoving, state, animTimer, attackTimer, flash) {
   if (!_mobPartsReady('kurt_govde', 'kurt_kafa', 'kurt_pati', 'kurt_kuyruk')) return false;
   ctx.save();
-  const scale = (R / 62) * 1.15;
+  const scale = (R / 62) * 1.32;
   ctx.scale(scale, scale);
   ctx.rotate(Math.PI / 2);
 
@@ -26416,6 +26416,42 @@ function resolveEntitySolidCollision(e, isBoss) {
   }
 }
 
+function _mobSteeringAngle(e, targetX, targetY, desiredAngle, speed) {
+  if (!Number.isFinite(desiredAngle)) desiredAngle = Number.isFinite(e.angle) ? e.angle : 0;
+  if (typeof NetworkPhysics === 'undefined' || typeof NetworkPhysics.steerAroundCircles !== 'function') {
+    return desiredAngle;
+  }
+
+  const radius = Number(e.radius) || 28;
+  const lookAhead = Math.max(radius * 2, Math.min(180, radius + Math.max(0, speed) * Math.max(0.2, _dt) * 8));
+  const obstacles = [];
+  if (typeof _resQuery === 'function') {
+    for (const res of _resQuery(e.x, e.y, lookAhead + radius + 150)) {
+      if (!res || res._destroyed || res.hp <= 0) continue;
+      const collisionRadius = (res.radius || 38) * (_RES_COL_FRAC[res.type] || 0.65);
+      obstacles.push({ x: res.x, y: res.y, radius: collisionRadius });
+    }
+  }
+  if (typeof _sgQuery === 'function') {
+    for (const building of _sgQuery(e.x, e.y, lookAhead + radius + 120)) {
+      if (!building || building.hp <= 0 || [4, 5, 6, 8, 9].includes(Number(building.type))) continue;
+      obstacles.push({
+        x: building.x,
+        y: building.y,
+        radius: _BLD_RADII[building.type] || 36
+      });
+    }
+  }
+
+  const angle = NetworkPhysics.steerAroundCircles(
+    e.x, e.y,
+    targetX ?? (e.x + Math.cos(desiredAngle) * lookAhead),
+    targetY ?? (e.y + Math.sin(desiredAngle) * lookAhead),
+    radius, obstacles, lookAhead, e.angle
+  );
+  return Number.isFinite(angle) ? angle : desiredAngle;
+}
+
 // MAIN UPDATE LOOP
 // ============================================================
 let _gameLoopRaf = null;
@@ -27042,8 +27078,17 @@ function update(timestamp = 0) {
     if (e.provoked) {
       const _chaseScale = e.speed > 1.1 ? 0.72 : 0.82;
       if (dist < _effAggro * 1.35) {
-        e.vx += (dx / dist) * spd * _dt * _chaseScale;
-        e.vy += (dy / dist) * spd * _dt * _chaseScale;
+        const stopDistance = Math.min(76, (player.radius || 35) + (e.radius || 28) + 4);
+        if (dist > stopDistance) {
+          const desiredAngle = dist > 1e-6 ? Math.atan2(dy, dx) : (e.angle || 0);
+          const steeringAngle = _mobSteeringAngle(e, player.x, player.y, desiredAngle, spd);
+          e.vx += Math.cos(steeringAngle) * spd * _dt * _chaseScale;
+          e.vy += Math.sin(steeringAngle) * spd * _dt * _chaseScale;
+        } else {
+          const settle = Math.pow(0.68, _dt);
+          e.vx *= settle;
+          e.vy *= settle;
+        }
       }
     } else {
       // Idle wander — roam slowly when not aggroed (timer-based, not per-frame random)
@@ -27064,9 +27109,15 @@ function update(timestamp = 0) {
           e.vy += (_hdy/_hd) * 0.4 * _dt;
         }
       }
-          resolveEntitySolidCollision(e, false);
-    e.vx += Math.cos(e._wanderA) * 0.14 * _dt;
-      e.vy += Math.sin(e._wanderA) * 0.14 * _dt;
+      const steeringAngle = _mobSteeringAngle(
+        e,
+        null,
+        null,
+        e._wanderA,
+        spd
+      );
+      e.vx += Math.cos(steeringAngle) * 0.14 * _dt;
+      e.vy += Math.sin(steeringAngle) * 0.14 * _dt;
     }
     // Trap capture: if mob is held in a trap, verify trap still alive then freeze
     // PERF: cache trap ref directly on enemy — avoids O(N_buildings) find() scan every frame
@@ -27162,7 +27213,9 @@ function update(timestamp = 0) {
     const _mobVisible = Math.abs(e.x - (camX + canvas.width / 2)) < _viewPad && Math.abs(e.y - (camY + canvas.height / 2)) < _viewPad;
     // FIX: Only attack if provoked AND in range - prevents mobs from attacking from across the map
     if (e.provoked && dist < mobReach && (_mobVisible || dist < 80)) {
-      player.momX += (dx/dist) * 8; player.momY += (dy/dist) * 8; // physical push-back
+      const pushX = dist > 1e-6 ? dx / dist : Math.cos(e.angle || 0);
+      const pushY = dist > 1e-6 ? dy / dist : Math.sin(e.angle || 0);
+      player.momX += pushX * 8; player.momY += pushY * 8; // physical push-back
       if (e.hp > 0 && !_spawnProtected && (!_serverMobAuthority || e._netId === undefined) && now - (e.lastHit || 0) > 1600) {
         _lastDamager = e;
         e.lastHit = now;
@@ -27337,10 +27390,11 @@ function update(timestamp = 0) {
       // PERF: Component-wise fast reject replaces Manhattan sum + hypot — skips ~97% resources with 2 comparisons
       if (Math.abs(_rrdx) > rMin || Math.abs(_rrdy) > rMin) continue;
       const _rrd2 = _rrdx * _rrdx + _rrdy * _rrdy;
-      if (_rrd2 >= rMin * rMin || _rrd2 === 0) continue;
+      if (_rrd2 >= rMin * rMin) continue;
       {
         const rd = Math.sqrt(_rrd2);
-        const nx = _rrdx / rd, ny = _rrdy / rd; // unit vector: mob away from resource (no atan2/cos/sin)
+        const nx = rd > 1e-6 ? _rrdx / rd : Math.cos(e.angle || 0);
+        const ny = rd > 1e-6 ? _rrdy / rd : Math.sin(e.angle || 0);
         // Mob'u dışarı it — tam itme, kaynak içine girme tamamen engellenir
         const push = (rMin - rd) * 0.90;
         e.x += nx * push;
