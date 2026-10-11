@@ -48,7 +48,7 @@
 <script>
 // ULTRA-EARLY: Replit badge ve benzeri enjekte edilen DOM elemanlarını yok et.
 (function(){
-  var K={gameCanvas:1,'game-ui-layer':1,minimap:1,'kill-feed':1,'dmg-flash':1,'upgrade-overlay':1,'upg-backdrop':1,'upg-notify-btn':1,'death-overlay':1,'spawn-overlay':1,'top-hud':1,'bottom-hud':1,'joy-left':1,'joy-right':1,'inv-bar':1,'lb-panel':1,'ui-top':1,'ui-bottom':1,'toast':1,'boss-bar':1,'biome-indicator':1,'safe-village-banner':1,'ping-display':1,'fps-display':1,'res-panel':1,'resource-hud':1,'left-stats-stack':1,'kill-flash':1,'kill-notif':1,'rage-overlay':1,'event-banner':1,'streak-hud':1,'shield-hud':1,'lvlup-flash':1,'tab-scoreboard':1,'quick-chat-wheel':1,'build-upg-panel':1,'train-btn':1,'train-stop-hud':1,'loading-screen':1,'quest-panel':1,'ach-popup':1,'spectator-hud':1,'invite-hud-btn':1,'event-meteor-banner':1,'trophy-meta-hud':1,'cave-prompt':1,'ach-panel':1,'bp-panel':1,'dash-btn':1,'snap-settings-panel':1,'entry-consent':1,'clan-game-btn':1,'clan-game-panel':1,'mmo-modal-bag':1,'mmo-modal-char':1,'mmo-modal-skills':1,'mmo-modal-bank':1,'mmo-modal-forge':1,'mmo-modal-merchant':1,'mmo-popover':1,'mmo-lvlup-toast':1,'blacksmith-modal':1,'blacksmith-shop-btn':1,'scythe-modal':1,'scythe-shop-btn':1,'helmet-modal':1,'helmet-shop-btn':1,'inventory-modal':1,'inventory-btn':1,'premium-auto-btn':1,'mount-btn':1,'combat-stats-panel':1,'combat-stats-toggle-btn':1};
+  var K={gameCanvas:1,'game-ui-layer':1,minimap:1,'kill-feed':1,'dmg-flash':1,'upgrade-overlay':1,'upg-backdrop':1,'upg-notify-btn':1,'death-overlay':1,'spawn-overlay':1,'top-hud':1,'bottom-hud':1,'joy-left':1,'joy-right':1,'inv-bar':1,'lb-panel':1,'ui-top':1,'ui-bottom':1,'toast':1,'boss-bar':1,'biome-indicator':1,'safe-village-banner':1,'ping-display':1,'fps-display':1,'res-panel':1,'resource-hud':1,'left-stats-stack':1,'kill-flash':1,'kill-notif':1,'rage-overlay':1,'event-banner':1,'streak-hud':1,'shield-hud':1,'lvlup-flash':1,'tab-scoreboard':1,'quick-chat-wheel':1,'build-upg-panel':1,'train-btn':1,'train-stop-hud':1,'loading-screen':1,'quest-panel':1,'ach-popup':1,'spectator-hud':1,'invite-hud-btn':1,'event-meteor-banner':1,'trophy-meta-hud':1,'cave-prompt':1,'ach-panel':1,'bp-panel':1,'dash-btn':1,'snap-settings-panel':1,'entry-consent':1,'clan-game-btn':1,'clan-game-panel':1,'mmo-modal-bag':1,'mmo-modal-char':1,'mmo-modal-skills':1,'mmo-modal-bank':1,'mmo-modal-forge':1,'mmo-modal-merchant':1,'mmo-popover':1,'mmo-lvlup-toast':1,'blacksmith-modal':1,'blacksmith-shop-btn':1,'scythe-modal':1,'scythe-shop-btn':1,'helmet-modal':1,'helmet-shop-btn':1,'inventory-modal':1,'inventory-btn':1,'premium-auto-btn':1,'combat-stats-panel':1,'combat-stats-toggle-btn':1};
   function shouldHide(el){
     if(!el||el.nodeType!==1)return false;
     if(el===document.body||el===document.head||el===document.documentElement)return false;
@@ -5741,36 +5741,9 @@ html,body{width:100vw !important;max-width:100vw !important;height:var(--app-hei
   border-color:#84cc16 !important;
   box-shadow:0 0 10px rgba(132,204,22,.5),inset 0 1px 0 rgba(255,255,255,.2) !important;
 }
-#mount-btn {
-  width:auto !important;
-  min-width:42px;
-  padding:0 8px !important;
-  display:flex !important;
-  align-items:center;
-  justify-content:center;
-  gap:4px;
-  color:#fde68a !important;
-  border-color:#f59e0b !important;
-  background:linear-gradient(145deg,#92400e,#451a03) !important;
-  font-size:12px !important;
-  font-weight:900;
-}
-#mount-btn[aria-pressed="true"] {
-  color:#d9f99d !important;
-  border-color:#f59e0b !important;
-  box-shadow:0 0 10px rgba(245,158,11,.5),inset 0 1px 0 rgba(255,255,255,.2) !important;
-}
 @media(max-width:480px) {
   #ui-top #premium-auto-btn {display:grid !important;width:29px !important;min-width:29px;padding:0 !important;}
   #premium-auto-btn .premium-auto-label {display:none;}
-  #ui-top #mount-btn {display:grid !important;width:29px !important;min-width:29px;padding:0 !important;}
-  #mount-btn .mount-label {display:none;}
-}
-
-@media(min-width:481px) {
-  .mount-label {
-    display: inline;
-  }
 }
 
 .arpg-inv-modal {
@@ -7705,9 +7678,6 @@ function drawSkinEyesOverlay(c, R, sk, fl) {
   <div style="display:flex;gap:6px;pointer-events:auto;align-items:center;">
     <button type="button" id="premium-auto-btn" class="ref-hud-btn" onclick="window.toggleAutoAttack()" title="Otomatik vuruş: KAPALI" aria-label="Otomatik vuruş" aria-pressed="false">
       <span aria-hidden="true">⚔️</span><span class="premium-auto-label">AUTO</span>
-    </button>
-    <button type="button" id="mount-btn" class="ref-hud-btn" onclick="window.toggleMount()" title="Binek: KAPALI" aria-label="Binek" aria-pressed="false">
-      <span aria-hidden="true">🐺</span><span class="mount-label">BİNEK</span>
     </button>
     <button type="button" id="inventory-btn" class="ref-hud-btn" onclick="window.toggleInventoryModal()" title="Envanter ve Karakter (I)" aria-label="Envanter">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.6));color:#f59e0b;">
@@ -13651,11 +13621,6 @@ const player = {
   autoAttack: false,
   attackDuration: ATTACK_DUR[_initialWeapon] || 300, swingAngle: 0,
   lastHitEnemyTime: 0,
-  // Mount (Binek) System
-  isMounted: false,
-  mountType: null, // 'wolf', 'bear', 'dragon'
-  mountSpeedBonus: 0,
-  mountAnimTimer: 0,
   // Perk multipliers
   speedBonus: 1, dmgBonus: 1, harvestBonus: 1,
   armorBonus: 0, regenBonus: 1, atkSpdBonus: 1,
@@ -15992,31 +15957,6 @@ function _updateAutoAttackButton() {
   }
 }
 
-function _updateMountButton() {
-  const button = document.getElementById('mount-btn');
-  if (!button) return;
-  const mounted = Boolean(player && player.isMounted);
-  button.setAttribute('aria-pressed', mounted ? 'true' : 'false');
-  const mountTypes = { wolf: '🐺 Kurt', bear: '🐻 Ayı', dragon: '🐲 Ejderha' };
-  const mountName = player?.mountType ? mountTypes[player.mountType] || 'Bilinmeyen' : 'KAPALI';
-  button.title = 'Binek: ' + (mounted ? mountName : 'KAPALI');
-  button.setAttribute('aria-label', 'Binek ' + (mounted ? mountName : 'kapalı'));
-  // Update icon based on mount type
-  const iconSpan = button.querySelector('span[aria-hidden="true"]');
-  if (iconSpan && player?.mountType) {
-    const icons = { wolf: '🐺', bear: '🐻', dragon: '🐲' };
-    iconSpan.textContent = icons[player.mountType] || '🐺';
-  }
-  // Visual feedback
-  if (mounted) {
-    button.style.background = 'linear-gradient(180deg, #f59e0b 0%, #d97706 100%)';
-    button.style.borderColor = '#b45309';
-  } else {
-    button.style.background = '';
-    button.style.borderColor = '';
-  }
-}
-
 window.toggleAutoAttack = function() {
   if (!player || player.weapon >= 3) {
     if (typeof showGameToast === 'function') showGameToast('Otomatik vuruş için balta veya kılıç seç.');
@@ -16029,38 +15969,6 @@ window.toggleAutoAttack = function() {
   if (typeof showGameToast === 'function') {
     showGameToast(player.autoAttack ? 'Otomatik vuruş AÇIK ✓' : 'Otomatik vuruş KAPALI');
   }
-};
-
-window.toggleMount = function() {
-  if (!player) return;
-  
-  if (player.isMounted) {
-    // Dismount
-    player.isMounted = false;
-    player.mountType = null;
-    player.mountSpeedBonus = 0;
-    if (typeof showGameToast === 'function') {
-      showGameToast('BİNEK: İndi');
-    }
-  } else {
-    // Mount - cycle through available mounts
-    const mounts = ['wolf', 'bear', 'dragon'];
-    const currentIndex = mounts.indexOf(player.mountType || '');
-    const nextIndex = (currentIndex + 1) % mounts.length;
-    player.mountType = mounts[nextIndex];
-    player.isMounted = true;
-    
-    // Set speed bonus based on mount type
-    const speedBonuses = { wolf: 1.4, bear: 1.3, dragon: 1.6 };
-    player.mountSpeedBonus = speedBonuses[player.mountType] || 1.4;
-    
-    if (typeof showGameToast === 'function') {
-      const mountNames = { wolf: 'Kurt', bear: 'Ayı', dragon: 'Ejderha' };
-      showGameToast('BİNEK: ' + mountNames[player.mountType] + ' bindi! (Hız: +' + Math.round((player.mountSpeedBonus - 1) * 100) + '%)');
-    }
-  }
-
-  _updateMountButton();
 };
 
 // ── Lag compensation: immediate client-side PvP hit prediction ──────────────
@@ -25659,27 +25567,6 @@ function drawPlayer() {
 
   ctx.rotate(player.angle);
 
-  // ── MOUNT (BİNEK) DRAWING ─────────────────────────────────────
-  if (player.isMounted && player.mountType) {
-    const isMoving = Math.hypot(player.vx || 0, player.vy || 0) > 0.5;
-    player.mountAnimTimer = (player.mountAnimTimer || 0) + (isMoving ? 0.25 : 0.05);
-    const mountR = player.radius * 1.8;
-    
-    ctx.save();
-    ctx.translate(0, player.radius * 0.3);
-    ctx.rotate(-player.angle); // Mount faces movement direction
-    
-    if (player.mountType === 'wolf') {
-      _drawMountWolf(ctx, mountR, isMoving, player.mountAnimTimer, player.hitFlash > 0);
-    } else if (player.mountType === 'bear') {
-      _drawMountBear(ctx, mountR, isMoving, player.mountAnimTimer, player.hitFlash > 0);
-    } else if (player.mountType === 'dragon') {
-      _drawMountDragon(ctx, mountR, isMoving, player.mountAnimTimer, player.hitFlash > 0);
-    }
-    
-    ctx.restore();
-  }
-
   drawHelmetMovementTrail(ctx, player, window._equippedHelmetId, rx, ry, player.radius);
 
   // -- Halo (above everything, before rotation effects) --
@@ -26695,7 +26582,7 @@ function update(timestamp = 0) {
   if (_shadowOk) updateAmbientParticles();
   if (globalTime % (_qualityLevel === 0 ? 10 : 4) === 0) updateCampfires();
   _interpOtherPlayers();
-  let speedMult = (player.speedBonus || 1) * (player._equipmentSpeedMultiplier || 1) * (player.mountSpeedBonus || 1);
+  let speedMult = (player.speedBonus || 1) * (player._equipmentSpeedMultiplier || 1);
 
   // Update HP bar every frame (HP changes from enemy hits / healing)
   updateHpBar();
@@ -39678,7 +39565,7 @@ renderInventoryIcons(true);
 
   const style = document.createElement('style');
   style.textContent = `
-    #fb-mount-test-controls {
+    #fb-mob-test-controls {
       position: fixed;
       z-index: 260;
       display: flex;
@@ -39692,7 +39579,7 @@ renderInventoryIcons(true);
       font-family: 'Segoe UI', Arial, sans-serif;
     }
 
-    #fb-mount-test-controls button {
+    #fb-mob-test-controls button {
       min-height: 42px;
       padding: 8px 11px;
       border: 1px solid rgba(255,255,255,.22);
@@ -39709,12 +39596,8 @@ renderInventoryIcons(true);
       -webkit-tap-highlight-color: transparent;
     }
 
-    #fb-mount-test-controls button:active {
+    #fb-mob-test-controls button:active {
       transform: scale(.96);
-    }
-
-    #fb-free-mount-btn {
-      border-color: rgba(251,191,36,.58);
     }
 
     #fb-mob-test-btn {
@@ -39722,24 +39605,12 @@ renderInventoryIcons(true);
       background: linear-gradient(145deg, rgba(82,28,28,.96), rgba(25,10,13,.98));
     }
 
-    #fb-mount-test-status {
-      padding: 5px 8px;
-      border: 1px solid rgba(255,255,255,.12);
-      border-radius: 8px;
-      color: #d8e2ee;
-      background: rgba(0,0,0,.72);
-      font-size: 10px;
-      font-weight: 800;
-      text-align: center;
-      pointer-events: none;
-    }
-
     @media (max-width: 480px) {
-      #fb-mount-test-controls {
+      #fb-mob-test-controls {
         width: 148px;
       }
 
-      #fb-mount-test-controls button {
+      #fb-mob-test-controls button {
         min-height: 39px;
         padding: 7px 9px;
         font-size: 11px;
@@ -39749,27 +39620,8 @@ renderInventoryIcons(true);
   document.head.appendChild(style);
 
   const panel = document.createElement('section');
-  panel.id = 'fb-mount-test-controls';
-  panel.setAttribute('aria-label', 'Ücretsiz binek ve mob testleri');
-
-  let mountButton = document.getElementById('mount-btn');
-  if (!mountButton) {
-    mountButton = document.createElement('button');
-    mountButton.id = 'mount-btn';
-    mountButton.type = 'button';
-    mountButton.addEventListener('click', () => window.toggleMount());
-  }
-
-  mountButton.type = 'button';
-  mountButton.innerHTML =
-    '<span aria-hidden="true">🐺</span> Ücretsiz Binek';
-  mountButton.setAttribute('aria-label', 'Ücretsiz test bineğine bin veya in');
-  mountButton.title = 'Ücretsiz test bineği — hız artışı';
-  mountButton.style.setProperty('display', 'inline-flex', 'important');
-  mountButton.style.setProperty('align-items', 'center', 'important');
-  mountButton.style.setProperty('gap', '7px', 'important');
-  mountButton.style.setProperty('width', '100%', 'important');
-  mountButton.onclick = () => window.toggleMount();
+  panel.id = 'fb-mob-test-controls';
+  panel.setAttribute('aria-label', 'Mob testleri');
 
   const testMobsButton = document.createElement('button');
   testMobsButton.id = 'fb-mob-test-btn';
@@ -39777,11 +39629,7 @@ renderInventoryIcons(true);
   testMobsButton.textContent = '🔥 3 Güçlü Mob Çağır';
   testMobsButton.title = 'Çevrimdışı test alanına üç güçlü mob ekle';
 
-  const status = document.createElement('div');
-  status.id = 'fb-mount-test-status';
-  status.setAttribute('aria-live', 'polite');
-
-  panel.append(mountButton, testMobsButton, status);
+  panel.append(testMobsButton);
   document.body.appendChild(panel);
 
   function positionPanel() {
@@ -39802,54 +39650,11 @@ renderInventoryIcons(true);
     }
   }
 
-  function updateMountStatus() {
-    if (typeof player === 'undefined' || !player) return;
-
-    const mounted = Boolean(player.isMounted);
-    status.textContent = mounted
-      ? '🐺 BİNİLİ • Hız +%28 • Ücretsiz'
-      : 'Ücretsiz test bineği hazır';
-
-    mountButton.setAttribute('aria-pressed', mounted ? 'true' : 'false');
-    mountButton.innerHTML = mounted
-      ? '<span aria-hidden="true">🐺</span> Binekten İn'
-      : '<span aria-hidden="true">🐺</span> Ücretsiz Binek';
-
-    mountButton.style.background = mounted
-      ? 'linear-gradient(180deg, #f59e0b 0%, #b45309 100%)'
-      : '';
-  }
-
-  window.toggleMount = function() {
-    if (typeof player === 'undefined' || !player) return;
-
-    if (player.isMounted) {
-      player.isMounted = false;
-      player.mountType = null;
-      player.mountSpeedBonus = 0;
-
-      if (typeof showGameToast === 'function') {
-        showGameToast('Binekten indin. Test bineği tamamen ücretsiz.');
-      }
-    } else {
-      player.mountType = 'wolf';
-      player.isMounted = true;
-      player.mountSpeedBonus = 1.28;
-
-      if (typeof showGameToast === 'function') {
-        showGameToast('🐺 Ücretsiz test bineğine bindin! Hareket hızı +%28.');
-      }
-    }
-
-    if (typeof _updateMountButton === 'function') _updateMountButton();
-    updateMountStatus();
-  };
-
   function removePreviousTestMobs() {
     if (typeof enemies === 'undefined' || !Array.isArray(enemies)) return;
 
     for (let i = enemies.length - 1; i >= 0; i--) {
-      if (enemies[i]?._mountTestMob) enemies.splice(i, 1);
+      if (enemies[i]?._fbTestMob) enemies.splice(i, 1);
     }
   }
 
@@ -39940,7 +39745,7 @@ renderInventoryIcons(true);
         lastSpikeHit: 0,
         lastResHit: 0,
         lastHitSwingId: -1,
-        _mountTestMob: true
+        _fbTestMob: true
       });
     }
 
@@ -39954,8 +39759,6 @@ renderInventoryIcons(true);
   window.addEventListener('orientationchange', positionPanel, { passive: true });
 
   positionPanel();
-  updateMountStatus();
-  setInterval(updateMountStatus, 500);
 })();
 </script>
 <script>
@@ -39965,7 +39768,7 @@ renderInventoryIcons(true);
   // Önceki test çağrısında gerçek oyun dizisine eklenmiş mobları temizle.
   if (typeof enemies !== 'undefined' && Array.isArray(enemies)) {
     for (let i = enemies.length - 1; i >= 0; i--) {
-      if (enemies[i]?._mountTestMob) enemies.splice(i, 1);
+      if (enemies[i]?._fbTestMob) enemies.splice(i, 1);
     }
   }
 
@@ -40204,7 +40007,7 @@ renderInventoryIcons(true);
   // Önceki test çağrısında gerçek oyun dizisine eklenmiş mobları temizle.
   if (typeof enemies !== 'undefined' && Array.isArray(enemies)) {
     for (let i = enemies.length - 1; i >= 0; i--) {
-      if (enemies[i]?._mountTestMob) enemies.splice(i, 1);
+      if (enemies[i]?._fbTestMob) enemies.splice(i, 1);
     }
   }
 
