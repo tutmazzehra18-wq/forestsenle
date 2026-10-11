@@ -166,8 +166,6 @@
     ['pointerdown', 'touchstart', 'mousedown', 'click'].forEach(evt => {
       window.addEventListener(evt, onUserGestureFullscreen, { passive: true, capture: true });
     });
-    window.addEventListener('load', () => setTimeout(reqFullscreen, 250), { once: true });
-    window.addEventListener('orientationchange', () => setTimeout(reqFullscreen, 200), { passive: true });
   })();
 </script>
 <link rel="preload" href="asset/tree-forest.png" as="image">
@@ -16061,9 +16059,8 @@ window.toggleMount = function() {
       showGameToast('BİNEK: ' + mountNames[player.mountType] + ' bindi! (Hız: +' + Math.round((player.mountSpeedBonus - 1) * 100) + '%)');
     }
   }
-  
+
   _updateMountButton();
-};
 };
 
 // ── Lag compensation: immediate client-side PvP hit prediction ──────────────
@@ -40439,4 +40436,3 @@ renderInventoryIcons(true);
   });
 })();
 </script>
-
