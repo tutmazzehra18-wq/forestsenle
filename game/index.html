@@ -74,7 +74,7 @@
         <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=3">
         <script>
             if ('serviceWorker' in navigator) {
-                window.addEventListener('load', () => navigator.serviceWorker.register('sw.js?v=9').catch(() => {}));
+                window.addEventListener('load', () => navigator.serviceWorker.register('sw.js?v=10').catch(() => {}));
             }
             (function() {
               const root = document.documentElement;
@@ -4517,6 +4517,228 @@
                 transition: none !important;
             }
         }
+
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            background: linear-gradient(90deg, rgba(5, 9, 7, .72), rgba(5, 9, 7, .28) 54%, rgba(5, 9, 7, .44));
+        }
+
+        #bgCanvas { filter: saturate(.76) brightness(.68); }
+
+        #main-menu {
+            width: min(438px, calc(100vw - 36px)) !important;
+            max-width: 438px !important;
+            padding: 18px 22px 20px !important;
+            border: 0 !important;
+            border-left: 2px solid #9db58a !important;
+            border-radius: 2px !important;
+            background: rgba(10, 15, 12, .96) !important;
+            box-shadow: 0 16px 52px rgba(0, 0, 0, .36) !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            animation: lobby-arrive .34s cubic-bezier(.2, .75, .3, 1) both;
+        }
+
+        #main-menu > .relative:first-child {
+            justify-content: flex-start !important;
+            margin-bottom: 14px !important;
+            padding-bottom: 11px !important;
+            border-bottom: 1px solid rgba(211, 221, 203, .15);
+        }
+
+        #main-menu > .relative:first-child h1 {
+            font-size: clamp(2.35rem, 7vw, 3.05rem) !important;
+            text-shadow: none !important;
+        }
+
+        #main-menu > .relative:first-child h1 span:first-of-type { color: #a9c38f !important; }
+        #main-menu > .relative:first-child h1 span:last-of-type { color: #d7ddd2 !important; }
+        #main-menu > .relative:first-child h1 .fa-leaf { display: none !important; }
+
+        #main-menu > .w-full.pl-2 {
+            color: #9da99f !important;
+            font-size: 9px !important;
+        }
+
+        #char-level-indicator,
+        #pet-tag-indicator {
+            color: #a9c38f !important;
+            background: transparent !important;
+            border: 0 !important;
+            padding: 0 !important;
+        }
+
+        #name-input {
+            text-align: left !important;
+            border-radius: 2px !important;
+            border-color: rgba(210, 220, 207, .22) !important;
+            background: #121915 !important;
+            box-shadow: none !important;
+        }
+
+        #active-pet-btn {
+            height: 94px !important;
+            min-height: 94px !important;
+            margin: 0 0 12px !important;
+            padding: 7px 0 !important;
+            border: 0 !important;
+            border-block: 1px solid rgba(211, 221, 203, .15) !important;
+            border-radius: 0 !important;
+            background: transparent !important;
+            box-shadow: none !important;
+        }
+
+        #active-pet-btn > div:first-child {
+            width: 78px !important;
+            height: 78px !important;
+            min-width: 78px !important;
+            border: 0 !important;
+            border-radius: 0 !important;
+            background: transparent !important;
+            box-shadow: none !important;
+        }
+
+        #active-pet-btn canvas { width: 74px !important; height: 74px !important; }
+        #active-pet-btn .pet-card-badges { right: 0 !important; gap: 5px !important; }
+
+        #active-pet-btn .icon-badge {
+            width: 25px !important;
+            height: 25px !important;
+            border: 1px solid rgba(211, 221, 203, .16) !important;
+            border-radius: 2px !important;
+            background: #18211b !important;
+            box-shadow: none !important;
+        }
+
+        #active-pet-name { font-size: 22px !important; }
+        #active-pet-sub { color: #acb6aa !important; }
+        #mode-active-indicator { color: #a9c38f !important; font-size: 9px !important; }
+
+        .mode-card,
+        .mode-card.active {
+            border-radius: 2px !important;
+            border-left: 2px solid #8da77a !important;
+            background: #141b16 !important;
+        }
+
+        .mode-card .mode-badge {
+            border-radius: 1px !important;
+            background: #24352a !important;
+            color: #bdd2ae !important;
+            box-shadow: none !important;
+        }
+
+        #play-btn {
+            border: 1px solid #9db58a !important;
+            border-radius: 2px !important;
+            background: #8da77a !important;
+            box-shadow: none !important;
+            color: #0e1510 !important;
+        }
+
+        #play-btn:hover,
+        #play-btn:active {
+            transform: none !important;
+            filter: brightness(1.08) !important;
+            box-shadow: none !important;
+        }
+
+        #play-btn > i,
+        #play-btn-text { color: #0e1510 !important; }
+
+        #action-buttons-grid button,
+        #action-buttons-grid button:first-child {
+            border: 1px solid rgba(211, 221, 203, .2) !important;
+            border-radius: 2px !important;
+            background: #121915 !important;
+            color: #d8ded5 !important;
+        }
+
+        #action-buttons-grid button i,
+        #action-buttons-grid button span { color: inherit !important; }
+
+        #header-left-bar,
+        #header-right-panel {
+            padding: 5px !important;
+            border: 1px solid rgba(211, 221, 203, .16) !important;
+            border-radius: 2px !important;
+            background: rgba(10, 15, 12, .95) !important;
+            box-shadow: none !important;
+            backdrop-filter: none !important;
+        }
+
+        #header-left-bar .btn-3d,
+        #header-right-panel .btn-3d {
+            min-height: 31px !important;
+            border: 1px solid rgba(211, 221, 203, .15) !important;
+            border-radius: 2px !important;
+            background: #141b16 !important;
+            box-shadow: none !important;
+            color: #d8ded5 !important;
+            text-shadow: none !important;
+        }
+
+        #header-left-bar .gold-balance-pill,
+        #header-left-bar .diamond-pill,
+        #header-server-section > div {
+            min-height: 31px !important;
+            border: 1px solid rgba(211, 221, 203, .15) !important;
+            border-radius: 2px !important;
+            background: #141b16 !important;
+            box-shadow: none !important;
+        }
+
+        #header-right-panel .grid button { border-radius: 2px !important; background: #141b16 !important; }
+
+        #left-events-container .invite-banner-card,
+        #left-events-container .creator-banner-card,
+        .mobile-portrait-stream .invite-banner-card,
+        .mobile-portrait-stream .creator-banner-card {
+            border: 1px solid rgba(211, 221, 203, .18) !important;
+            border-radius: 2px !important;
+            background: #111815 !important;
+            box-shadow: none !important;
+        }
+
+        .invite-flame-glow,
+        .creator-flame-glow { display: none !important; }
+
+        #left-events-container .creator-banner-card,
+        .mobile-portrait-stream .creator-banner-card { border-color: rgba(211, 221, 203, .18) !important; }
+
+        .mobile-portrait-stream .invite-banner-card > div:first-child,
+        .mobile-portrait-stream .creator-banner-card > div:first-child {
+            border-radius: 2px !important;
+            box-shadow: none !important;
+        }
+
+        #main-menu .panel-inset,
+        #header-profile-hud.panel-inset,
+        #header-right-panel .panel-inset {
+            border-radius: 2px !important;
+            background: rgba(15, 22, 18, .92) !important;
+            box-shadow: none !important;
+        }
+
+        @keyframes lobby-arrive {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @media (max-width: 640px) and (orientation: portrait) {
+            #main-menu { padding: 14px !important; }
+            #active-pet-btn { height: 82px !important; min-height: 82px !important; }
+            #active-pet-btn > div:first-child { width: 66px !important; height: 66px !important; min-width: 66px !important; }
+            #active-pet-btn canvas { width: 62px !important; height: 62px !important; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            #main-menu { animation: none !important; }
+        }
     </style>
 </head>
 <body class="w-full h-full flex flex-col items-center justify-center relative select-none">
@@ -4537,12 +4759,12 @@
                 <button onclick="openModal('registerModal'); playSfx('click')" class="btn-3d bg-[#7A4B29] px-2.5 py-1.5 flex items-center gap-1.5 group">
                     <i class="fa-solid fa-sparkles text-[#F7C02D] text-base drop-shadow-md group-hover:scale-110 transition"></i>
                     <div class="flex flex-col text-left leading-none">
-                        <span class="font-io text-[10px] sm:text-[11px] text-white">REGISTER</span>
-                        <span class="font-io text-[9px] sm:text-[10px] stroke-text-gold">+300 FREE</span>
+                        <span class="font-io text-[10px] sm:text-[11px] text-white">KAYIT OL</span>
+                        <span class="font-io text-[9px] sm:text-[10px] stroke-text-gold">+300 ALTIN</span>
                     </div>
                 </button>
                 <button onclick="openModal('loginModal'); playSfx('click')" class="btn-3d btn-yellow px-4 py-1.5 font-io text-xs sm:text-sm stroke-text-dark">
-                    LOGIN
+                    GİRİŞ
                 </button>
                 <div class="gold-balance-pill" title="Güncel gold bakiyesi">
                     <i class="fa-solid fa-coins gold-balance-icon" aria-label="Gold"></i>
@@ -4619,7 +4841,7 @@
                     <i class="fa-solid fa-gear text-white text-base drop-shadow-md"></i>
                 </button>
                 <button id="btn-lang-toggle" onclick="toggleLanguage(); playSfx('click')" title="Change Language / Dil Değiştir" class="btn-3d btn-action p-1.5 px-2.5 flex items-center gap-1 font-io text-xs text-white">
-                    <span id="lang-flag">🇬🇧</span> <span id="lang-label">EN</span>
+                    <i id="lang-flag" class="fa-solid fa-globe" aria-hidden="true"></i> <span id="lang-label">EN</span>
                 </button>
             </div>
         </div>
@@ -4804,15 +5026,15 @@
 
         <!-- Kullanıcı Adı Girişi -->
         <div class="w-full pl-2 flex justify-between items-center mb-1">
-            <span class="text-white font-black text-xs sm:text-sm uppercase tracking-wider">Set a username</span>
-            <span id="char-level-indicator" class="text-[#79D138] font-black text-[11px] uppercase tracking-wider">READY FOR BATTLE</span>
+            <span class="text-white font-black text-xs sm:text-sm uppercase tracking-wider">OYUNCU ADI</span>
+            <span id="char-level-indicator" class="text-[#79D138] font-black text-[11px] uppercase tracking-wider">HAZIR</span>
         </div>
-        <input id="name-input" type="text" maxlength="18" value="forestbrawl" placeholder="Enter Name" class="input-io w-full h-13 sm:h-14 text-center font-io text-xl sm:text-2xl tracking-wide mb-3 py-2">
+        <input id="name-input" type="text" maxlength="18" value="forestbrawl" placeholder="Oyuncu adını yaz" class="input-io w-full h-13 sm:h-14 text-center font-io text-xl sm:text-2xl tracking-wide mb-3 py-2">
 
         <!-- Karakter / Deri Seçim Kartı (Tıklayınca Sahip Olunan Kozmetikleri Açar) -->
         <div class="w-full pl-2 flex justify-between items-end mb-1">
-            <span class="text-white font-black text-xs sm:text-sm uppercase tracking-wider">Character & Skin</span>
-            <span id="pet-tag-indicator" class="bg-black/60 border border-amber-400/50 px-2 py-0.5 rounded-md text-amber-300 font-black text-[10px]">ACTIVE SKIN</span>
+            <span class="text-white font-black text-xs sm:text-sm uppercase tracking-wider">KARAKTER</span>
+            <span id="pet-tag-indicator" class="bg-black/60 border border-amber-400/50 px-2 py-0.5 rounded-md text-amber-300 font-black text-[10px]">SEÇİLİ GÖRÜNÜM</span>
         </div>
         
         <button id="active-pet-btn" onclick="openCosmeticsModal(); playSfx('click')" class="btn-3d btn-action w-full h-[82px] sm:h-[92px] mb-3 relative flex items-center p-2 border-[4px] rounded-xl group hover:bg-[#4A2D17]">
@@ -4839,7 +5061,7 @@
         <!-- OYUN MODU -->
         <div class="mode-selector-wrap mb-2.5 w-full">
             <div class="w-full pl-2 flex justify-between items-center mb-1">
-                <span class="text-white font-black text-xs uppercase tracking-wider">Oyun Modu / Game Mode</span>
+                <span class="text-white font-black text-xs uppercase tracking-wider">OYUN MODU</span>
                 <span id="mode-active-indicator" class="text-emerald-300 font-black text-[10px] uppercase tracking-wider bg-emerald-950/70 px-2 py-0.5 rounded border border-emerald-500/40"><i class="fa-solid fa-crosshairs" aria-hidden="true"></i> KLASİK ARENA</span>
             </div>
             <div class="grid grid-cols-1 gap-2 w-full">
@@ -4860,7 +5082,7 @@
         <div class="io-games-play-row">
             <button id="play-btn" onclick="startDirectGame()" class="btn-3d btn-play h-[88px] sm:h-[100px] relative group overflow-hidden">
                 <i class="fa-solid fa-play" aria-hidden="true"></i>
-                <span id="play-btn-text" class="font-io text-[2.8rem] sm:text-[3.5rem] tracking-widest text-white z-10 group-hover:scale-105 transition-transform">Play</span>
+                <span id="play-btn-text" class="font-io text-[2.8rem] sm:text-[3.5rem] tracking-widest text-white z-10 group-hover:scale-105 transition-transform">Oyna</span>
             </button>
         </div>
 
@@ -4868,11 +5090,11 @@
         <div id="action-buttons-grid" class="grid grid-cols-2 gap-2 w-full mt-2 mb-3">
             <button onclick="openShopModal(); playSfx('click')" class="btn-3d btn-yellow h-[56px] sm:h-[62px] flex items-center justify-center gap-2 font-io text-base sm:text-lg tracking-wider stroke-text-dark rounded-xl" title="Shop (Market)">
                 <i class="fa-solid fa-store text-xl sm:text-2xl text-[var(--border-heavy)]"></i>
-                <span class="text-[var(--border-heavy)]">SHOP</span>
+                <span class="text-[var(--border-heavy)]">MAĞAZA</span>
             </button>
             <button onclick="openCosmeticsModal(); playSfx('click')" class="btn-3d btn-action h-[56px] sm:h-[62px] flex items-center justify-center gap-2 font-io text-base sm:text-lg tracking-wider text-white stroke-text rounded-xl" title="Cosmetics (Kozmetikler)">
                 <i class="fa-solid fa-box-open text-xl sm:text-2xl text-[#B388FF]"></i>
-                <span class="text-white">COSMETICS</span>
+                <span class="text-white">GÖRÜNÜM</span>
             </button>
         </div>
 
@@ -4926,7 +5148,7 @@
                     <div class="flex flex-col text-left min-w-0 flex-1">
                         <div class="flex items-center gap-1.5">
                             <span class="font-io text-pink-300 text-xs stroke-text tracking-wide whitespace-nowrap">İÇERİK ÜRETİCİ</span>
-                            <span class="text-[9px] font-black text-purple-200 bg-purple-950/80 px-1.5 py-0.2 rounded border border-purple-500/40">200K 🪙</span>
+                            <span class="text-[9px] font-black text-purple-200 bg-purple-950/80 px-1.5 py-0.2 rounded border border-purple-500/40">200K <img src="asset/gold.png" class="real-coin-icon" alt="Altın"></span>
                         </div>
                         <span class="text-[10px] text-gray-200 font-bold leading-tight mt-0.5 truncate">TikTok & YouTube Video Çek, Kristal Kazan!</span>
                     </div>
@@ -5081,7 +5303,7 @@
                 
                 <label class="text-white font-black text-xs mb-1 flex items-center justify-between">
                     <span>Davet Eden Arkadaş / Kod (İsteğe Bağlı)</span>
-                    <span id="reg-ref-badge" class="hidden text-[10px] text-green-300 font-bold bg-green-950/80 px-2 py-0.5 rounded border border-green-500/50">✓ Davet Aktif (+300 🪙)</span>
+                    <span id="reg-ref-badge" class="hidden text-[10px] text-green-300 font-bold bg-green-950/80 px-2 py-0.5 rounded border border-green-500/50">✓ Davet Aktif (+300 Altın)</span>
                 </label>
                 <div class="relative mb-4">
                     <input id="reg-ref-code" type="text" placeholder="Davet eden kullanıcı adı (örn: Ahmet)" class="input-io w-full h-10 px-3 pr-9 font-io text-sm text-yellow-300">
@@ -5128,7 +5350,7 @@
                             <span id="prof-rank-icon" class="bg-black/50 w-7 h-7 flex items-center justify-center rounded-lg text-yellow-300 font-black border border-yellow-500/40"><i class="fa-solid fa-seedling"></i></span>
                             <span id="prof-gold-badge" class="bg-black/50 px-2 py-1 rounded-lg text-[10px] text-[#FFDF73] font-black border border-yellow-500/40"><i class="fa-solid fa-coins text-[#F7C02D]"></i> --</span>
                         </div>
-                        <div id="prof-next-rank" class="text-[10px] font-black text-[#9FE870] mt-1">➡️ 🪨 Taş: 350 XP kaldı</div>
+                        <div id="prof-next-rank" class="text-[10px] font-black text-[#9FE870] mt-1">Sonraki rütbe: Taş · 350 XP</div>
                     </div>
                 </div>
 
@@ -5325,7 +5547,7 @@
                         
                         <div class="col-span-2 flex items-center gap-2">
                             <div class="w-8 h-8 bg-black/40 rounded-lg flex items-center justify-center border border-white/20">
-                                <span class="text-lg">🇹🇷</span>
+                                <span class="text-[10px] font-bold tracking-normal text-white/80">TR</span>
                             </div>
                             <div class="flex flex-col leading-tight">
                                 <span class="text-[#FFDF73] font-io text-xs sm:text-sm stroke-text">Istanbul #1</span>
@@ -5755,7 +5977,7 @@
                         <span>2. Arkadaş</span>
                         <span>3. Arkadaş</span>
                         <span>4. Arkadaş</span>
-                        <span class="text-amber-300 font-bold">🔥 5. Efsanevi</span>
+                        <span class="text-amber-300 font-bold"><i class="fa-solid fa-fire" aria-hidden="true"></i> 5. Efsanevi</span>
                     </div>
                 </div>
             </div>
@@ -6211,7 +6433,6 @@
         try { mergeServerCosmetics(JSON.parse(localStorage.getItem('fb_cosmetic_catalog') || '[]')); } catch (_) {}
 
         const RANKS = Array.from({ length: 100 }, (_, index) => `${['Tohum', 'Taş', 'Köylü', 'Acemi', 'Savaşçı', 'Muhafız', 'Ateş Efendisi', 'Kristal', 'Fırtına', 'Gece Hanı', 'Efsane', 'Tanrısal'][index % 12]} ${index + 1}`);
-        const RANK_ICONS = Array.from({ length: 100 }, (_, index) => ['🌱', '🪨', '🪵', '🏹', '⚔️', '🛡️', '🔥', '💎', '🌪️', '🌙', '👑', '✨'][index % 12]);
 
         /* ════════════════════════════════════════════════════════════════
            2. DURUM YÖNETİMİ & RESİM ÖNBELLEĞİ
@@ -6927,7 +7148,7 @@
                 if (hu) hu.textContent = _authUser.username;
                 const hr = document.getElementById('header-rank');
                 const rankId = getRankIdByXp(Number(_authUser.xp ?? getPlayerTotalXp()));
-                if (hr) hr.textContent = `Lv.${rankId + 1} ${RANKS[rankId] || 'Savaşçı'} ${RANK_ICONS[rankId] || ''}`;
+                if (hr) hr.textContent = `Lv.${rankId + 1} · ${RANKS[rankId] || 'Savaşçı'}`;
                 
                 const ni = document.getElementById('name-input');
                 if (ni) { ni.value = _authUser.username; ni.disabled = true; ni.title = 'Profil adı kullanıcı adıyla sabittir'; }
@@ -7270,11 +7491,11 @@
             document.getElementById('prof-email').textContent = u.email || 'E-posta kayıtlı değil';
             document.getElementById('prof-rank-name').textContent = `Lv.${rankId + 1} ${currentRankName}`;
             document.getElementById('prof-rank-icon').innerHTML = getRankIconHtml(rankId);
-            document.getElementById('prof-next-rank').textContent = rankId >= RANKS.length - 1 ? '➡️ ✨ Maksimum rütbe' : `➡️ ${RANK_ICONS[Math.min(rankId + 1, RANK_ICONS.length - 1)] || '🌱'} ${nextRankName}: ${neededToNext.toLocaleString()} XP kaldı`;
+            document.getElementById('prof-next-rank').textContent = rankId >= RANKS.length - 1 ? 'Maksimum rütbe' : `Sonraki rütbe: ${nextRankName} · ${neededToNext.toLocaleString()} XP`;
             
             if (rankId >= RANKS.length - 1) {
                 document.getElementById('prof-xp-text').textContent = `${totalXp.toLocaleString()} XP (MAKSİMUM SEVİYE)`;
-                document.getElementById('prof-remaining-xp').textContent = 'En yüksek rütbeye ulaştın! 👑';
+                document.getElementById('prof-remaining-xp').textContent = 'En yüksek rütbeye ulaştın.';
             } else {
                 document.getElementById('prof-xp-text').textContent = `${totalXp.toLocaleString()} / ${nextBase.toLocaleString()} XP (${pct}%)`;
                 document.getElementById('prof-remaining-xp').textContent = `Sonraki Seviye (${nextRankName}) için: ${neededToNext.toLocaleString()} XP kaldı`;
@@ -11752,7 +11973,6 @@
                 partyBannerDesc: 'Parti Kodu: ',
                 nicknamePlaceholder: 'İsim Yaz...',
                 langLabel: 'TR',
-                langFlag: '🇹🇷'
             },
             en: {
                 play: 'Play',
@@ -11776,7 +11996,6 @@
                 partyBannerDesc: 'Party Code: ',
                 nicknamePlaceholder: 'Enter Name...',
                 langLabel: 'EN',
-                langFlag: '🇬🇧'
             }
         };
 
@@ -11789,9 +12008,7 @@
             document.documentElement.lang = lang;
             const dict = I18N_DICTS[lang] || I18N_DICTS.en;
 
-            const flagEl = document.getElementById('lang-flag');
             const labelEl = document.getElementById('lang-label');
-            if (flagEl) flagEl.textContent = dict.langFlag;
             if (labelEl) labelEl.textContent = dict.langLabel;
 
             const nameInput = document.getElementById('name-input');

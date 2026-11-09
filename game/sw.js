@@ -1,4 +1,4 @@
-const CACHE_NAME = 'forestbrawl-shell-v35';
+const CACHE_NAME = 'forestbrawl-shell-v36';
 const APP_SHELL = [
   './',
   './index.html',
@@ -10,6 +10,7 @@ const APP_SHELL = [
   './asset/resource-icons/wood.png',
   './asset/resource-icons/stone.png',
   './asset/resource-icons/gold.png',
+  './asset/gold.png',
   './asset/resource-icons/diamond.png',
   './asset/resource-icons/amethyst.png',
   './asset/resource-icons/redite.png',
