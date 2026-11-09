@@ -4701,6 +4701,18 @@ function setMobTarget(mob, targetId, now = Date.now()) {
     mob.chaseUntil = now + MOB_CHASE_TIMEOUT;
   }
   mob.targetId = targetId;
+  mob.lastCombatAt = now;
+}
+
+function disengageMobTarget(mob, targetId, now = Date.now()) {
+  if (targetId) {
+    mob.ignoreTargetId = targetId;
+    mob.ignoreTargetUntil = now + MOB_REAGGRO_DELAY;
+  }
+  mob.targetId = null;
+  mob.chaseStartedAt = 0;
+  mob.chaseUntil = 0;
+  mob.lastCombatAt = 0;
 }
 
 const BUILD_ROLES = {
@@ -6043,6 +6055,7 @@ function applyMobDamage(mob, target, damage, isWeb = false) {
   const hpBefore = target.hp;
   applyPlayerDamage(target, appliedDamage);
   const actualDamage = Math.max(0, hpBefore - target.hp);
+  if (actualDamage > 0) mob.lastCombatAt = now;
 
   // Oyuncuya Defence XP kazandır
   const defXpGain = Math.max(6, Math.round(actualDamage * 0.55));
@@ -7068,13 +7081,9 @@ setInterval(() => {
       mob.chaseUntil = 0;
       target = null;
     }
-    if (target && mob.chaseStartedAt && now - mob.chaseStartedAt >= MOB_CHASE_TIMEOUT) {
-      mob.ignoreTargetId = target.id;
-      mob.ignoreTargetUntil = now + MOB_REAGGRO_DELAY;
-      mob.targetId = null;
-      mob.chaseStartedAt = 0;
-      mob.chaseUntil = 0;
-      mob.hp = Math.min(mob.maxHp, mob.hp + Math.round(mob.maxHp * 0.15));
+    const lastChaseActivityAt = Math.max(mob.chaseStartedAt || 0, mob.lastCombatAt || 0);
+    if (target && mob.chaseStartedAt && now - lastChaseActivityAt >= MOB_CHASE_TIMEOUT) {
+      disengageMobTarget(mob, target.id, now);
       target = null;
     }
     if (now >= (mob.ignoreTargetUntil || 0)) mob.ignoreTargetId = null;
@@ -7108,13 +7117,8 @@ setInterval(() => {
     const leash = mob.leashRadius || 550;
     const distFromHome = Math.hypot(mob.x - homeX, mob.y - homeY);
     if (target && distFromHome > leash * 1.3) {
-      mob.ignoreTargetId = target.id;
-      mob.ignoreTargetUntil = now + MOB_REAGGRO_DELAY;
-      mob.targetId = null;
-      mob.chaseStartedAt = 0;
-      mob.chaseUntil = 0;
+      disengageMobTarget(mob, target.id, now);
       target = null;
-      mob.hp = Math.min(mob.maxHp, mob.hp + Math.round(mob.maxHp * 0.15));
     }
     const isEnraged = (mob.hp ?? mob.maxHp) < mob.maxHp * 0.4;
     if (isEnraged && !mob.isEnraged) {
