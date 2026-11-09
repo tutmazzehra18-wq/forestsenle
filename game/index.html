@@ -105,6 +105,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=DM+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="socket.io.js"></script>
@@ -4260,6 +4261,262 @@
                 font-size: 14px !important;
             }
         }
+
+        #main-menu {
+            position: fixed !important;
+            top: 50% !important;
+            bottom: auto !important;
+            left: 50% !important;
+            transform: translate(-50%, -50%) !important;
+            width: min(410px, calc(100vw - 36px)) !important;
+            max-width: 410px !important;
+            height: auto !important;
+            max-height: calc(var(--app-height) - 40px) !important;
+            padding: 18px !important;
+            overflow-x: hidden !important;
+            overflow-y: auto !important;
+            border: 1px solid rgba(216, 205, 164, .2) !important;
+            border-radius: 10px !important;
+            background: rgba(11, 17, 14, .93) !important;
+            box-shadow: 0 24px 70px rgba(0, 0, 0, .48) !important;
+            color: #e8ebdf !important;
+            backdrop-filter: blur(18px) saturate(110%);
+            -webkit-backdrop-filter: blur(18px) saturate(110%);
+        }
+
+        #main-menu [class*="font-io"] {
+            font-family: 'Barlow Condensed', 'DM Sans', sans-serif !important;
+            letter-spacing: 0 !important;
+        }
+
+        #main-menu > .relative:first-child {
+            margin-bottom: 12px !important;
+            filter: none !important;
+        }
+
+        #main-menu > .relative:first-child h1 {
+            font-family: 'Barlow Condensed', 'DM Sans', sans-serif !important;
+            font-size: clamp(2.4rem, 8vw, 3.2rem) !important;
+            font-weight: 800 !important;
+            line-height: .9 !important;
+            letter-spacing: 0 !important;
+            -webkit-text-stroke: 0 !important;
+            text-shadow: 0 2px 18px rgba(132, 176, 89, .22) !important;
+        }
+
+        #main-menu > .w-full.pl-2 {
+            margin-left: 0 !important;
+            padding-left: 1px !important;
+            color: #b6c0b3 !important;
+            font: 700 10px/1.2 'DM Sans', sans-serif !important;
+        }
+
+        #name-input {
+            height: 46px !important;
+            min-height: 46px !important;
+            margin-bottom: 12px !important;
+            padding-inline: 14px !important;
+            border: 1px solid rgba(202, 213, 192, .22) !important;
+            border-radius: 7px !important;
+            background: #101713 !important;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, .28) !important;
+            color: #f0f1e8 !important;
+            font: 700 17px 'DM Sans', sans-serif !important;
+            text-shadow: none !important;
+        }
+
+        #name-input:focus {
+            border-color: #9ab67b !important;
+            box-shadow: 0 0 0 3px rgba(154, 182, 123, .14) !important;
+        }
+
+        #active-pet-btn {
+            height: 68px !important;
+            min-height: 68px !important;
+            margin-bottom: 12px !important;
+            padding: 6px !important;
+            border: 1px solid rgba(202, 213, 192, .2) !important;
+            border-radius: 8px !important;
+            background: #121a15 !important;
+            box-shadow: none !important;
+        }
+
+        #active-pet-btn > div:first-child {
+            width: 54px !important;
+            height: 54px !important;
+            min-width: 54px !important;
+            border: 1px solid rgba(202, 213, 192, .22) !important;
+            border-radius: 6px !important;
+            background: #18221b !important;
+        }
+
+        #active-pet-btn canvas {
+            width: 50px !important;
+            height: 50px !important;
+        }
+
+        #active-pet-name {
+            color: #f1f0e7 !important;
+            font: 700 19px/1 'Barlow Condensed', sans-serif !important;
+        }
+
+        #active-pet-sub {
+            color: #b9c3b5 !important;
+            font: 600 10px/1.3 'DM Sans', sans-serif !important;
+        }
+
+        .mode-selector-wrap {
+            margin-bottom: 12px !important;
+        }
+
+        #mode-active-indicator {
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 6px !important;
+            padding: 0 !important;
+            border: 0 !important;
+            background: transparent !important;
+            color: #b8d39a !important;
+            font: 700 10px/1 'DM Sans', sans-serif !important;
+        }
+
+        #mode-active-indicator i {
+            font-size: 11px !important;
+        }
+
+        .mode-card,
+        .mode-card.active {
+            padding: 10px !important;
+            border: 1px solid rgba(202, 213, 192, .18) !important;
+            border-radius: 7px !important;
+            background: #121a15 !important;
+            box-shadow: none !important;
+            backdrop-filter: none !important;
+        }
+
+        .mode-card:hover,
+        .mode-card:active {
+            transform: none !important;
+            border-color: rgba(184, 211, 154, .5) !important;
+        }
+
+        #play-btn {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 11px !important;
+            height: 60px !important;
+            min-height: 60px !important;
+            border: 1px solid #9dbb7d !important;
+            border-radius: 7px !important;
+            background: #6f914c !important;
+            box-shadow: 0 4px 0 #3f5730 !important;
+            color: #fff !important;
+            transition: transform .16s ease, filter .16s ease !important;
+        }
+
+        #play-btn:hover {
+            filter: brightness(1.08) !important;
+            transform: translateY(-1px) !important;
+        }
+
+        #play-btn:active {
+            transform: translateY(2px) !important;
+            box-shadow: 0 2px 0 #3f5730 !important;
+        }
+
+        #play-btn > i {
+            position: static !important;
+            color: #eef4e6 !important;
+            font-size: 13px !important;
+            opacity: .9 !important;
+            transform: none !important;
+        }
+
+        #play-btn-text {
+            font: 700 26px/1 'Barlow Condensed', sans-serif !important;
+            letter-spacing: 0 !important;
+            -webkit-text-stroke: 0 !important;
+            text-shadow: none !important;
+        }
+
+        #action-buttons-grid {
+            gap: 8px !important;
+            margin-top: 10px !important;
+        }
+
+        #action-buttons-grid button,
+        #action-buttons-grid button:first-child {
+            height: 46px !important;
+            min-height: 46px !important;
+            border: 1px solid rgba(202, 213, 192, .18) !important;
+            border-radius: 7px !important;
+            background: #17211a !important;
+            box-shadow: none !important;
+            color: #e8ebdf !important;
+            font: 700 13px 'DM Sans', sans-serif !important;
+        }
+
+        #action-buttons-grid button i {
+            font-size: 15px !important;
+        }
+
+        @media (max-width: 640px) and (orientation: portrait) {
+            #left-events-container {
+                display: none !important;
+            }
+
+            #main-menu {
+                top: max(56px, env(safe-area-inset-top, 56px)) !important;
+                bottom: max(10px, env(safe-area-inset-bottom, 10px)) !important;
+                transform: translateX(-50%) !important;
+                width: min(420px, calc(100vw - 20px)) !important;
+                max-height: none !important;
+                padding: 14px !important;
+            }
+
+            #main-menu > .relative:first-child {
+                margin-bottom: 10px !important;
+            }
+
+            #name-input {
+                height: 44px !important;
+                min-height: 44px !important;
+                margin-bottom: 10px !important;
+            }
+
+            #active-pet-btn {
+                height: 62px !important;
+                min-height: 62px !important;
+                margin-bottom: 10px !important;
+            }
+
+            #active-pet-btn > div:first-child {
+                width: 48px !important;
+                height: 48px !important;
+                min-width: 48px !important;
+            }
+
+            #active-pet-btn canvas {
+                width: 44px !important;
+                height: 44px !important;
+            }
+
+            #play-btn {
+                height: 56px !important;
+                min-height: 56px !important;
+            }
+
+            #play-btn-text {
+                font-size: 24px !important;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            #play-btn {
+                transition: none !important;
+            }
+        }
     </style>
 </head>
 <body class="w-full h-full flex flex-col items-center justify-center relative select-none">
@@ -4536,7 +4793,7 @@
         <!-- ================= PARTİ DAVET BANNERI ================= -->
         <div id="party-invite-banner" class="hidden w-full mb-3 bg-gradient-to-r from-[#2b5a1b] to-[#1d3d12] border-2 border-[#79D138] rounded-xl px-4 py-2 shadow-2xl flex items-center justify-between gap-2 animate-pulse">
             <div class="flex items-center gap-2.5 min-w-0">
-                <span class="text-2xl">🎉</span>
+                <i class="fa-solid fa-users text-lg text-emerald-200" aria-hidden="true"></i>
                 <div class="flex flex-col text-left leading-tight min-w-0">
                     <span class="text-white font-io text-xs stroke-text truncate" id="party-banner-title">Arkadaşının Partisine Katılıyorsun!</span>
                     <span class="text-[#FFDF73] font-black text-[10px]"><span id="party-banner-desc-text">Parti Kodu: </span><span id="party-banner-code" class="underline font-bold text-white tracking-wider">--</span></span>
@@ -4583,7 +4840,7 @@
         <div class="mode-selector-wrap mb-2.5 w-full">
             <div class="w-full pl-2 flex justify-between items-center mb-1">
                 <span class="text-white font-black text-xs uppercase tracking-wider">Oyun Modu / Game Mode</span>
-                <span id="mode-active-indicator" class="text-emerald-300 font-black text-[10px] uppercase tracking-wider bg-emerald-950/70 px-2 py-0.5 rounded border border-emerald-500/40">🏹 KLASİK ARENA</span>
+                <span id="mode-active-indicator" class="text-emerald-300 font-black text-[10px] uppercase tracking-wider bg-emerald-950/70 px-2 py-0.5 rounded border border-emerald-500/40"><i class="fa-solid fa-crosshairs" aria-hidden="true"></i> KLASİK ARENA</span>
             </div>
             <div class="grid grid-cols-1 gap-2 w-full">
                 <!-- 1. KLASİK MOD (IO SURVIVAL) -->
@@ -4602,9 +4859,8 @@
         <!-- DEV 3D PLAY BUTONU -->
         <div class="io-games-play-row">
             <button id="play-btn" onclick="startDirectGame()" class="btn-3d btn-play h-[88px] sm:h-[100px] relative group overflow-hidden">
+                <i class="fa-solid fa-play" aria-hidden="true"></i>
                 <span id="play-btn-text" class="font-io text-[2.8rem] sm:text-[3.5rem] tracking-widest text-white z-10 group-hover:scale-105 transition-transform">Play</span>
-                <i class="fa-solid fa-khanda absolute left-6 text-5xl text-white/20 transform -rotate-45 pointer-events-none"></i>
-                <i class="fa-solid fa-shield-halved absolute right-6 text-5xl text-white/20 transform rotate-12 pointer-events-none"></i>
             </button>
         </div>
 
@@ -10067,7 +10323,7 @@
 
             if (playBtnText) playBtnText.textContent = (getCurrentLang() === 'en') ? 'Play' : 'Oyna';
             if (indicator) {
-                indicator.textContent = '🏹 KLASİK ARENA';
+                indicator.innerHTML = '<i class="fa-solid fa-crosshairs" aria-hidden="true"></i> KLASİK ARENA';
                 indicator.className = 'text-emerald-300 font-black text-[10px] uppercase tracking-wider bg-emerald-950/70 px-2 py-0.5 rounded border border-emerald-500/40';
             }
         }
