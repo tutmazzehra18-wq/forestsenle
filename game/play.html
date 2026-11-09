@@ -29361,6 +29361,10 @@ function initMultiplayer() {
   _socket.on('welcome', (welcomeData) => {
     const { id, players: others, buildings: remoteBuildings, worldSeed, resHp, mobs, isHost: serverIsHost, bountyId: welcomeBountyId, announcement: welcomeAnnouncement } = welcomeData;
     _mySocketId = id;
+    if (Number.isSafeInteger(welcomeData.stateSeq) && welcomeData.stateSeq >= 0) {
+      _mpSeq = Math.max(_mpSeq, welcomeData.stateSeq);
+      _mpLastAckedSeq = Math.max(_mpLastAckedSeq, welcomeData.stateSeq);
+    }
     if (typeof window._initializeLootInventory === 'function') window._initializeLootInventory();
     if (typeof window.syncCombatStatsToServer === 'function') window.syncCombatStatsToServer();
     if (welcomeData.gear) {
@@ -30330,6 +30334,7 @@ function initMultiplayer() {
 
   _socket.on('self_state', (s) => {
     if (!s) return;
+    if (Number.isSafeInteger(s.seq) && s.seq >= 0) _mpSeq = Math.max(_mpSeq, s.seq);
     // Server-authoritative economy and resources — always accept server updates
     if (typeof s.sc === 'number') player.score = Math.max(0, s.sc);
     if (typeof s.g === 'number') player.gold = Math.max(0, s.g);

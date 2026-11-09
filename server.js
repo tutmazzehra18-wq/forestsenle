@@ -8565,6 +8565,16 @@ io.on('connection', (socket) => {
       : (authUser ? (canEquipShopItem(authUser, 'deriler', requestedSkin) ? requestedSkin : 'wolf') : requestedSkin);
     const gameMode = 'online';
     const guestId = String(data.guestId || '').slice(0, 80);
+    if (guestId && data.reconnectSecret) {
+      const activeGuest = [...players.entries()].find(([, activePlayer]) => activePlayer?._guestId === guestId);
+      if (activeGuest) {
+        const [activeSocketId, activePlayer] = activeGuest;
+        const activeSocket = io.sockets.sockets.get(activeSocketId);
+        if (activeSocket && activePlayer._reconnectSecret === data.reconnectSecret) {
+          activeSocket.disconnect(true);
+        }
+      }
+    }
     let baseWorldX = normalizeWorldCoord(data.x, 0);
     let baseWorldY = normalizeWorldCoord(data.y, 0);
     if (!data.x && !data.y) {
@@ -8679,7 +8689,7 @@ io.on('connection', (socket) => {
 
     if (canRestoreReconnect) {
       const saved = reconnectSession.state;
-      for (const key of ['x', 'y', 'angle', 'vx', 'vy', 'hp', 'maxHp', 'hpSeq', 'hpAt', 'score', 'sc', 'gold', 'xp', 'kills', 'wood', 'stone', 'apples', 'diamond', 'amethyst', 'redite', 'weapon', 'axeTier', 'swordTier', '_preScytheSwordTier', 'axeSkin', 'swordSkin', 'scytheId', 'helmetSkin', 'ownedAxes', 'ownedSwords', 'ownedHelmets', 'ownedScythes', 'lootBag', 'lootEquipment', 'team', 'color', 'skin']) {
+      for (const key of ['x', 'y', 'angle', 'vx', 'vy', 'stateSeq', 'hp', 'maxHp', 'hpSeq', 'hpAt', 'score', 'sc', 'gold', 'xp', 'kills', 'wood', 'stone', 'apples', 'diamond', 'amethyst', 'redite', 'weapon', 'axeTier', 'swordTier', '_preScytheSwordTier', 'axeSkin', 'swordSkin', 'scytheId', 'helmetSkin', 'ownedAxes', 'ownedSwords', 'ownedHelmets', 'ownedScythes', 'lootBag', 'lootEquipment', 'team', 'color', 'skin']) {
         if (saved[key] !== undefined) state[key] = saved[key];
       }
       for (const building of buildings.values()) {
@@ -8789,13 +8799,15 @@ io.on('connection', (socket) => {
         weapon: state.designWeapon, set: state.loadoutSet,
         roleInfo: BUILD_ROLES[state.role], helmetInfo: BUILD_HELMETS[state.helmet],
         weaponInfo: state.weaponInfo, setInfo: state.setInfo
-      }
+      },
+      stateSeq: state.stateSeq || 0
     });
     socket.emit('self_state', {
       hp: state.hp, maxHp: state.maxHp, baseMaxHp: state._loadoutBaseMaxHp,
       hpSeq: state.hpSeq || 0, hpAt: state.hpAt || Date.now(),
       sc: state.score || 0, g: state.gold || 0, xp: state.xp || 0,
       wood: state.wood || 0, stone: state.stone || 0, apples: state.apples || 0,
+      seq: state.stateSeq || 0,
       diamond: state.diamond || 0, amethyst: state.amethyst || 0, redite: state.redite || 0
     });
     socket.emit('loot_inventory_state', lootInventoryPayload(state));
@@ -8874,8 +8886,8 @@ io.on('connection', (socket) => {
     let acceptedX = incomingX;
     let acceptedY = incomingY;
 
-    // Sequence check with wrap tolerance: drop strictly older packets unless a wrap/respawn happened
-    if (incomingSeq !== null && incomingSeq <= (player.stateSeq || 0) && (player.stateSeq - incomingSeq < 1000)) {
+    // State sequences are monotonic JavaScript numbers; older packets are never a valid wrap.
+    if (incomingSeq !== null && incomingSeq <= (player.stateSeq || 0)) {
       return;
     }
 
