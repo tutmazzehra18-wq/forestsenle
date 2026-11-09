@@ -8626,6 +8626,7 @@ io.on('connection', (socket) => {
       matchStartedAt: Date.now(),
       _matchFinalized: false,
       id: socket.id,
+      stateSeq: 0,
       clanId: '',
       clanTag: '',
       wood: 50,
@@ -8882,7 +8883,9 @@ io.on('connection', (socket) => {
     const prevY = Number(player.y) || 0;
     const incomingX = Number(data.x);
     const incomingY = Number(data.y);
-    const incomingSeq = Number.isFinite(data.seq) ? Number(data.seq) : null;
+    const hasIncomingSeq = data.seq !== undefined && data.seq !== null;
+    const incomingSeq = Number.isSafeInteger(data.seq) && data.seq >= 0 ? data.seq : null;
+    if (hasIncomingSeq && incomingSeq === null) return;
     let acceptedX = incomingX;
     let acceptedY = incomingY;
 

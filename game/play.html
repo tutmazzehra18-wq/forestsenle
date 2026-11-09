@@ -29453,6 +29453,7 @@ function initMultiplayer() {
         _sx: s.x ?? 0, _sy: s.y ?? 0, _targetAngle: s.a ?? s.angle ?? 0,
         _targetX: s.x ?? 0, _targetY: s.y ?? 0, vx: s.vx || 0, vy: s.vy || 0,
         _lastPacketTime: Date.now(), _teleportSeq: s.tp ?? 0,
+        _netSeq: Number.isSafeInteger(s.sq) && s.sq >= 0 ? s.sq : 0,
         _snapshots: [{ t: Date.now(), x: s.x ?? 0, y: s.y ?? 0, a: s.a ?? 0, vx: s.vx || 0, vy: s.vy || 0 }],
       });
       _applyPendingRemoteSwing(pid);
@@ -29511,10 +29512,10 @@ function initMultiplayer() {
       const sx = s.x ?? 0, sy = s.y ?? 0, sa = s.a ?? 0, svx = s.vx || 0, svy = s.vy || 0;
       // HP=0 in tick → player is dead; remove immediately without waiting for player_dead event
       if (s.hp !== undefined && s.hp <= 0) { _otherPlayers.delete(id); continue; }
+      if (s.sq !== undefined && (!Number.isSafeInteger(s.sq) || s.sq < 0)) continue;
       const existing = _otherPlayers.get(id);
       if (existing && typeof s.sq === 'number') {
-        // Drop strictly older out-of-order packets, but never drop equal sequence or vital damage/swing updates
-        if (s.sq < (existing._netSeq || 0) && ((existing._netSeq || 0) - s.sq < 500) && s.hp === existing.hp && !s.atk) continue;
+        if (s.sq < (Number.isSafeInteger(existing._netSeq) ? existing._netSeq : 0)) continue;
         existing._netSeq = s.sq;
       }
       if (existing && typeof s.tp === 'number') {
@@ -29681,6 +29682,7 @@ function initMultiplayer() {
       vx: _pjS.vx || 0, vy: _pjS.vy || 0, _lastPacketTime: Date.now(),
       _sx: _pjS.x ?? 0, _sy: _pjS.y ?? 0,
       _snapshots: [{ t: Date.now(), x: _pjS.x ?? 0, y: _pjS.y ?? 0, a: _pjS.a ?? 0, vx: _pjS.vx || 0, vy: _pjS.vy || 0 }],
+      _netSeq: Number.isSafeInteger(_pjS.sq) && _pjS.sq >= 0 ? _pjS.sq : 0,
       _teleportSeq: _pjS.tp ?? 0,
     });
     _applyPendingRemoteSwing(id);
@@ -30358,11 +30360,9 @@ function initMultiplayer() {
     if (acceptsHp) { player.hp = Math.max(0, s.hp); updateHpBar(); }
     if (player.hp <= 0 && !_isDying) die();
 
-    if (typeof s.seq === 'number' && s.seq < _mpLastAckedSeq && (_mpLastAckedSeq - s.seq < 500)) {
-      return;
-    }
-    // Acknowledge seq
-    if (typeof s.seq === 'number') {
+    if (s.seq !== undefined) {
+      if (!Number.isSafeInteger(s.seq) || s.seq < 0 || s.seq < _mpLastAckedSeq) return;
+      _mpSeq = Math.max(_mpSeq, s.seq);
       _mpLastAckedSeq = s.seq;
     }
     // Reconcile if position diverges significantly (e.g. server collision push or lag spike)
@@ -31297,6 +31297,9 @@ function initMultiplayer() {
       buildX: (typeof _prS.bx === 'number') ? _prS.bx : null,
       buildY: (typeof _prS.by === 'number') ? _prS.by : null,
       _sx: _prS.x ?? 0, _sy: _prS.y ?? 0, _targetAngle: _prS.a ?? _prS.angle ?? 0,
+      _targetX: _prS.x ?? 0, _targetY: _prS.y ?? 0,
+      _lastPacketTime: Date.now(), _teleportSeq: _prS.tp ?? 0,
+      _netSeq: Number.isSafeInteger(_prS.sq) && _prS.sq >= 0 ? _prS.sq : 0,
       _snapshots: [{ t: Date.now(), x: _prS.x ?? 0, y: _prS.y ?? 0, a: _prS.a ?? 0, vx: _prS.vx || 0, vy: _prS.vy || 0 }],
     });
   });
